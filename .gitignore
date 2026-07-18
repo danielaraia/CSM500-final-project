@@ -9,3 +9,4 @@ data/
 *.ckpt
 .git-credentials-local
 experiments/runs/**
+EvoBrain/
