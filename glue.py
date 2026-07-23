@@ -2,6 +2,7 @@ import numpy as np
 
 from features import log_amplitude_fft
 from filters import filter_ecg, filter_eeg, filter_emg, filter_movement_axis
+from labels import LABEL_UNUSED, label_second
 from movement import axis_magnitude, upsample_movement_to_256
 from pearson import (
     ELECTRICAL_SAMPLES_1S,
@@ -82,6 +83,38 @@ def build_windows(electrical, movement_axes, stride_seconds=TRAIN_STRIDE_SECONDS
             step += 1
         window_index += 1
     return features, adjacency, ends
+
+
+def keep_labelled_windows(features, adjacency, ends, seizures):
+    features = np.asarray(features)
+    adjacency = np.asarray(adjacency)
+    if features.shape[0] != adjacency.shape[0] or features.shape[0] != len(ends):
+        raise ValueError(
+            "features, graphs and ends need the same count, "
+            f"we got {features.shape[0]}, {adjacency.shape[0]}, {len(ends)}"
+        )
+    kept_features = []
+    kept_graphs = []
+    kept_ends = []
+    kept_labels = []
+    index = 0
+    while index < len(ends):
+        # label sits on the last second of the window, not the whole 60
+        lab = label_second(ends[index], seizures)
+        if lab != LABEL_UNUSED:
+            kept_features.append(features[index])
+            kept_graphs.append(adjacency[index])
+            kept_ends.append(ends[index])
+            kept_labels.append(lab)
+        index += 1
+    if len(kept_labels) == 0:
+        raise ValueError("didnt keep any labelled windows")
+    return (
+        np.stack(kept_features, axis=0),
+        np.stack(kept_graphs, axis=0),
+        kept_ends,
+        kept_labels,
+    )
 
 
 def _n_seconds(electrical, movement_axes):

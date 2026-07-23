@@ -2,7 +2,8 @@ import numpy as np
 import pytest
 
 from features import N_FFT_BINS
-from glue import SECONDS_NEEDED, build_one_window, build_windows
+from glue import SECONDS_NEEDED, build_one_window, build_windows, keep_labelled_windows
+from labels import LABEL_SOP, LABEL_UNUSED, label_second
 from pearson import N_NODES
 from windows import WINDOW_SECONDS
 
@@ -53,6 +54,32 @@ def test_second_count_mismatch_fails():
     movement = np.ones((12, 25 * 3))
     with pytest.raises(ValueError, match="we got 4 and 3"):
         build_one_window(electrical, movement)
+
+
+def test_keep_labelled_drops_sph_and_keeps_sop():
+    features = np.zeros((2, WINDOW_SECONDS, N_NODES, N_FFT_BINS))
+    graphs = np.zeros((2, WINDOW_SECONDS, N_NODES, N_NODES))
+    features[0, 0, 0, 0] = 1.0
+    ends = [69, 79]
+    # onset 375: SOP ends at 75, SPH is 75 to 375, so 69 is sop and 79 is unused
+    seizures = [(375, 400)]
+    kept_f, kept_g, kept_ends, kept_labels = keep_labelled_windows(
+        features, graphs, ends, seizures
+    )
+    assert kept_ends == [69]
+    assert kept_labels == [LABEL_SOP]
+    assert kept_f.shape[0] == 1
+    assert kept_f[0, 0, 0, 0] == 1.0
+    assert label_second(79, seizures) == LABEL_UNUSED
+
+
+def test_all_unused_windows_fail():
+    features = np.zeros((2, WINDOW_SECONDS, N_NODES, N_FFT_BINS))
+    graphs = np.zeros((2, WINDOW_SECONDS, N_NODES, N_NODES))
+    ends = [69, 79]
+    seizures = [(80, 100)]
+    with pytest.raises(ValueError, match="didnt keep any labelled windows"):
+        keep_labelled_windows(features, graphs, ends, seizures)
 
 
 def _fake_window():
