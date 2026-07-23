@@ -11,8 +11,15 @@ from pearson import (
     N_MOVEMENT_NODES,
     N_NODES,
     build_pearson_graph,
+    steps_with_full_movement_buffer,
 )
-from windows import WINDOW_SECONDS
+from quality import second_is_bad
+from windows import (
+    EVAL_STRIDE_SECONDS,
+    TRAIN_STRIDE_SECONDS,
+    WINDOW_SECONDS,
+    window_end_times,
+)
 
 N_MOVEMENT_AXES = 12
 AXES_PER_DEVICE = 3
@@ -23,35 +30,58 @@ SECONDS_NEEDED = SECONDS_BEFORE_FIRST_GRAPH + WINDOW_SECONDS
 
 
 def build_one_window(electrical, movement_axes):
+    features, graphs, _ends = build_windows(
+        electrical, movement_axes, stride_seconds=EVAL_STRIDE_SECONDS
+    )
+    if features.shape[0] < 1:
+        raise ValueError("didnt get a window, too many bad seconds")
+    return features[0], graphs[0]
+
+
+def build_windows(electrical, movement_axes, stride_seconds=TRAIN_STRIDE_SECONDS):
     electrical = np.asarray(electrical, dtype=np.float64)
     movement_axes = np.asarray(movement_axes, dtype=np.float64)
-    n_seconds = _n_seconds(electrical, movement_axes)
-    if n_seconds < SECONDS_NEEDED:
-        raise ValueError(
-            f"need {SECONDS_NEEDED} sec for teh first window "
-            f"(4 sec pearson buffer + {WINDOW_SECONDS}), we got {n_seconds}"
-        )
+    _n_seconds(electrical, movement_axes)
 
     electrical = _filter_electrical(electrical)
     movement = _movement_magnitudes(movement_axes)
-
     electrical_seconds = _cut_seconds(electrical, ELECTRICAL_SAMPLES_1S)
     movement_seconds = _cut_seconds(movement, SAMPLES_MOVEMENT_1S)
 
-    features = np.zeros((WINDOW_SECONDS, N_NODES, 128), dtype=np.float64)
-    adjacency = np.zeros((WINDOW_SECONDS, N_NODES, N_NODES), dtype=np.float64)
-    step = 0
-    while step < WINDOW_SECONDS:
-        second_index = SECONDS_BEFORE_FIRST_GRAPH + step
-        features[step] = _features_for_second(
-            electrical_seconds[second_index],
-            movement_seconds[second_index],
-        )
-        adjacency[step] = _pearson_for_second(
-            electrical_seconds, movement_seconds, second_index
-        )
-        step += 1
-    return features, adjacency
+    quality_ok = _quality_ok_seconds(electrical_seconds, movement_seconds)
+    graph_ok = _graph_ok_seconds(quality_ok)
+    ends = window_end_times(graph_ok, WINDOW_SECONDS, stride_seconds)
+
+    n_windows = len(ends)
+    features = np.zeros((n_windows, WINDOW_SECONDS, N_NODES, 128), dtype=np.float64)
+    adjacency = np.zeros((n_windows, WINDOW_SECONDS, N_NODES, N_NODES), dtype=np.float64)
+    feat_by_second = {}
+    graph_by_second = {}
+    window_index = 0
+    while window_index < n_windows:
+        end_time = ends[window_index]
+        start_time = end_time - WINDOW_SECONDS + 1
+        step = 0
+        while step < WINDOW_SECONDS:
+            index = start_time + step
+            if index not in feat_by_second:
+                if not graph_ok[index]:
+                    raise ValueError(
+                        f"window end {end_time} wants sec {index} "
+                        f"bjt that second isnt graph ok"
+                    )
+                feat_by_second[index] = _features_for_second(
+                    electrical_seconds[index],
+                    movement_seconds[index],
+                )
+                graph_by_second[index] = _pearson_for_second(
+                    electrical_seconds, movement_seconds, index
+                )
+            features[window_index, step] = feat_by_second[index]
+            adjacency[window_index, step] = graph_by_second[index]
+            step += 1
+        window_index += 1
+    return features, adjacency, ends
 
 
 def _n_seconds(electrical, movement_axes):
@@ -79,6 +109,36 @@ def _n_seconds(electrical, movement_axes):
             f"we got {n_electrical} and {n_movement}"
         )
     return n_electrical
+
+
+def _quality_ok_seconds(electrical_seconds, movement_seconds):
+    n_seconds = electrical_seconds.shape[0]
+    ok = []
+    second_index = 0
+    while second_index < n_seconds:
+        bad = second_is_bad(
+            electrical_seconds[second_index, 0],
+            electrical_seconds[second_index, 1],
+            electrical_seconds[second_index, 2],
+            electrical_seconds[second_index, 3],
+            movement_seconds[second_index, 0],
+            movement_seconds[second_index, 1],
+            movement_seconds[second_index, 2],
+            movement_seconds[second_index, 3],
+        )
+        ok.append(not bad)
+        second_index += 1
+    return ok
+
+
+def _graph_ok_seconds(quality_ok):
+    has_buffer = steps_with_full_movement_buffer(quality_ok)
+    graph_ok = []
+    second_index = 0
+    while second_index < len(quality_ok):
+        graph_ok.append(bool(quality_ok[second_index] and has_buffer[second_index]))
+        second_index += 1
+    return graph_ok
 
 
 def _filter_electrical(electrical):
