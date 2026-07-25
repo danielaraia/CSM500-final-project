@@ -1,5 +1,7 @@
 import numpy as np
 
+from labels import LABEL_INTERICTAL, LABEL_SOP
+
 
 def save_split(path, features, adjacency, labels):
     features = np.asarray(features)
@@ -22,3 +24,20 @@ def save_split(path, features, adjacency, labels):
 def load_split(path):
     loaded = np.load(path)
     return loaded["features"], loaded["adjacency"], loaded["labels"]
+
+
+def save_named_labels(path, features, adjacency, named_labels):
+    numbers = []
+    index = 0
+    while index < len(named_labels):
+        numbers.append(label_to_class_number(named_labels[index]))
+        index += 1
+    save_split(path, features, adjacency, np.asarray(numbers, dtype=np.int64))
+
+
+def label_to_class_number(label):
+    if label == LABEL_SOP:
+        return 1
+    if label == LABEL_INTERICTAL:
+        return 0
+    raise ValueError(f"cant pack label {label}, only sop and interictal")

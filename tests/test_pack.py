@@ -2,8 +2,10 @@ import os
 import tempfile
 
 import numpy as np
+import pytest
 
-from pack import load_split, save_split
+from labels import LABEL_INTERICTAL, LABEL_SOP, LABEL_UNUSED
+from pack import label_to_class_number, load_split, save_named_labels, save_split
 
 
 def test_round_trip_one_file_not_one_per_window():
@@ -20,5 +22,30 @@ def test_round_trip_one_file_not_one_per_window():
         np.testing.assert_array_equal(f2, features)
         np.testing.assert_array_equal(l2, labels)
         assert f2.shape[0] == 3
+    finally:
+        os.remove(handle.name)
+
+
+def test_sop_is_one_and_interictal_is_zero():
+    assert label_to_class_number(LABEL_SOP) == 1
+    assert label_to_class_number(LABEL_INTERICTAL) == 0
+
+
+def test_unused_label_cant_be_packed():
+    with pytest.raises(ValueError, match="cant pack label"):
+        label_to_class_number(LABEL_UNUSED)
+
+
+def test_named_labels_round_trip_as_zeros_and_ones():
+    features = np.ones((2, 60, 8, 128))
+    adjacency = np.zeros((2, 60, 8, 8))
+    handle = tempfile.NamedTemporaryFile(suffix=".npz", delete=False)
+    handle.close()
+    try:
+        save_named_labels(
+            handle.name, features, adjacency, [LABEL_INTERICTAL, LABEL_SOP]
+        )
+        _f2, _a2, labels = load_split(handle.name)
+        np.testing.assert_array_equal(labels, np.array([0, 1]))
     finally:
         os.remove(handle.name)
