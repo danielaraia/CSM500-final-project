@@ -117,6 +117,67 @@ def keep_labelled_windows(features, adjacency, ends, seizures):
     )
 
 
+def split_labelled_windows(features, adjacency, ends, labels, t1, t2):
+    features = np.asarray(features)
+    adjacency = np.asarray(adjacency)
+    if t2 < t1:
+        raise ValueError(f"t2 is befor t1, we got t1={t1} t2={t2}")
+    if features.shape[0] != adjacency.shape[0] or features.shape[0] != len(ends):
+        raise ValueError(
+            "features, graphs and ends need the same count, "
+            f"we got {features.shape[0]}, {adjacency.shape[0]}, {len(ends)}"
+        )
+    if len(labels) != len(ends):
+        raise ValueError(
+            f"labels and ends need the same count, we got {len(labels)} and {len(ends)}"
+        )
+    train_i = []
+    val_i = []
+    test_i = []
+    index = 0
+    while index < len(ends):
+        # same clock as the label: the last second of the window
+        end_time = ends[index]
+        if end_time < t1:
+            train_i.append(index)
+        elif end_time < t2:
+            val_i.append(index)
+        else:
+            test_i.append(index)
+        index += 1
+    if len(train_i) == 0:
+        raise ValueError("no train windows")
+    if len(test_i) == 0:
+        raise ValueError("no test windows")
+    train = _gather_windows(train_i, features, adjacency, ends, labels)
+    val = _gather_windows(val_i, features, adjacency, ends, labels)
+    test = _gather_windows(test_i, features, adjacency, ends, labels)
+    return train, val, test
+
+
+def _gather_windows(indices, features, adjacency, ends, labels):
+    if len(indices) == 0:
+        return features[:0], adjacency[:0], [], []
+    kept_features = []
+    kept_graphs = []
+    kept_ends = []
+    kept_labels = []
+    pos = 0
+    while pos < len(indices):
+        i = indices[pos]
+        kept_features.append(features[i])
+        kept_graphs.append(adjacency[i])
+        kept_ends.append(ends[i])
+        kept_labels.append(labels[i])
+        pos += 1
+    return (
+        np.stack(kept_features, axis=0),
+        np.stack(kept_graphs, axis=0),
+        kept_ends,
+        kept_labels,
+    )
+
+
 def _n_seconds(electrical, movement_axes):
     if electrical.ndim != 2 or electrical.shape[0] != N_ELECTRICAL_NODES:
         raise ValueError(

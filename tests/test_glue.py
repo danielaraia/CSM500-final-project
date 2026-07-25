@@ -2,7 +2,13 @@ import numpy as np
 import pytest
 
 from features import N_FFT_BINS
-from glue import SECONDS_NEEDED, build_one_window, build_windows, keep_labelled_windows
+from glue import (
+    SECONDS_NEEDED,
+    build_one_window,
+    build_windows,
+    keep_labelled_windows,
+    split_labelled_windows,
+)
 from labels import LABEL_SOP, LABEL_UNUSED, label_second
 from pearson import N_NODES
 from windows import WINDOW_SECONDS
@@ -80,6 +86,36 @@ def test_all_unused_windows_fail():
     seizures = [(80, 100)]
     with pytest.raises(ValueError, match="didnt keep any labelled windows"):
         keep_labelled_windows(features, graphs, ends, seizures)
+
+
+def test_split_puts_windows_before_t1_in_train():
+    features = np.zeros((4, WINDOW_SECONDS, N_NODES, N_FFT_BINS))
+    graphs = np.zeros((4, WINDOW_SECONDS, N_NODES, N_NODES))
+    features[0, 0, 0, 0] = 1.0
+    features[3, 0, 0, 0] = 9.0
+    ends = [10, 20, 50, 80]
+    labels = [LABEL_SOP, LABEL_SOP, LABEL_SOP, LABEL_SOP]
+    train, val, test = split_labelled_windows(
+        features, graphs, ends, labels, t1=30, t2=60
+    )
+    train_f, _train_g, train_ends, _train_l = train
+    val_f, _val_g, val_ends, _val_l = val
+    test_f, _test_g, test_ends, _test_l = test
+    assert train_ends == [10, 20]
+    assert val_ends == [50]
+    assert test_ends == [80]
+    assert train_f[0, 0, 0, 0] == 1.0
+    assert test_f[0, 0, 0, 0] == 9.0
+    assert val_f.shape[0] == 1
+
+
+def test_split_fails_without_train_windows():
+    features = np.zeros((2, WINDOW_SECONDS, N_NODES, N_FFT_BINS))
+    graphs = np.zeros((2, WINDOW_SECONDS, N_NODES, N_NODES))
+    ends = [50, 80]
+    labels = [LABEL_SOP, LABEL_SOP]
+    with pytest.raises(ValueError, match="no train windows"):
+        split_labelled_windows(features, graphs, ends, labels, t1=30, t2=60)
 
 
 def _fake_window():
