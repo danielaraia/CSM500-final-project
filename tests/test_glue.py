@@ -6,10 +6,11 @@ from glue import (
     SECONDS_NEEDED,
     build_one_window,
     build_windows,
+    cut_monitoring_slice,
     keep_labelled_windows,
     split_labelled_windows,
 )
-from labels import LABEL_SOP, LABEL_UNUSED, label_second
+from labels import LABEL_INTERICTAL, LABEL_SOP, LABEL_UNUSED, label_second
 from pearson import N_NODES
 from windows import WINDOW_SECONDS
 
@@ -116,6 +117,30 @@ def test_split_fails_without_train_windows():
     labels = [LABEL_SOP, LABEL_SOP]
     with pytest.raises(ValueError, match="no train windows"):
         split_labelled_windows(features, graphs, ends, labels, t1=30, t2=60)
+
+
+def test_monitoring_cut_keeps_last_quarter():
+    n_windows = 16
+    features = np.zeros((n_windows, WINDOW_SECONDS, N_NODES, N_FFT_BINS))
+    graphs = np.zeros((n_windows, WINDOW_SECONDS, N_NODES, N_NODES))
+    features[0, 0, 0, 0] = 1.0
+    features[15, 0, 0, 0] = 9.0
+    ends = list(range(n_windows))
+    labels = [LABEL_INTERICTAL] * 12 + [LABEL_SOP] * 2 + [LABEL_INTERICTAL] * 2
+    train, monitor, monitor_start, n_positive, n_negative = cut_monitoring_slice(
+        features, graphs, ends, labels
+    )
+    train_f, _g, train_ends, train_labels = train
+    mon_f, _mg, mon_ends, mon_labels = monitor
+    assert monitor_start == 12
+    assert n_positive == 2
+    assert n_negative == 2
+    assert train_ends == list(range(12))
+    assert mon_ends == [12, 13, 14, 15]
+    assert train_f.shape[0] == 12
+    assert mon_f[3, 0, 0, 0] == 9.0
+    assert train_labels[-1] == LABEL_INTERICTAL
+    assert mon_labels[0] == LABEL_SOP
 
 
 def _fake_window():

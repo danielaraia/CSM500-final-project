@@ -2,7 +2,7 @@ import numpy as np
 
 from features import log_amplitude_fft
 from filters import filter_ecg, filter_eeg, filter_emg, filter_movement_axis
-from labels import LABEL_UNUSED, label_second
+from labels import LABEL_UNUSED, label_second, monitoring_indices
 from movement import axis_magnitude, upsample_movement_to_256
 from pearson import (
     ELECTRICAL_SAMPLES_1S,
@@ -153,6 +153,27 @@ def split_labelled_windows(features, adjacency, ends, labels, t1, t2):
     val = _gather_windows(val_i, features, adjacency, ends, labels)
     test = _gather_windows(test_i, features, adjacency, ends, labels)
     return train, val, test
+
+
+def cut_monitoring_slice(features, adjacency, ends, labels):
+    features = np.asarray(features)
+    adjacency = np.asarray(adjacency)
+    monitor_start, n_positive, n_negative = monitoring_indices(labels)
+    n_windows = len(labels)
+    train_i = []
+    monitor_i = []
+    index = 0
+    while index < n_windows:
+        if index < monitor_start:
+            train_i.append(index)
+        else:
+            monitor_i.append(index)
+        index += 1
+    if len(train_i) == 0:
+        raise ValueError("didnt leave any train windows after the monitoring cut")
+    train = _gather_windows(train_i, features, adjacency, ends, labels)
+    monitor = _gather_windows(monitor_i, features, adjacency, ends, labels)
+    return train, monitor, monitor_start, n_positive, n_negative
 
 
 def _gather_windows(indices, features, adjacency, ends, labels):
