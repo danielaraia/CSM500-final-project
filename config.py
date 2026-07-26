@@ -1,4 +1,5 @@
 import json
+import os
 
 # these beat the evobrain args.py defaults
 LOCKED = {
@@ -44,3 +45,30 @@ def write_config(path, extra):
 def read_config(path):
     with open(path) as handle:
         return json.load(handle)
+
+
+def run_folder_path(root, patient_id):
+    return os.path.join(
+        root,
+        "experiments",
+        "runs",
+        "within_patient",
+        patient_id,
+        "pearson",
+        "sop30",
+        "seed123",
+        "none",
+    )
+
+
+def start_run(root, patient_id, extra=None):
+    if patient_id is None or patient_id == "":
+        raise ValueError("need a patient id")
+    path = run_folder_path(root, patient_id)
+    if os.path.exists(path):
+        raise ValueError(f"run folder already exists, we wont write over it: {path}")
+    os.makedirs(path)
+    extra = dict(extra or {})
+    extra["patient_id"] = patient_id
+    write_config(os.path.join(path, "config.json"), extra)
+    return path

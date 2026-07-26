@@ -9,4 +9,7 @@ data/
 *.ckpt
 .git-credentials-local
 experiments/runs/**
+!experiments/runs/**/
+!experiments/runs/**/config.json
+!experiments/runs/**/metrics.json
 EvoBrain/
