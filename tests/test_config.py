@@ -12,6 +12,8 @@ def test_locked_learning_rate_is_not_the_code_default():
     assert LOCKED["max_seq_len"] == 60
     assert LOCKED["data_augment"] is False
     assert LOCKED["train_batch_size"] == 32
+    assert LOCKED["num_eigenvectors"] == 4
+    assert LOCKED["rnn_units"] == 64
 
 
 def test_write_and_read_config():
