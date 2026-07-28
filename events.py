@@ -27,11 +27,21 @@ def unique_event_types(rows):
 
 def seizure_onsets(rows):
     onsets = []
+    for start, _end in seizure_spans(rows):
+        onsets.append(start)
+    return onsets
+
+
+def seizure_spans(rows):
+    spans = []
     for row in rows:
         if row["eventType"].strip().startswith("sz"):
-            # sz and sz_whatever both count as a seizure
-            onsets.append(float(row["onset"]))
-    return onsets
+            start = float(row["onset"])
+            duration = float(row.get("duration") or 0)
+            if duration <= 0:
+                raise ValueError(f"seizure at {start} has no duration")
+            spans.append((start, start + duration))
+    return spans
 
 
 def impd_spans(rows):

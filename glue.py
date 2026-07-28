@@ -15,6 +15,7 @@ from pearson import (
     steps_with_full_movement_buffer,
 )
 from quality import second_is_bad
+from spans import second_hits_a_span
 from windows import (
     EVAL_STRIDE_SECONDS,
     TRAIN_STRIDE_SECONDS,
@@ -39,7 +40,12 @@ def build_one_window(electrical, movement_axes):
     return features[0], graphs[0]
 
 
-def build_windows(electrical, movement_axes, stride_seconds=TRAIN_STRIDE_SECONDS):
+def build_windows(
+    electrical,
+    movement_axes,
+    stride_seconds=TRAIN_STRIDE_SECONDS,
+    drop_spans=None,
+):
     electrical = np.asarray(electrical, dtype=np.float64)
     movement_axes = np.asarray(movement_axes, dtype=np.float64)
     _n_seconds(electrical, movement_axes)
@@ -50,6 +56,7 @@ def build_windows(electrical, movement_axes, stride_seconds=TRAIN_STRIDE_SECONDS
     movement_seconds = _cut_seconds(movement, SAMPLES_MOVEMENT_1S)
 
     quality_ok = _quality_ok_seconds(electrical_seconds, movement_seconds)
+    quality_ok = _apply_drop_spans(quality_ok, drop_spans)
     graph_ok = _graph_ok_seconds(quality_ok)
     ends = window_end_times(graph_ok, WINDOW_SECONDS, stride_seconds)
 
@@ -224,6 +231,18 @@ def _n_seconds(electrical, movement_axes):
             f"we got {n_electrical} and {n_movement}"
         )
     return n_electrical
+
+
+def _apply_drop_spans(quality_ok, drop_spans):
+    if drop_spans is None:
+        drop_spans = []
+    ok = []
+    second_index = 0
+    while second_index < len(quality_ok):
+        hit = second_hits_a_span(second_index, drop_spans)
+        ok.append(bool(quality_ok[second_index] and not hit))
+        second_index += 1
+    return ok
 
 
 def _quality_ok_seconds(electrical_seconds, movement_seconds):

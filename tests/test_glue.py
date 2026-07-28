@@ -49,6 +49,15 @@ def test_hole_at_fifteen_drops_the_early_train_window():
     assert graphs.shape[0] == 1
 
 
+def test_impd_span_drops_the_early_train_window():
+    electrical, movement = _fake_run(80)
+    features, graphs, ends = build_windows(
+        electrical, movement, drop_spans=[(15.0, 16.0)]
+    )
+    assert ends == [79]
+    assert features.shape[0] == 1
+
+
 def test_too_short_fails():
     electrical = np.ones((4, 256))
     movement = np.ones((12, 25))

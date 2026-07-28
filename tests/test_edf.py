@@ -10,7 +10,7 @@ from channels import (
     NECK_ACC_LABELS,
     NECK_GYR_LABELS,
 )
-from edf import load_edf, load_run
+from edf import edf_gap_spans, edf_record_onsets, load_edf, load_run
 
 
 def test_missing_file_fails():
@@ -59,6 +59,39 @@ def test_wrong_eeg_rate_fails():
     finally:
         os.remove(bad)
         _remove_paths(paths)
+
+
+def test_plain_edf_has_no_tal_channel():
+    time = np.arange(256) / 256.0
+    samples = 50.0 * np.sin(2 * np.pi * 10.0 * time)
+    path = _write_edf([("BTEleft SD", samples)], 256)
+    try:
+        with pytest.raises(ValueError, match="EDF Annotations"):
+            edf_gap_spans(path)
+    finally:
+        os.remove(path)
+
+
+def test_continuous_edf_plus_has_no_gap():
+    path = _write_edf_plus([0.0, 1.0, 2.0], reserved="EDF+C")
+    try:
+        onsets, duration = edf_record_onsets(path)
+        assert onsets == [0.0, 1.0, 2.0]
+        assert duration == 1.0
+        assert edf_gap_spans(path) == []
+    finally:
+        os.remove(path)
+
+
+def test_edf_plus_jump_is_a_gap():
+    path = _write_edf_plus([0.0, 1.0, 4.0], reserved="EDF+D")
+    try:
+        onsets, duration = edf_record_onsets(path)
+        assert onsets == [0.0, 1.0, 4.0]
+        assert duration == 1.0
+        assert edf_gap_spans(path) == [(2.0, 4.0)]
+    finally:
+        os.remove(path)
 
 
 def _wave(n, scale):
@@ -160,6 +193,70 @@ def _write_edf(channels, sfreq):
         handle.write(reserved)
         for body in bodies:
             handle.write(body)
+    finally:
+        handle.close()
+    return handle.name
+
+
+def _tal_bytes(onset, n_samples):
+    if onset == int(onset):
+        text = f"+{int(onset)}\x14\x14\x00"
+    else:
+        text = f"+{onset}\x14\x14\x00"
+    raw = text.encode("ascii")
+    nbytes = n_samples * 2
+    if len(raw) > nbytes:
+        raise ValueError("tal too long for the annotation channel")
+    return raw + b"\x00" * (nbytes - len(raw))
+
+
+def _write_edf_plus(record_onsets, reserved="EDF+C"):
+    n_records = len(record_onsets)
+    annot_nsamp = 40
+    dummy_nsamp = 8
+    n_ch = 2
+    n_header = 256 + 256 * n_ch
+    header = b"".join(
+        [
+            _pad("0", 8),
+            _pad("tiny", 80),
+            _pad("tiny", 80),
+            _pad("01.01.70", 8),
+            _pad("00.00.00", 8),
+            _pad(str(n_header), 8),
+            _pad(reserved, 44),
+            _pad(str(n_records), 8),
+            _pad("1", 8),
+            _pad(str(n_ch), 4),
+        ]
+    )
+    labels = _pad("EDF Annotations", 16) + _pad("BTEleft SD", 16)
+    transducers = _pad("", 80) + _pad("", 80)
+    units = _pad("", 8) + _pad("uV", 8)
+    phys_mins = _pad("-32768", 8) + _pad("-1000", 8)
+    phys_maxs = _pad("32767", 8) + _pad("1000", 8)
+    dig_mins = _pad("-32768", 8) + _pad("-32767", 8)
+    dig_maxs = _pad("32767", 8) + _pad("32767", 8)
+    prefilters = _pad("", 80) + _pad("", 80)
+    nsamps = _pad(str(annot_nsamp), 8) + _pad(str(dummy_nsamp), 8)
+    ch_reserved = _pad("", 32) + _pad("", 32)
+    handle = tempfile.NamedTemporaryFile(suffix=".edf", delete=False)
+    try:
+        handle.write(header)
+        handle.write(labels)
+        handle.write(transducers)
+        handle.write(units)
+        handle.write(phys_mins)
+        handle.write(phys_maxs)
+        handle.write(dig_mins)
+        handle.write(dig_maxs)
+        handle.write(prefilters)
+        handle.write(nsamps)
+        handle.write(ch_reserved)
+        dummy = np.zeros(dummy_nsamp, dtype=np.int16)
+        for onset in record_onsets:
+            handle.write(_tal_bytes(onset, annot_nsamp))
+            handle.write(dummy.tobytes())
     finally:
         handle.close()
     return handle.name

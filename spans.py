@@ -11,3 +11,33 @@ def second_hits_a_span(second_start, spans):
         if spans_overlap(second_start, second_end, start, end):
             return True
     return False
+
+
+def gap_spans_from_record_onsets(onsets, record_duration):
+    if record_duration <= 0:
+        raise ValueError(
+            f"record duration has to be positive, we got {record_duration}"
+        )
+    if len(onsets) < 1:
+        raise ValueError("need at least one data record time stamp")
+    spans = []
+    if onsets[0] > 0:
+        spans.append((0.0, float(onsets[0])))
+    index = 0
+    while index < len(onsets) - 1:
+        start = float(onsets[index])
+        nxt = float(onsets[index + 1])
+        if nxt < start:
+            raise ValueError(
+                f"edf record times went backwards, we got {start} then {nxt}"
+            )
+        jump = nxt - start
+        if jump < record_duration:
+            raise ValueError(
+                f"edf records overlap, we got start {start} then {nxt}"
+            )
+        # r14: a jump bigger than one data record is a silent gap
+        if jump > record_duration:
+            spans.append((start + record_duration, nxt))
+        index += 1
+    return spans
