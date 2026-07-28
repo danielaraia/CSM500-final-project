@@ -4,7 +4,13 @@ import tempfile
 import numpy as np
 import pytest
 
-from edf import load_edf
+from channels import (
+    CHEST_ACC_LABELS,
+    CHEST_GYR_LABELS,
+    NECK_ACC_LABELS,
+    NECK_GYR_LABELS,
+)
+from edf import load_edf, load_run
 
 
 def test_missing_file_fails():
@@ -15,7 +21,7 @@ def test_missing_file_fails():
 def test_reads_header_name_rate_and_samples():
     time = np.arange(256) / 256.0
     samples = 50.0 * np.sin(2 * np.pi * 10.0 * time)
-    path = _write_edf("BTEleft SD", 256, samples)
+    path = _write_edf([("BTEleft SD", samples)], 256)
     try:
         names, sfreq, data = load_edf(path)
         assert names == ["BTEleft SD"]
@@ -27,6 +33,61 @@ def test_reads_header_name_rate_and_samples():
         os.remove(path)
 
 
+def test_load_run_stacks_four_files():
+    paths = _write_tiny_run()
+    try:
+        electrical, movement, picked = load_run(
+            paths["eeg"], paths["ecg"], paths["emg"], paths["mov"]
+        )
+        assert electrical.shape == (4, 256)
+        assert movement.shape == (12, 25)
+        assert picked["eeg_a"] == "BTEleft SD"
+        assert picked["eeg_b"] == "CROSStop SD"
+        assert np.max(np.abs(electrical[0] - _wave(256, 50.0))) < 1.0
+    finally:
+        _remove_paths(paths)
+
+
+def test_wrong_eeg_rate_fails():
+    time = np.arange(128) / 128.0
+    samples = 50.0 * np.sin(2 * np.pi * 10.0 * time)
+    bad = _write_edf([("BTEleft SD", samples), ("CROSStop SD", samples)], 128)
+    paths = _write_tiny_run()
+    try:
+        with pytest.raises(ValueError, match="eeg should be 256 Hz"):
+            load_run(bad, paths["ecg"], paths["emg"], paths["mov"])
+    finally:
+        os.remove(bad)
+        _remove_paths(paths)
+
+
+def _wave(n, scale):
+    time = np.arange(n) / float(n)
+    return scale * np.sin(2 * np.pi * 10.0 * time)
+
+
+def _write_tiny_run():
+    eeg_wave = _wave(256, 50.0)
+    mov_wave = _wave(25, 1.0)
+    mov_channels = []
+    for label in NECK_ACC_LABELS + NECK_GYR_LABELS + CHEST_ACC_LABELS + CHEST_GYR_LABELS:
+        mov_channels.append((label, mov_wave))
+    paths = {
+        "eeg": _write_edf(
+            [("BTEleft SD", eeg_wave), ("CROSStop SD", eeg_wave)], 256
+        ),
+        "ecg": _write_edf([("ECG SD", eeg_wave)], 256),
+        "emg": _write_edf([("EMG SD", eeg_wave)], 256),
+        "mov": _write_edf(mov_channels, 25),
+    }
+    return paths
+
+
+def _remove_paths(paths):
+    for path in paths.values():
+        os.remove(path)
+
+
 def _pad(text, width):
     raw = text.encode("ascii")
     if len(raw) > width:
@@ -34,19 +95,16 @@ def _pad(text, width):
     return raw + b" " * (width - len(raw))
 
 
-def _write_edf(label, sfreq, samples):
-    samples = np.asarray(samples, dtype=np.float64)
-    n_samples = int(samples.size)
+def _write_edf(channels, sfreq):
+    n_ch = len(channels)
+    n_samples = int(np.asarray(channels[0][1]).size)
     if n_samples != sfreq:
         raise ValueError("this tiny writer only does one 1-second record")
     phys_max = 1000.0
     phys_min = -1000.0
     dig_max = 32767
     dig_min = -32767
-    scaled = (samples - phys_min) / (phys_max - phys_min)
-    digital = np.round(scaled * (dig_max - dig_min) + dig_min).astype(np.int16)
-
-    n_header = 256 + 256
+    n_header = 256 + 256 * n_ch
     header = b"".join(
         [
             _pad("0", 8),
@@ -58,28 +116,50 @@ def _write_edf(label, sfreq, samples):
             _pad("", 44),
             _pad("1", 8),
             _pad("1", 8),
-            _pad("1", 4),
+            _pad(str(n_ch), 4),
         ]
     )
-    channel = b"".join(
-        [
-            _pad(label, 16),
-            _pad("", 80),
-            _pad("uV", 8),
-            _pad(str(phys_min), 8),
-            _pad(str(phys_max), 8),
-            _pad(str(dig_min), 8),
-            _pad(str(dig_max), 8),
-            _pad("", 80),
-            _pad(str(n_samples), 8),
-            _pad("", 32),
-        ]
-    )
+    labels = b""
+    transducers = b""
+    units = b""
+    phys_mins = b""
+    phys_maxs = b""
+    dig_mins = b""
+    dig_maxs = b""
+    prefilters = b""
+    nsamps = b""
+    reserved = b""
+    bodies = []
+    for label, samples in channels:
+        samples = np.asarray(samples, dtype=np.float64)
+        scaled = (samples - phys_min) / (phys_max - phys_min)
+        digital = np.round(scaled * (dig_max - dig_min) + dig_min).astype(np.int16)
+        labels += _pad(label, 16)
+        transducers += _pad("", 80)
+        units += _pad("uV", 8)
+        phys_mins += _pad(str(phys_min), 8)
+        phys_maxs += _pad(str(phys_max), 8)
+        dig_mins += _pad(str(dig_min), 8)
+        dig_maxs += _pad(str(dig_max), 8)
+        prefilters += _pad("", 80)
+        nsamps += _pad(str(n_samples), 8)
+        reserved += _pad("", 32)
+        bodies.append(digital.tobytes())
     handle = tempfile.NamedTemporaryFile(suffix=".edf", delete=False)
     try:
         handle.write(header)
-        handle.write(channel)
-        handle.write(digital.tobytes())
+        handle.write(labels)
+        handle.write(transducers)
+        handle.write(units)
+        handle.write(phys_mins)
+        handle.write(phys_maxs)
+        handle.write(dig_mins)
+        handle.write(dig_maxs)
+        handle.write(prefilters)
+        handle.write(nsamps)
+        handle.write(reserved)
+        for body in bodies:
+            handle.write(body)
     finally:
         handle.close()
     return handle.name
