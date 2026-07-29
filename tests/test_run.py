@@ -1,0 +1,232 @@
+import os
+import tempfile
+
+import numpy as np
+import pytest
+
+from channels import (
+    CHEST_ACC_LABELS,
+    CHEST_GYR_LABELS,
+    ECG_LABEL,
+    EMG_LABEL,
+    NECK_ACC_LABELS,
+    NECK_GYR_LABELS,
+)
+from labels import LABEL_SOP
+from run import labelled_windows_from_files
+
+
+def test_files_and_events_keep_the_sop_window():
+    paths = _write_tiny_labelled_run(n_seconds=80)
+    try:
+        features, graphs, ends, labels = labelled_windows_from_files(
+            paths["eeg"],
+            paths["ecg"],
+            paths["emg"],
+            paths["mov"],
+            paths["events"],
+        )
+        assert ends == [69]
+        assert labels == [LABEL_SOP]
+        assert features.shape[0] == 1
+        assert graphs.shape[0] == 1
+    finally:
+        _remove_paths(paths)
+
+
+def test_impd_on_the_sop_window_leaves_nothing():
+    paths = _write_tiny_labelled_run(n_seconds=80, impd=(15.0, 1.0))
+    try:
+        with pytest.raises(ValueError, match="didnt keep any labelled windows"):
+            labelled_windows_from_files(
+                paths["eeg"],
+                paths["ecg"],
+                paths["emg"],
+                paths["mov"],
+                paths["events"],
+            )
+    finally:
+        _remove_paths(paths)
+
+
+def test_silent_gap_fails():
+    paths = _write_tiny_labelled_run(n_seconds=3, eeg_onsets=[0.0, 1.0, 4.0])
+    try:
+        with pytest.raises(ValueError, match="silent gaps"):
+            labelled_windows_from_files(
+                paths["eeg"],
+                paths["ecg"],
+                paths["emg"],
+                paths["mov"],
+                paths["events"],
+            )
+    finally:
+        _remove_paths(paths)
+
+
+def test_missing_events_file_fails():
+    paths = _write_tiny_labelled_run(n_seconds=3)
+    try:
+        with pytest.raises(ValueError, match="events file is missing"):
+            labelled_windows_from_files(
+                paths["eeg"],
+                paths["ecg"],
+                paths["emg"],
+                paths["mov"],
+                "/tmp/no-such-events-please.tsv",
+            )
+    finally:
+        _remove_paths(paths)
+
+
+def _write_tiny_labelled_run(n_seconds, impd=None, eeg_onsets=None):
+    eeg_wave = _wave(n_seconds * 256, 50.0)
+    mov_wave = _noise(n_seconds * 25)
+    mov_channels = []
+    for label in NECK_ACC_LABELS + NECK_GYR_LABELS + CHEST_ACC_LABELS + CHEST_GYR_LABELS:
+        mov_channels.append((label, mov_wave))
+    paths = {
+        "eeg": _write_edf_plus_signals(
+            [("BTEleft SD", eeg_wave), ("CROSStop SD", eeg_wave)],
+            256,
+            eeg_onsets,
+        ),
+        "ecg": _write_edf_plus_signals([(ECG_LABEL, eeg_wave)], 256, None),
+        "emg": _write_edf_plus_signals([(EMG_LABEL, eeg_wave)], 256, None),
+        "mov": _write_edf_plus_signals(mov_channels, 25, None),
+        "events": _write_events(impd),
+    }
+    return paths
+
+
+def _write_events(impd):
+    lines = ["onset\tduration\teventType\n", "375.0\t25.0\tsz\n"]
+    if impd is not None:
+        start, duration = impd
+        lines.append(f"{start}\t{duration}\timpd\n")
+    handle = tempfile.NamedTemporaryFile("w", suffix=".tsv", delete=False)
+    handle.write("".join(lines))
+    handle.close()
+    return handle.name
+
+
+def _wave(n, scale):
+    time = np.arange(n) / 256.0
+    return scale * np.sin(2 * np.pi * 10.0 * time)
+
+
+def _noise(n):
+    rng = np.random.default_rng(123)
+    return rng.normal(size=n)
+
+
+def _remove_paths(paths):
+    for path in paths.values():
+        os.remove(path)
+
+
+def _pad(text, width):
+    raw = text.encode("ascii")
+    if len(raw) > width:
+        raise ValueError(f"edf field too long: {text}")
+    return raw + b" " * (width - len(raw))
+
+
+def _tal_bytes(onset, n_samples):
+    if onset == int(onset):
+        text = f"+{int(onset)}\x14\x14\x00"
+    else:
+        text = f"+{onset}\x14\x14\x00"
+    raw = text.encode("ascii")
+    nbytes = n_samples * 2
+    if len(raw) > nbytes:
+        raise ValueError("tal too long for the annotation channel")
+    return raw + b"\x00" * (nbytes - len(raw))
+
+
+def _write_edf_plus_signals(channels, sfreq, record_onsets):
+    n_samples = int(np.asarray(channels[0][1]).size)
+    if n_samples % sfreq != 0:
+        raise ValueError("samples have to split into 1 sec records")
+    n_records = n_samples // sfreq
+    if record_onsets is None:
+        record_onsets = []
+        index = 0
+        while index < n_records:
+            record_onsets.append(float(index))
+            index += 1
+    if len(record_onsets) != n_records:
+        raise ValueError("need one onset per data record")
+    annot_nsamp = 40
+    n_sig = len(channels)
+    n_ch = n_sig + 1
+    n_header = 256 + 256 * n_ch
+    header = b"".join(
+        [
+            _pad("0", 8),
+            _pad("tiny", 80),
+            _pad("tiny", 80),
+            _pad("01.01.70", 8),
+            _pad("00.00.00", 8),
+            _pad(str(n_header), 8),
+            _pad("EDF+C", 44),
+            _pad(str(n_records), 8),
+            _pad("1", 8),
+            _pad(str(n_ch), 4),
+        ]
+    )
+    labels = _pad("EDF Annotations", 16)
+    transducers = _pad("", 80)
+    units = _pad("", 8)
+    phys_mins = _pad("-32768", 8)
+    phys_maxs = _pad("32767", 8)
+    dig_mins = _pad("-32768", 8)
+    dig_maxs = _pad("32767", 8)
+    prefilters = _pad("", 80)
+    nsamps = _pad(str(annot_nsamp), 8)
+    ch_reserved = _pad("", 32)
+    digital_rows = []
+    phys_min = -1000.0
+    phys_max = 1000.0
+    dig_min = -32767
+    dig_max = 32767
+    for label, samples in channels:
+        samples = np.asarray(samples, dtype=np.float64)
+        scaled = (samples - phys_min) / (phys_max - phys_min)
+        digital = np.round(scaled * (dig_max - dig_min) + dig_min).astype(np.int16)
+        digital_rows.append(digital)
+        labels += _pad(label, 16)
+        transducers += _pad("", 80)
+        units += _pad("uV", 8)
+        phys_mins += _pad(str(phys_min), 8)
+        phys_maxs += _pad(str(phys_max), 8)
+        dig_mins += _pad(str(dig_min), 8)
+        dig_maxs += _pad(str(dig_max), 8)
+        prefilters += _pad("", 80)
+        nsamps += _pad(str(sfreq), 8)
+        ch_reserved += _pad("", 32)
+    handle = tempfile.NamedTemporaryFile(suffix=".edf", delete=False)
+    try:
+        handle.write(header)
+        handle.write(labels)
+        handle.write(transducers)
+        handle.write(units)
+        handle.write(phys_mins)
+        handle.write(phys_maxs)
+        handle.write(dig_mins)
+        handle.write(dig_maxs)
+        handle.write(prefilters)
+        handle.write(nsamps)
+        handle.write(ch_reserved)
+        record_index = 0
+        while record_index < n_records:
+            handle.write(_tal_bytes(record_onsets[record_index], annot_nsamp))
+            ch_index = 0
+            while ch_index < n_sig:
+                start = record_index * sfreq
+                handle.write(digital_rows[ch_index][start : start + sfreq].tobytes())
+                ch_index += 1
+            record_index += 1
+    finally:
+        handle.close()
+    return handle.name
