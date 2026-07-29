@@ -21,13 +21,7 @@ def one_train_step(model, optimizer, input_seq, seq_lengths, adj, labels, pos_we
         raise ValueError(f"pos_weight has to be > 0, we got {pos_weight}")
     model.train()
     optimizer.zero_grad()
-    out = model(input_seq, seq_lengths, adj)
-    # evobrain returns (logits, hidden), a tiny test model can return logits only
-    if type(out) is tuple:
-        logits = out[0]
-    else:
-        logits = out
-    logits = logits.reshape(-1)
+    logits = model_logits(model, input_seq, seq_lengths, adj)
     labels = labels.float().reshape(-1)
     if logits.shape[0] != labels.shape[0]:
         raise ValueError(
@@ -39,3 +33,13 @@ def one_train_step(model, optimizer, input_seq, seq_lengths, adj, labels, pos_we
     torch.nn.utils.clip_grad_norm_(model.parameters(), MAX_GRAD_NORM)
     optimizer.step()
     return float(loss.detach())
+
+
+def model_logits(model, input_seq, seq_lengths, adj):
+    out = model(input_seq, seq_lengths, adj)
+    # evobrain returns (logits, hidden), a tiny test model can return logits only
+    if type(out) is tuple:
+        logits = out[0]
+    else:
+        logits = out
+    return logits.reshape(-1)
