@@ -1,4 +1,5 @@
 import os
+import shutil
 import tempfile
 
 import numpy as np
@@ -12,8 +13,10 @@ from channels import (
     NECK_ACC_LABELS,
     NECK_GYR_LABELS,
 )
+from config import read_config
 from labels import LABEL_SOP
-from run import labelled_windows_from_files
+from pack import load_split
+from run import labelled_windows_from_files, write_labelled_run
 
 
 def test_files_and_events_keep_the_sop_window():
@@ -62,6 +65,29 @@ def test_silent_gap_fails():
             )
     finally:
         _remove_paths(paths)
+
+
+def test_write_labelled_run_packs_npz_next_to_config():
+    paths = _write_tiny_labelled_run(n_seconds=80)
+    root = tempfile.mkdtemp()
+    try:
+        folder = write_labelled_run(
+            root,
+            "sub-004",
+            paths["eeg"],
+            paths["ecg"],
+            paths["emg"],
+            paths["mov"],
+            paths["events"],
+        )
+        loaded = read_config(os.path.join(folder, "config.json"))
+        assert loaded["patient_id"] == "sub-004"
+        assert loaded["seed"] == 123
+        _features, _graphs, labels = load_split(os.path.join(folder, "windows.npz"))
+        np.testing.assert_array_equal(labels, np.array([1]))
+    finally:
+        _remove_paths(paths)
+        shutil.rmtree(root)
 
 
 def test_missing_events_file_fails():

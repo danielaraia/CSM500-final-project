@@ -1,8 +1,10 @@
 import os
 
+from config import start_run
 from edf import edf_gap_spans, load_run
 from events import impd_spans, load_event_rows, seizure_spans
 from glue import build_windows, keep_labelled_windows
+from pack import save_named_labels
 from windows import TRAIN_STRIDE_SECONDS
 
 
@@ -37,3 +39,21 @@ def labelled_windows_from_files(
     return keep_labelled_windows(
         features, graphs, ends, seizure_spans(rows)
     )
+
+
+def write_labelled_run(
+    root,
+    patient_id,
+    eeg_path,
+    ecg_path,
+    emg_path,
+    mov_path,
+    events_path,
+    extra=None,
+):
+    features, graphs, _ends, labels = labelled_windows_from_files(
+        eeg_path, ecg_path, emg_path, mov_path, events_path
+    )
+    folder = start_run(root, patient_id, extra)
+    save_named_labels(os.path.join(folder, "windows.npz"), features, graphs, labels)
+    return folder
