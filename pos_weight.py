@@ -24,3 +24,19 @@ def weight_from_train_labels(train_labels):
             raise ValueError(f"train labels cant include {lab}")
         index += 1
     return positive_class_weight(n_negative, n_positive), n_negative, n_positive
+
+
+def weight_from_class_numbers(labels):
+    n_positive = 0
+    n_negative = 0
+    index = 0
+    while index < len(labels):
+        lab = int(labels[index])
+        if lab == 1:
+            n_positive += 1
+        elif lab == 0:
+            n_negative += 1
+        else:
+            raise ValueError(f"class numbers have to be 0 or 1, we got {lab}")
+        index += 1
+    return positive_class_weight(n_negative, n_positive), n_negative, n_positive

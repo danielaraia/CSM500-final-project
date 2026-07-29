@@ -6,7 +6,8 @@ import tempfile
 import pytest
 import torch
 
-from train_loop import monitor_bce, train_until_stop
+from metrics import read_metrics
+from train_loop import monitor_bce, train_and_write_metrics, train_until_stop
 from train_step import make_optimizer
 
 
@@ -89,6 +90,44 @@ def test_writes_last_and_best_checkpoints():
         assert last["epoch"] == 1
         assert best["epoch"] == 1
         assert math.isfinite(best["monitor_loss"])
+    finally:
+        shutil.rmtree(folder)
+
+
+def test_writes_metrics_next_to_checkpoints():
+    torch.manual_seed(123)
+    model = _TinyLogits()
+    optimizer = make_optimizer(model)
+    train = _tiny_set(8)
+    monitor = _tiny_set(8)
+    folder = tempfile.mkdtemp()
+    try:
+        train_and_write_metrics(
+            folder,
+            model,
+            optimizer,
+            train[0],
+            train[1],
+            train[2],
+            monitor[0],
+            monitor[1],
+            monitor[2],
+            extra={"patient_id": "sub-004"},
+            max_epochs=1,
+            patience=5,
+            train_batch_size=8,
+        )
+        loaded = read_metrics(folder)
+        assert loaded["patient_id"] == "sub-004"
+        assert loaded["n_train_windows"] == 8
+        assert loaded["n_monitor_windows"] == 8
+        assert loaded["n_positive_train"] == 1
+        assert loaded["n_negative_train"] == 7
+        assert loaded["pos_weight"] == pytest.approx(7.0)
+        assert loaded["negative_control"] == "none"
+        assert math.isfinite(loaded["best_monitor_bce"])
+        assert loaded["parameter_count"] > 0
+        assert os.path.isfile(os.path.join(folder, "checkpoints", "best.pth.tar"))
     finally:
         shutil.rmtree(folder)
 

@@ -4,6 +4,8 @@ import torch
 from torch.nn import BCEWithLogitsLoss
 
 from config import LOCKED
+from metrics import write_metrics
+from pos_weight import weight_from_class_numbers
 from train_step import model_logits, one_train_step
 from windows import WINDOW_SECONDS
 
@@ -122,6 +124,59 @@ def train_until_stop(
                 )
         if wait >= patience:
             break
+    return best_epoch, best_loss
+
+
+def train_and_write_metrics(
+    folder,
+    model,
+    optimizer,
+    train_features,
+    train_adjacency,
+    train_labels,
+    monitor_features,
+    monitor_adjacency,
+    monitor_labels,
+    extra=None,
+    max_epochs=None,
+    patience=None,
+    train_batch_size=None,
+):
+    pos_weight, n_negative, n_positive = weight_from_class_numbers(train_labels)
+    best_epoch, best_loss = train_until_stop(
+        model,
+        optimizer,
+        train_features,
+        train_adjacency,
+        train_labels,
+        monitor_features,
+        monitor_adjacency,
+        monitor_labels,
+        pos_weight,
+        max_epochs=max_epochs,
+        patience=patience,
+        train_batch_size=train_batch_size,
+        checkpoint_dir=os.path.join(folder, "checkpoints"),
+    )
+    n_params = 0
+    for parameter in model.parameters():
+        n_params += parameter.numel()
+    metrics = {
+        "best_epoch": int(best_epoch),
+        "best_monitor_bce": float(best_loss),
+        "pos_weight": float(pos_weight),
+        "n_positive_train": int(n_positive),
+        "n_negative_train": int(n_negative),
+        "n_train_windows": int(len(train_labels)),
+        "n_monitor_windows": int(len(monitor_labels)),
+        "parameter_count": int(n_params),
+        "negative_control": "none",
+        "early_stopping_metric": LOCKED["early_stopping_metric"],
+    }
+    if extra is not None:
+        for key in extra:
+            metrics[key] = extra[key]
+    write_metrics(folder, metrics)
     return best_epoch, best_loss
 
 
