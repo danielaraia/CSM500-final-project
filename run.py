@@ -3,7 +3,8 @@ import os
 from config import start_run
 from edf import edf_gap_spans, load_run
 from events import impd_spans, load_event_rows, seizure_spans
-from glue import build_windows, keep_labelled_windows
+from glue import build_windows, cut_monitoring_slice, keep_labelled_windows, split_labelled_windows
+from normalize import apply_node_zscore, node_mean_and_std
 from pack import save_named_labels
 from windows import TRAIN_STRIDE_SECONDS
 
@@ -57,3 +58,33 @@ def write_labelled_run(
     folder = start_run(root, patient_id, extra)
     save_named_labels(os.path.join(folder, "windows.npz"), features, graphs, labels)
     return folder
+
+
+def write_scaled_splits(folder, features, graphs, ends, labels, t1, t2):
+    if not os.path.isdir(folder):
+        raise ValueError(f"run folder is missing: {folder}")
+    train_path = os.path.join(folder, "train.npz")
+    if os.path.exists(train_path):
+        raise ValueError(f"split files already exist, we wont write over them: {train_path}")
+    train, val, test = split_labelled_windows(features, graphs, ends, labels, t1, t2)
+    train, monitor, _monitor_start, _n_pos, _n_neg = cut_monitoring_slice(
+        train[0], train[1], train[2], train[3]
+    )
+    # zscore from gradient train only, then the same numbers on monitor, val, and test
+    means, stds = node_mean_and_std(train[0])
+    train_f = apply_node_zscore(train[0], means, stds)
+    monitor_f = apply_node_zscore(monitor[0], means, stds)
+    val_f = apply_node_zscore(val[0], means, stds)
+    test_f = apply_node_zscore(test[0], means, stds)
+    save_named_labels(train_path, train_f, train[1], train[3])
+    save_named_labels(os.path.join(folder, "monitor.npz"), monitor_f, monitor[1], monitor[3])
+    save_named_labels(os.path.join(folder, "val.npz"), val_f, val[1], val[3])
+    save_named_labels(os.path.join(folder, "test.npz"), test_f, test[1], test[3])
+    return {
+        "n_train_windows": int(train_f.shape[0]),
+        "n_monitor_windows": int(monitor_f.shape[0]),
+        "n_validation_windows": int(val_f.shape[0]),
+        "n_test_windows": int(test_f.shape[0]),
+        "means": means,
+        "stds": stds,
+    }

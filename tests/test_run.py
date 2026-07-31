@@ -14,9 +14,9 @@ from channels import (
     NECK_GYR_LABELS,
 )
 from config import read_config
-from labels import LABEL_SOP
+from labels import LABEL_INTERICTAL, LABEL_SOP
 from pack import load_split
-from run import labelled_windows_from_files, write_labelled_run
+from run import labelled_windows_from_files, write_labelled_run, write_scaled_splits
 
 
 def test_files_and_events_keep_the_sop_window():
@@ -88,6 +88,53 @@ def test_write_labelled_run_packs_npz_next_to_config():
     finally:
         _remove_paths(paths)
         shutil.rmtree(root)
+
+
+def test_write_scaled_splits_zscore_from_train_only():
+    n_windows = 20
+    features = np.zeros((n_windows, 1, 8, 1))
+    graphs = np.zeros((n_windows, 1, 8, 8))
+    ends = list(range(n_windows))
+    labels = (
+        [LABEL_INTERICTAL] * 10
+        + [LABEL_SOP] * 2
+        + [LABEL_SOP] * 2
+        + [LABEL_INTERICTAL] * 2
+        + [LABEL_SOP] * 2
+        + [LABEL_SOP, LABEL_INTERICTAL]
+    )
+    # first 12 windows are gradient train: 0, 2, 0, 2 ... so mean 1 std 1
+    index = 0
+    while index < 12:
+        features[index, 0, :, 0] = 0.0 if index % 2 == 0 else 2.0
+        index += 1
+    features[12:18, 0, :, 0] = 100.0
+    features[18:20, 0, :, 0] = 3.0
+    folder = tempfile.mkdtemp()
+    try:
+        counts = write_scaled_splits(
+            folder, features, graphs, ends, labels, t1=16, t2=18
+        )
+        assert counts["n_train_windows"] == 12
+        assert counts["n_monitor_windows"] == 4
+        assert counts["n_validation_windows"] == 2
+        assert counts["n_test_windows"] == 2
+        train_f, _g, train_y = load_split(os.path.join(folder, "train.npz"))
+        mon_f, _mg, mon_y = load_split(os.path.join(folder, "monitor.npz"))
+        _val_f, _vg, val_y = load_split(os.path.join(folder, "val.npz"))
+        test_f, _tg, test_y = load_split(os.path.join(folder, "test.npz"))
+        assert train_f[0, 0, 0, 0] == pytest.approx(-1.0)
+        assert train_f[1, 0, 0, 0] == pytest.approx(1.0)
+        # 100 used train stats, not its own
+        assert mon_f[0, 0, 0, 0] == pytest.approx(99.0)
+        assert test_f[0, 0, 0, 0] == pytest.approx(2.0)
+        np.testing.assert_array_equal(train_y[:10], np.zeros(10))
+        np.testing.assert_array_equal(train_y[10:], np.ones(2))
+        np.testing.assert_array_equal(mon_y, np.array([1, 1, 0, 0]))
+        np.testing.assert_array_equal(val_y, np.array([1, 1]))
+        np.testing.assert_array_equal(test_y, np.array([1, 0]))
+    finally:
+        shutil.rmtree(folder)
 
 
 def test_missing_events_file_fails():
