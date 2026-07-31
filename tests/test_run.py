@@ -21,6 +21,7 @@ from run import (
     write_labelled_run,
     write_scaled_splits,
     write_scaled_splits_from_seizures,
+    write_split_run,
 )
 
 
@@ -201,6 +202,25 @@ def test_one_seizure_cannot_make_split_files():
             )
     finally:
         shutil.rmtree(folder)
+
+
+def test_write_split_run_fails_with_one_seizure():
+    paths = _write_tiny_labelled_run(n_seconds=80)
+    root = tempfile.mkdtemp()
+    try:
+        with pytest.raises(ValueError, match="at least two usable seizures"):
+            write_split_run(
+                root,
+                "sub-004",
+                paths["eeg"],
+                paths["ecg"],
+                paths["emg"],
+                paths["mov"],
+                paths["events"],
+            )
+    finally:
+        _remove_paths(paths)
+        shutil.rmtree(root)
 
 
 def test_missing_events_file_fails():

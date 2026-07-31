@@ -10,6 +10,7 @@ from labels import (
     label_second,
     monitoring_indices,
     n_test_seizures,
+    seizures_with_full_sop,
     split_cut_times,
 )
 
@@ -37,6 +38,21 @@ def test_sop_sph_ictal_and_interictal_on_known_clock():
 def test_one_usable_seizure_is_rejected():
     with pytest.raises(ValueError, match="at least two usable seizures"):
         n_test_seizures(1)
+
+
+def test_early_seizure_is_dropped_without_a_full_sop():
+    seizures = [
+        (1359.0, 1401.0),
+        (8300.0, 8381.0),
+        (19956.0, 20062.0),
+        (26559.0, 26644.0),
+    ]
+    kept = seizures_with_full_sop(seizures)
+    assert kept == [
+        (8300.0, 8381.0),
+        (19956.0, 20062.0),
+        (26559.0, 26644.0),
+    ]
 
 
 def test_three_seizures_put_one_in_test_and_cut_at_gap_midpoint():

@@ -54,6 +54,17 @@ def n_test_seizures(n_usable):
     return n_test
 
 
+def seizures_with_full_sop(seizures):
+    kept = []
+    index = 0
+    while index < len(seizures):
+        onset, offset = seizures[index]
+        if onset >= SPH_SECONDS + SOP_SECONDS:
+            kept.append((onset, offset))
+        index += 1
+    return kept
+
+
 def split_cut_times(seizures):
     n_usable = len(seizures)
     n_test = n_test_seizures(n_usable)
