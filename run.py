@@ -4,6 +4,7 @@ from config import start_run
 from edf import edf_gap_spans, load_run
 from events import impd_spans, load_event_rows, seizure_spans
 from glue import build_windows, cut_monitoring_slice, keep_labelled_windows, split_labelled_windows
+from labels import split_cut_times
 from normalize import apply_node_zscore, node_mean_and_std
 from pack import save_named_labels
 from windows import TRAIN_STRIDE_SECONDS
@@ -58,6 +59,16 @@ def write_labelled_run(
     folder = start_run(root, patient_id, extra)
     save_named_labels(os.path.join(folder, "windows.npz"), features, graphs, labels)
     return folder
+
+
+def write_scaled_splits_from_seizures(folder, features, graphs, ends, labels, seizures):
+    t1, t2, n_train_seizures, n_test = split_cut_times(seizures)
+    counts = write_scaled_splits(folder, features, graphs, ends, labels, t1, t2)
+    counts["t1"] = t1
+    counts["t2"] = t2
+    counts["n_train_seizures"] = int(n_train_seizures)
+    counts["n_test_seizures"] = int(n_test)
+    return counts
 
 
 def write_scaled_splits(folder, features, graphs, ends, labels, t1, t2):

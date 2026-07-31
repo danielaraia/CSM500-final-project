@@ -16,7 +16,12 @@ from channels import (
 from config import read_config
 from labels import LABEL_INTERICTAL, LABEL_SOP
 from pack import load_split
-from run import labelled_windows_from_files, write_labelled_run, write_scaled_splits
+from run import (
+    labelled_windows_from_files,
+    write_labelled_run,
+    write_scaled_splits,
+    write_scaled_splits_from_seizures,
+)
 
 
 def test_files_and_events_keep_the_sop_window():
@@ -133,6 +138,67 @@ def test_write_scaled_splits_zscore_from_train_only():
         np.testing.assert_array_equal(mon_y, np.array([1, 1, 0, 0]))
         np.testing.assert_array_equal(val_y, np.array([1, 1]))
         np.testing.assert_array_equal(test_y, np.array([1, 0]))
+    finally:
+        shutil.rmtree(folder)
+
+
+def test_write_scaled_splits_uses_seizure_cut_times():
+    seizures = [
+        (10_000, 10_100),
+        (30_000, 30_100),
+        (50_000, 50_100),
+    ]
+    t1 = 30_100.0
+    t2 = 40_050.0
+    n_windows = 20
+    features = np.zeros((n_windows, 1, 8, 1))
+    graphs = np.zeros((n_windows, 1, 8, 8))
+    ends = list(range(16)) + [t1, t1 + 1.0, t2, t2 + 1.0]
+    index = 0
+    while index < 12:
+        features[index, 0, :, 0] = 0.0 if index % 2 == 0 else 2.0
+        index += 1
+    labels = (
+        [LABEL_INTERICTAL] * 10
+        + [LABEL_SOP] * 2
+        + [LABEL_SOP] * 2
+        + [LABEL_INTERICTAL] * 2
+        + [LABEL_SOP] * 2
+        + [LABEL_SOP, LABEL_INTERICTAL]
+    )
+    folder = tempfile.mkdtemp()
+    try:
+        counts = write_scaled_splits_from_seizures(
+            folder, features, graphs, ends, labels, seizures
+        )
+        assert counts["t1"] == pytest.approx(t1)
+        assert counts["t2"] == pytest.approx(t2)
+        assert counts["n_train_seizures"] == 2
+        assert counts["n_test_seizures"] == 1
+        assert counts["n_train_windows"] == 12
+        assert counts["n_monitor_windows"] == 4
+        assert counts["n_validation_windows"] == 2
+        assert counts["n_test_windows"] == 2
+        _val_f, _vg, val_y = load_split(os.path.join(folder, "val.npz"))
+        _test_f, _tg, test_y = load_split(os.path.join(folder, "test.npz"))
+        np.testing.assert_array_equal(val_y, np.array([1, 1]))
+        np.testing.assert_array_equal(test_y, np.array([1, 0]))
+    finally:
+        shutil.rmtree(folder)
+
+
+def test_one_seizure_cannot_make_split_files():
+    folder = tempfile.mkdtemp()
+    try:
+        with pytest.raises(ValueError, match="at least two usable seizures"):
+            write_scaled_splits_from_seizures(
+                folder,
+                np.zeros((4, 1, 8, 1)),
+                np.zeros((4, 1, 8, 8)),
+                [1, 2, 3, 4],
+                [LABEL_SOP, LABEL_SOP, LABEL_INTERICTAL, LABEL_INTERICTAL],
+                [(10_000, 10_100)],
+            )
     finally:
         shutil.rmtree(folder)
 
