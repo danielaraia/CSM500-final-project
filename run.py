@@ -51,24 +51,6 @@ def labelled_windows_from_files(
     return kept[0], kept[1], kept[2], kept[3], drop_counts
 
 
-def write_labelled_run(
-    root,
-    patient_id,
-    eeg_path,
-    ecg_path,
-    emg_path,
-    mov_path,
-    events_path,
-    extra=None,
-):
-    features, graphs, _ends, labels, _drop_counts = labelled_windows_from_files(
-        eeg_path, ecg_path, emg_path, mov_path, events_path
-    )
-    folder = start_run(root, patient_id, extra)
-    save_named_labels(os.path.join(folder, "windows.npz"), features, graphs, labels)
-    return folder
-
-
 def write_split_run(
     root,
     patient_id,

@@ -25,13 +25,6 @@ def unique_event_types(rows):
     return names
 
 
-def seizure_onsets(rows):
-    onsets = []
-    for start, _end in seizure_spans(rows):
-        onsets.append(start)
-    return onsets
-
-
 def seizure_spans(rows):
     spans = []
     for row in rows:

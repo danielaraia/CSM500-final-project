@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from normalize import apply_node_zscore, node_mean_and_std, zscore_from_train
+from normalize import apply_node_zscore, node_mean_and_std
 
 
 def test_constant_node_fails():
@@ -34,7 +34,10 @@ def test_val_uses_train_mean_not_its_own():
         node_index += 1
     val = np.full((1, 1, 8, 1), 100.0)
     test = np.full((1, 1, 8, 1), 3.0)
-    train_z, val_z, test_z, means, stds = zscore_from_train(train, val, test)
+    means, stds = node_mean_and_std(train)
+    train_z = apply_node_zscore(train, means, stds)
+    val_z = apply_node_zscore(val, means, stds)
+    test_z = apply_node_zscore(test, means, stds)
     assert means[0] == pytest.approx(1.0)
     assert stds[0] == pytest.approx(1.0)
     # if we had used val's own stats, 100 would become 0

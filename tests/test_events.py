@@ -3,7 +3,7 @@ import tempfile
 
 import pytest
 
-from events import impd_spans, load_event_rows, seizure_onsets, seizure_spans, unique_event_types
+from events import impd_spans, load_event_rows, seizure_spans, unique_event_types
 
 
 def test_seizure_and_impd_from_a_tiny_tsv():
@@ -17,7 +17,6 @@ def test_seizure_and_impd_from_a_tiny_tsv():
     try:
         rows = load_event_rows(path)
         assert unique_event_types(rows) == ["sz", "impd", "bckg"]
-        assert seizure_onsets(rows) == [10.0]
         assert seizure_spans(rows) == [(10.0, 40.0)]
         assert impd_spans(rows) == [(100.0, 105.0)]
     finally:
