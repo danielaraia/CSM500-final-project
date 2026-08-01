@@ -1,12 +1,15 @@
 import os
 
-from config import start_run
+import torch
+
+from config import LOCKED, start_run
 from edf import edf_gap_spans, load_run
 from events import impd_spans, load_event_rows, seizure_spans
 from glue import build_windows, cut_monitoring_slice, keep_labelled_windows, split_labelled_windows
 from labels import seizures_with_full_sop, split_cut_times
 from normalize import apply_node_zscore, node_mean_and_std
-from pack import save_named_labels
+from pack import load_split, save_named_labels
+from train_loop import train_and_write_metrics
 from windows import TRAIN_STRIDE_SECONDS
 
 
@@ -121,3 +124,46 @@ def write_scaled_splits(folder, features, graphs, ends, labels, t1, t2):
         "means": means,
         "stds": stds,
     }
+
+
+def train_packed_run(
+    folder,
+    model,
+    optimizer,
+    extra=None,
+    max_epochs=None,
+    patience=None,
+    train_batch_size=None,
+):
+    train_f, train_g, train_y = _load_split_file(folder, "train.npz")
+    monitor_f, monitor_g, monitor_y = _load_split_file(folder, "monitor.npz")
+    packed_extra = {
+        "n_validation_windows": int(_load_split_file(folder, "val.npz")[2].shape[0]),
+        "n_test_windows": int(_load_split_file(folder, "test.npz")[2].shape[0]),
+    }
+    if extra is not None:
+        for key in extra:
+            packed_extra[key] = extra[key]
+    torch.manual_seed(LOCKED["seed"])
+    return train_and_write_metrics(
+        folder,
+        model,
+        optimizer,
+        train_f,
+        train_g,
+        train_y,
+        monitor_f,
+        monitor_g,
+        monitor_y,
+        extra=packed_extra,
+        max_epochs=max_epochs,
+        patience=patience,
+        train_batch_size=train_batch_size,
+    )
+
+
+def _load_split_file(folder, name):
+    path = os.path.join(folder, name)
+    if not os.path.isfile(path):
+        raise ValueError(f"split file is missing: {path}")
+    return load_split(path)
