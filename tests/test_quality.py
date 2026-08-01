@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from quality import EEG_RMS_MAX, EEG_RMS_MIN, is_flat, root_mean_square, second_drop_reason, second_is_bad
+from quality import EEG_RMS_MAX, EEG_RMS_MIN, electrical_rail_reason, is_flat, root_mean_square, second_drop_reason, second_is_bad
 
 
 def _ok_wave(scale):
@@ -51,10 +51,17 @@ def test_drop_reason_names_the_fail():
 
 def test_rail_hit_drops_the_second():
     loud_ok = _ok_wave(80.0)
-    movement = _ok_wave(1.0)
     on_rail = loud_ok.copy()
     on_rail[10] = 1000.0
-    assert second_is_bad(
-        on_rail, loud_ok, loud_ok, loud_ok, movement, movement, movement, movement,
-        rail_min=-200.0, rail_max=200.0,
-    ) is True
+    raw = np.stack([on_rail, loud_ok, loud_ok, loud_ok])
+    rails = [(-200.0, 200.0), (-200.0, 200.0), (-200.0, 200.0), (-200.0, 200.0)]
+    assert electrical_rail_reason(raw, rails) == "electrical_rail"
+    clean = np.stack([loud_ok, loud_ok, loud_ok, loud_ok])
+    assert electrical_rail_reason(clean, rails) is None
+
+
+def test_missing_rails_fail():
+    loud_ok = _ok_wave(80.0)
+    raw = np.stack([loud_ok, loud_ok, loud_ok, loud_ok])
+    with pytest.raises(ValueError, match="need converter rails"):
+        electrical_rail_reason(raw, None)

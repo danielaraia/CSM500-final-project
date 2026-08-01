@@ -24,7 +24,7 @@ def labelled_windows_from_files(
     events_path,
     stride_seconds=TRAIN_STRIDE_SECONDS,
 ):
-    electrical, movement, _picked = load_run(
+    electrical, movement, _picked, electrical_rails = load_run(
         eeg_path, ecg_path, emg_path, mov_path
     )
     gaps = []
@@ -43,6 +43,7 @@ def labelled_windows_from_files(
         movement,
         stride_seconds=stride_seconds,
         drop_spans=impd_spans(rows),
+        electrical_rails=electrical_rails,
     )
     kept = keep_labelled_windows(
         features, graphs, ends, seizure_spans(rows)
@@ -191,7 +192,7 @@ def timed_patient_run(
     )
     rows = load_event_rows(events_path)
     seizures = seizures_with_full_sop(seizure_spans(rows))
-    folder = start_run(root, patient_id, extra)
+    folder = start_run(root, patient_id)
     split_counts = write_scaled_splits_from_seizures(
         folder, features, graphs, ends, labels, seizures
     )
@@ -204,6 +205,7 @@ def timed_patient_run(
     packed_extra["n_train_seizures"] = int(split_counts["n_train_seizures"])
     packed_extra["n_test_seizures"] = int(split_counts["n_test_seizures"])
     packed_extra["scored_at_train_stride"] = True
+    packed_extra["patient_id"] = patient_id
     if extra is not None:
         for key in extra:
             packed_extra[key] = extra[key]
@@ -241,6 +243,7 @@ def train_score_and_write_metrics(
     test_f, test_g, _test_y = _load_split_file(folder, "test.npz")
     torch.manual_seed(LOCKED["seed"])
     pos_weight, n_negative, n_positive = weight_from_class_numbers(train_y)
+    _mon_w, n_negative_monitor, n_positive_monitor = weight_from_class_numbers(monitor_y)
     train_start = time.perf_counter()
     best_epoch, best_loss = train_until_stop(
         model,
@@ -273,6 +276,8 @@ def train_score_and_write_metrics(
         "pos_weight": float(pos_weight),
         "n_positive_train": int(n_positive),
         "n_negative_train": int(n_negative),
+        "n_positive_monitor": int(n_positive_monitor),
+        "n_negative_monitor": int(n_negative_monitor),
         "n_train_windows": int(len(train_y)),
         "n_monitor_windows": int(len(monitor_y)),
         "parameter_count": int(n_params),
@@ -282,42 +287,35 @@ def train_score_and_write_metrics(
         "train_seconds": float(train_seconds),
         "score_seconds": float(score_seconds),
         "end_to_end_wall_clock": float(total_seconds),
+        "patient_wall_clock_seconds": float(total_seconds),
         "n_seconds_scored": int(n_val_scored + n_test_scored),
         "n_validation_windows_scored": int(n_val_scored),
         "n_test_windows_scored": int(n_test_scored),
+        "patient_id": extra.get("patient_id") if extra else None,
+        "graph_strategy": LOCKED["graph_strategy"],
+        "sop_minutes": LOCKED["sop_minutes"],
+        "sph_minutes": LOCKED["sph_minutes"],
     }
+    if metrics["patient_id"] is None:
+        metrics.pop("patient_id")
     if compile_seconds is not None:
         metrics["compile_seconds"] = float(compile_seconds)
     if extra is not None:
         for key in extra:
             metrics[key] = extra[key]
+    if "peak_memory_allocated_bytes" in metrics:
+        metrics["peak_memory_bytes"] = metrics["peak_memory_allocated_bytes"]
+        metrics["peak_memory_allocated_gib"] = float(
+            metrics["peak_memory_allocated_bytes"]
+        ) / float(1024 ** 3)
+        if "gpu_memory_bytes" in metrics:
+            metrics["concurrent_train_processes_arithmetic_formula"] = (
+                "gpu_memory_bytes // peak_memory_bytes"
+            )
+    if "batch_128_one_step_fits" in metrics:
+        metrics["batch_128_fits_24gb"] = metrics["batch_128_one_step_fits"]
     write_metrics(folder, metrics)
     return folder, metrics
-    train_f, train_g, train_y = _load_split_file(folder, "train.npz")
-    monitor_f, monitor_g, monitor_y = _load_split_file(folder, "monitor.npz")
-    packed_extra = {
-        "n_validation_windows": int(_load_split_file(folder, "val.npz")[2].shape[0]),
-        "n_test_windows": int(_load_split_file(folder, "test.npz")[2].shape[0]),
-    }
-    if extra is not None:
-        for key in extra:
-            packed_extra[key] = extra[key]
-    torch.manual_seed(LOCKED["seed"])
-    return train_and_write_metrics(
-        folder,
-        model,
-        optimizer,
-        train_f,
-        train_g,
-        train_y,
-        monitor_f,
-        monitor_g,
-        monitor_y,
-        extra=packed_extra,
-        max_epochs=max_epochs,
-        patience=patience,
-        train_batch_size=train_batch_size,
-    )
 
 
 def _load_split_file(folder, name):

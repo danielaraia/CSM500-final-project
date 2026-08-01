@@ -15,6 +15,14 @@ from pearson import N_NODES
 from windows import WINDOW_SECONDS
 
 
+WIDE_RAILS = [
+    (-1000.0, 1000.0),
+    (-1000.0, 1000.0),
+    (-1000.0, 1000.0),
+    (-1000.0, 1000.0),
+]
+
+
 def test_fake_run_makes_one_sixty_step_window():
     features, graphs = _fake_window()
     assert features.shape == (WINDOW_SECONDS, N_NODES, N_FFT_BINS)
@@ -32,7 +40,9 @@ def test_fake_run_makes_one_sixty_step_window():
 
 def test_clean_eighty_seconds_has_two_train_windows():
     electrical, movement = _fake_run(80)
-    features, graphs, ends, drop_counts = build_windows(electrical, movement)
+    features, graphs, ends, drop_counts = build_windows(
+        electrical, movement, electrical_rails=WIDE_RAILS
+    )
     # first 3 sec have no pearson buffer, so end 59 is a hole, 69 and 79 survive
     assert ends == [69, 79]
     assert drop_counts["n_steps_dropped_short_buffer"] == 3
@@ -46,7 +56,9 @@ def test_hole_at_fifteen_drops_the_early_train_window():
     start = 15 * 256
     electrical[0, start : start + 256] = 0.0
     electrical[1, start : start + 256] = 0.0
-    features, graphs, ends, drop_counts = build_windows(electrical, movement)
+    features, graphs, ends, drop_counts = build_windows(
+        electrical, movement, electrical_rails=WIDE_RAILS
+    )
     assert ends == [79]
     assert features.shape[0] == 1
     assert graphs.shape[0] == 1
@@ -56,25 +68,44 @@ def test_hole_at_fifteen_drops_the_early_train_window():
 def test_impd_span_drops_the_early_train_window():
     electrical, movement = _fake_run(80)
     features, graphs, ends, drop_counts = build_windows(
-        electrical, movement, drop_spans=[(15.0, 16.0)]
+        electrical, movement, drop_spans=[(15.0, 16.0)], electrical_rails=WIDE_RAILS
     )
     assert ends == [79]
     assert features.shape[0] == 1
     assert drop_counts["n_steps_qc_drop_span"] == 1
 
 
+def test_missing_rails_fail():
+    electrical, movement = _fake_run(80)
+    with pytest.raises(ValueError, match="need converter rails"):
+        build_windows(electrical, movement)
+
+
+def test_raw_rail_hit_drops_the_early_train_window():
+    electrical, movement = _fake_run(80)
+    electrical[0, 15 * 256] = 1000.0
+    tight_rails = [(-200.0, 200.0), (-200.0, 200.0), (-200.0, 200.0), (-200.0, 200.0)]
+    features, graphs, ends, drop_counts = build_windows(
+        electrical, movement, electrical_rails=tight_rails
+    )
+    assert ends == [79]
+    assert features.shape[0] == 1
+    assert graphs.shape[0] == 1
+    assert drop_counts["n_steps_qc_electrical_rail"] >= 1
+
+
 def test_too_short_fails():
     electrical = np.ones((4, 256))
     movement = np.ones((12, 25))
     with pytest.raises(ValueError, match="didnt get a window"):
-        build_one_window(electrical, movement)
+        build_one_window(electrical, movement, WIDE_RAILS)
 
 
 def test_second_count_mismatch_fails():
     electrical = np.ones((4, 256 * 4))
     movement = np.ones((12, 25 * 3))
     with pytest.raises(ValueError, match="we got 4 and 3"):
-        build_one_window(electrical, movement)
+        build_one_window(electrical, movement, WIDE_RAILS)
 
 
 def test_keep_labelled_drops_sph_and_keeps_sop():
@@ -159,7 +190,7 @@ def test_monitoring_cut_keeps_last_quarter():
 
 def _fake_window():
     electrical, movement = _fake_run(SECONDS_NEEDED)
-    return build_one_window(electrical, movement)
+    return build_one_window(electrical, movement, WIDE_RAILS)
 
 
 def _fake_run(n_sec):

@@ -31,5 +31,8 @@
   "fft_bins": "drop dc, keep 1 to 128",
   "electrical_to_25hz": "scipy.signal.resample to 100 samples",
   "eeg_rms_rule": "drop a second only if both ears fail 13 to 150 uV",
+  "filter_call": "scipy.signal.butter SOS then sosfiltfilt",
+  "node_order": "eeg a, eeg b, ecg, emg, neck acc, neck gyr, chest acc, chest gyr",
+  "early_stopping_direction": "minimise",
   "patient_id": "sub-004"
 }

@@ -21,6 +21,7 @@
   "n_steps_dropped_short_buffer": 11917,
   "n_steps_qc_electrical_flat": 0,
   "n_steps_qc_electrical_rail": 0,
+  "n_steps_qc_electrical_rail_laptop_recount": 4,
   "n_steps_qc_both_ears_rms": 40431,
   "n_steps_qc_movement_flat": 0,
   "n_steps_qc_drop_span": 0,
@@ -47,7 +48,18 @@
   "seconds_per_scored_second": 0.0006696479784977782,
   "peak_memory_allocated_bytes": 1769934336,
   "concurrent_train_processes_arithmetic": 14,
+  "concurrent_train_processes_arithmetic_formula": "gpu_memory_bytes // peak_memory_bytes",
   "concurrent_train_processes_live": "UNVERIFIED",
   "batch_128_one_step_fits": true,
-  "timing_source": "p0-gate-metrics.json"
+  "timing_source": "p0-gate-metrics.json",
+  "n_positive_monitor": 9,
+  "n_negative_monitor": 19,
+  "patient_wall_clock_seconds": 77.1731054969132,
+  "peak_memory_bytes": 1769934336,
+  "peak_memory_allocated_gib": 1.6483798027038574,
+  "batch_128_fits_24gb": true,
+  "patient_id": "sub-004",
+  "graph_strategy": "pearson",
+  "sop_minutes": 30,
+  "sph_minutes": 5
 }

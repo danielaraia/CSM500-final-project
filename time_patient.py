@@ -5,6 +5,7 @@ import time
 import torch
 
 from config import LOCKED
+from metrics import load_gate_metrics
 from evobrain_load import load_evobrain
 from run import timed_patient_run
 from time_cuda import make_batch
@@ -46,18 +47,9 @@ def main():
         "eval_batch_size": LOCKED["eval_batch_size"],
     }
     gate_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "p0-gate-metrics.json")
-    if os.path.isfile(gate_path):
-        with open(gate_path) as handle:
-            gate = json.load(handle)
-        extra["seconds_per_training_sample"] = gate["seconds_per_training_sample"]
-        extra["seconds_per_scored_second"] = gate["seconds_per_scored_second"]
-        extra["peak_memory_allocated_bytes"] = gate["peak_memory_allocated_bytes"]
-        extra["concurrent_train_processes_arithmetic"] = gate[
-            "concurrent_train_processes_arithmetic"
-        ]
-        extra["concurrent_train_processes_live"] = gate["concurrent_train_processes_live"]
-        extra["batch_128_one_step_fits"] = gate["batch_128_one_step_fits"]
-        extra["timing_source"] = "p0-gate-metrics.json"
+    gate = load_gate_metrics(gate_path)
+    for key in gate:
+        extra[key] = gate[key]
 
     base = "data/seizeit2/sub-004/ses-01"
     folder, metrics = timed_patient_run(

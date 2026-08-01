@@ -15,6 +15,8 @@ def test_locked_learning_rate_is_not_the_code_default():
     assert LOCKED["num_eigenvectors"] == 4
     assert LOCKED["rnn_units"] == 64
     assert LOCKED["eeg_rms_rule"] == "drop a second only if both ears fail 13 to 150 uV"
+    assert LOCKED["filter_call"] == "scipy.signal.butter SOS then sosfiltfilt"
+    assert LOCKED["early_stopping_direction"] == "minimise"
 
 
 def test_write_and_read_config():
@@ -25,6 +27,16 @@ def test_write_and_read_config():
         loaded = read_config(handle.name)
         assert loaded["patient_id"] == "sub-004"
         assert loaded["seed"] == 123
+    finally:
+        os.remove(handle.name)
+
+
+def test_write_config_rejects_locked_overwrite():
+    handle = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False)
+    handle.close()
+    try:
+        with pytest.raises(ValueError, match="locked config key"):
+            write_config(handle.name, {"learning_rate": 0.0003})
     finally:
         os.remove(handle.name)
 

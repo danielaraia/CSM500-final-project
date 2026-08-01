@@ -35,12 +35,19 @@ LOCKED = {
     "fft_bins": "drop dc, keep 1 to 128",
     "electrical_to_25hz": "scipy.signal.resample to 100 samples",
     "eeg_rms_rule": "drop a second only if both ears fail 13 to 150 uV",
+    "filter_call": "scipy.signal.butter SOS then sosfiltfilt",
+    "node_order": "eeg a, eeg b, ecg, emg, neck acc, neck gyr, chest acc, chest gyr",
+    "early_stopping_direction": "minimise",
 }
 
 
 def write_config(path, extra):
     config = dict(LOCKED)
     for key in extra:
+        if key in LOCKED and extra[key] != LOCKED[key]:
+            raise ValueError(
+                f"locked config key {key} is {LOCKED[key]!r}, extra tried {extra[key]!r}"
+            )
         config[key] = extra[key]
     with open(path, "w") as handle:
         json.dump(config, handle, indent=2)

@@ -15,7 +15,7 @@ def pick_eeg_pair(channel_names):
             present.append(label)
     if len(present) < 2:
         raise ValueError(
-            "need two behind-the-ear eeg channels, we got "
+            "need two behind the ear eeg channels, we got "
             + ", ".join(channel_names)
         )
     return present[0], present[1]

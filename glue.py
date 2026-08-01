@@ -15,7 +15,7 @@ from pearson import (
     count_short_buffer_drops,
     steps_with_full_movement_buffer,
 )
-from quality import second_drop_reason, second_is_bad
+from quality import electrical_rail_reason, need_four_rails, second_drop_reason
 from spans import second_hits_a_span
 from windows import (
     EVAL_STRIDE_SECONDS,
@@ -32,9 +32,12 @@ SECONDS_BEFORE_FIRST_GRAPH = MOVEMENT_BUFFER_SECONDS - 1
 SECONDS_NEEDED = SECONDS_BEFORE_FIRST_GRAPH + WINDOW_SECONDS
 
 
-def build_one_window(electrical, movement_axes):
+def build_one_window(electrical, movement_axes, electrical_rails):
     features, graphs, _ends, _drop_counts = build_windows(
-        electrical, movement_axes, stride_seconds=EVAL_STRIDE_SECONDS
+        electrical,
+        movement_axes,
+        stride_seconds=EVAL_STRIDE_SECONDS,
+        electrical_rails=electrical_rails,
     )
     if features.shape[0] < 1:
         raise ValueError("didnt get a window, too many bad seconds")
@@ -46,18 +49,25 @@ def build_windows(
     movement_axes,
     stride_seconds=TRAIN_STRIDE_SECONDS,
     drop_spans=None,
+    electrical_rails=None,
 ):
+    need_four_rails(electrical_rails)
     electrical = np.asarray(electrical, dtype=np.float64)
     movement_axes = np.asarray(movement_axes, dtype=np.float64)
     _n_seconds(electrical, movement_axes)
 
+    electrical_raw_seconds = _cut_seconds(electrical, ELECTRICAL_SAMPLES_1S)
     electrical = _filter_electrical(electrical)
     movement = _movement_magnitudes(movement_axes)
     electrical_seconds = _cut_seconds(electrical, ELECTRICAL_SAMPLES_1S)
     movement_seconds = _cut_seconds(movement, SAMPLES_MOVEMENT_1S)
 
     quality_ok, drop_counts = _quality_ok_and_drop_counts(
-        electrical_seconds, movement_seconds, drop_spans
+        electrical_seconds,
+        movement_seconds,
+        drop_spans,
+        electrical_raw_seconds,
+        electrical_rails,
     )
     graph_ok = _graph_ok_seconds(quality_ok)
     ends = window_end_times(graph_ok, WINDOW_SECONDS, stride_seconds)
@@ -235,9 +245,21 @@ def _n_seconds(electrical, movement_axes):
     return n_electrical
 
 
-def _quality_ok_and_drop_counts(electrical_seconds, movement_seconds, drop_spans):
-    quality_ok = _quality_ok_seconds(electrical_seconds, movement_seconds)
-    n_seconds = len(quality_ok)
+def _quality_ok_and_drop_counts(
+    electrical_seconds,
+    movement_seconds,
+    drop_spans,
+    electrical_raw_seconds,
+    electrical_rails,
+):
+    need_four_rails(electrical_rails)
+    n_seconds = len(electrical_seconds)
+    if electrical_raw_seconds.shape[0] != n_seconds:
+        raise ValueError(
+            "raw and filtered electrical need the same second count, "
+            f"we got {electrical_raw_seconds.shape[0]} and {n_seconds}"
+        )
+    quality_ok = []
     n_electrical_flat = 0
     n_electrical_rail = 0
     n_both_ears_rms = 0
@@ -245,7 +267,14 @@ def _quality_ok_and_drop_counts(electrical_seconds, movement_seconds, drop_spans
     n_drop_span = 0
     second_index = 0
     while second_index < n_seconds:
-        if not quality_ok[second_index]:
+        rail_reason = electrical_rail_reason(
+            electrical_raw_seconds[second_index],
+            electrical_rails,
+        )
+        if rail_reason is not None:
+            quality_ok.append(False)
+            n_electrical_rail += 1
+        else:
             reason = second_drop_reason(
                 electrical_seconds[second_index, 0],
                 electrical_seconds[second_index, 1],
@@ -257,20 +286,24 @@ def _quality_ok_and_drop_counts(electrical_seconds, movement_seconds, drop_spans
                 movement_seconds[second_index, 3],
             )
             if reason is None:
-                raise ValueError(
-                    f"sec {second_index} failed quality but has no reason"
-                )
-            if reason == "electrical_flat":
+                quality_ok.append(True)
+            elif reason == "electrical_flat":
+                quality_ok.append(False)
                 n_electrical_flat += 1
-            elif reason == "electrical_rail":
-                n_electrical_rail += 1
             elif reason == "both_ears_rms":
+                quality_ok.append(False)
                 n_both_ears_rms += 1
             elif reason == "movement_flat":
+                quality_ok.append(False)
                 n_movement_flat += 1
             else:
                 raise ValueError(f"unknown quality reason {reason}")
-        elif second_hits_a_span(second_index, drop_spans or []):
+        second_index += 1
+    second_index = 0
+    while second_index < n_seconds:
+        if quality_ok[second_index] and second_hits_a_span(
+            second_index, drop_spans or []
+        ):
             n_drop_span += 1
         second_index += 1
     quality_ok = _apply_drop_spans(quality_ok, drop_spans)
@@ -301,26 +334,6 @@ def _apply_drop_spans(quality_ok, drop_spans):
     while second_index < len(quality_ok):
         hit = second_hits_a_span(second_index, drop_spans)
         ok.append(bool(quality_ok[second_index] and not hit))
-        second_index += 1
-    return ok
-
-
-def _quality_ok_seconds(electrical_seconds, movement_seconds):
-    n_seconds = electrical_seconds.shape[0]
-    ok = []
-    second_index = 0
-    while second_index < n_seconds:
-        bad = second_is_bad(
-            electrical_seconds[second_index, 0],
-            electrical_seconds[second_index, 1],
-            electrical_seconds[second_index, 2],
-            electrical_seconds[second_index, 3],
-            movement_seconds[second_index, 0],
-            movement_seconds[second_index, 1],
-            movement_seconds[second_index, 2],
-            movement_seconds[second_index, 3],
-        )
-        ok.append(not bad)
         second_index += 1
     return ok
 

@@ -10,7 +10,7 @@ def test_picks_left_and_right_when_all_three_eeg_are_there():
 
 
 def test_one_eeg_channel_fails():
-    with pytest.raises(ValueError, match="two behind-the-ear"):
+    with pytest.raises(ValueError, match="two behind the ear"):
         pick_eeg_pair(["BTEleft SD"])
 
 

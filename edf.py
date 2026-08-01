@@ -36,6 +36,7 @@ def load_run(eeg_path, ecg_path, emg_path, mov_path):
     _need_rate("emg", emg_rate, EEG_SAMPLE_RATE)
     _need_rate("movement", mov_rate, MOVEMENT_SAMPLE_RATE)
     picked = pick_run_channels(eeg_names, ecg_names, emg_names, mov_names)
+    electrical_rails = electrical_rails_uv(eeg_path, ecg_path, emg_path, picked)
     electrical = np.stack(
         [
             _row(eeg_names, eeg_data, picked["eeg_a"]) * VOLTS_TO_UV,
@@ -60,7 +61,7 @@ def load_run(eeg_path, ecg_path, emg_path, mov_path):
             f"electrical and movement need the same number of seconds, "
             f"we got {n_elec} and {n_mov}"
         )
-    return electrical, movement, picked
+    return electrical, movement, picked, electrical_rails
 
 
 def _need_rate(what, got, want):
@@ -101,7 +102,7 @@ def edf_record_onsets(path):
         rest = handle.read(n_header - 256)
         if len(rest) != n_header - 256:
             raise ValueError(f"edf header is truncated: {path}")
-        labels, nsamp = _channel_labels_and_nsamp(rest, n_ch)
+        labels, _units, _phys_mins, _phys_maxs, nsamp = _channel_header(rest, n_ch)
         annot_i = _annotation_channel(labels)
         bytes_before = 0
         index = 0
@@ -130,22 +131,116 @@ def edf_record_onsets(path):
     return onsets, record_duration
 
 
-def _channel_labels_and_nsamp(rest, n_ch):
-    labels = []
+def electrical_rails_uv(eeg_path, ecg_path, emg_path, picked):
+    eeg_ranges = edf_physical_ranges(eeg_path)
+    ecg_ranges = edf_physical_ranges(ecg_path)
+    emg_ranges = edf_physical_ranges(emg_path)
+    return [
+        _range_to_uv(eeg_ranges, picked["eeg_a"]),
+        _range_to_uv(eeg_ranges, picked["eeg_b"]),
+        _range_to_uv(ecg_ranges, picked["ecg"]),
+        _range_to_uv(emg_ranges, picked["emg"]),
+    ]
+
+
+def edf_physical_ranges(path):
+    if not os.path.isfile(path):
+        raise ValueError(f"edf file is missing: {path}")
+    with open(path, "rb") as handle:
+        preamble = handle.read(256)
+        if len(preamble) < 256:
+            raise ValueError(f"edf header is truncated: {path}")
+        n_header = _ascii_int(preamble[184:192], "header bytes")
+        n_ch = _ascii_int(preamble[252:256], "n channels")
+        rest = handle.read(n_header - 256)
+        if len(rest) != n_header - 256:
+            raise ValueError(f"edf header is truncated: {path}")
+        labels, units, phys_mins, phys_maxs, _nsamp = _channel_header(rest, n_ch)
+    ranges = {}
     index = 0
-    while index < n_ch:
-        start = index * 16
-        labels.append(rest[start : start + 16].decode("ascii").strip())
+    while index < len(labels):
+        label = labels[index]
+        if label != ANNOTATION_LABEL:
+            pmin = phys_mins[index]
+            pmax = phys_maxs[index]
+            if not np.isfinite(pmin) or not np.isfinite(pmax):
+                raise ValueError(
+                    f"physical range for {label} is not finite, we got {pmin} {pmax}"
+                )
+            if pmin >= pmax:
+                raise ValueError(
+                    f"physical min has to be below max for {label}, "
+                    f"we got {pmin} {pmax}"
+                )
+            ranges[label] = (pmin, pmax, units[index])
         index += 1
-    # labels, transducer, dim, phys min/max, dig min/max, prefilter, then nsamp
-    nsamp_start = n_ch * (16 + 80 + 8 + 8 + 8 + 8 + 8 + 80)
+    if len(ranges) < 1:
+        raise ValueError(f"edf has no signal channels with a physical range: {path}")
+    return ranges
+
+
+def _range_to_uv(ranges, label):
+    if label not in ranges:
+        raise ValueError(
+            f"no physical range for {label}, we got {list(ranges)}"
+        )
+    pmin, pmax, dim = ranges[label]
+    scale = _unit_to_uv_scale(dim)
+    return (pmin * scale, pmax * scale)
+
+
+def _unit_to_uv_scale(dim):
+    if dim == "uV":
+        return 1.0
+    if dim == "mV":
+        return 1000.0
+    if dim == "V":
+        return 1_000_000.0
+    raise ValueError(
+        f"electrical physical unit should be uV, mV, or V, we got {dim!r}"
+    )
+
+
+def _channel_header(rest, n_ch):
+    labels = _ascii_fields(rest, 0, n_ch, 16)
+    offset = n_ch * 16
+    offset += n_ch * 80
+    units = _ascii_fields(rest, offset, n_ch, 8)
+    offset += n_ch * 8
+    phys_mins = _float_fields(rest, offset, n_ch, "physical min")
+    offset += n_ch * 8
+    phys_maxs = _float_fields(rest, offset, n_ch, "physical max")
+    offset += n_ch * 8
+    offset += n_ch * 8
+    offset += n_ch * 8
+    offset += n_ch * 80
     nsamp = []
     index = 0
     while index < n_ch:
-        start = nsamp_start + index * 8
+        start = offset + index * 8
         nsamp.append(_ascii_int(rest[start : start + 8], "samples per record"))
         index += 1
-    return labels, nsamp
+    return labels, units, phys_mins, phys_maxs, nsamp
+
+
+def _ascii_fields(rest, offset, n_ch, width):
+    fields = []
+    index = 0
+    while index < n_ch:
+        start = offset + index * width
+        fields.append(rest[start : start + width].decode("ascii").strip())
+        index += 1
+    return fields
+
+
+def _float_fields(rest, offset, n_ch, what):
+    fields = []
+    index = 0
+    while index < n_ch:
+        start = offset + index * 8
+        fields.append(_ascii_float(rest[start : start + 8], what))
+        index += 1
+    return fields
 
 
 def _annotation_channel(labels):
@@ -165,7 +260,7 @@ def _first_tal_onset(raw, record_index):
         index += 1
     if index >= len(raw) or raw[index] not in (43, 45):
         raise ValueError(
-            f"data record {record_index} has no time-keeping tal"
+            f"data record {record_index} has no time keeping tal"
         )
     sign = 1.0
     if raw[index] == 45:
@@ -176,7 +271,7 @@ def _first_tal_onset(raw, record_index):
         index += 1
     if index == start or index >= len(raw) or raw[index] != 20:
         raise ValueError(
-            f"data record {record_index} has no time-keeping tal"
+            f"data record {record_index} has no time keeping tal"
         )
     return sign * float(raw[start:index].decode("ascii"))
 

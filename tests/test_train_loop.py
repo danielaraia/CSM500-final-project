@@ -64,11 +64,19 @@ def test_train_score_and_write_metrics_has_wall_clock_keys():
         assert loaded["compile_seconds"] == pytest.approx(1.5)
         assert loaded["n_steps_dropped_qc"] == 2
         assert loaded["n_steps_dropped_short_buffer"] == 3
+        assert loaded["n_positive_monitor"] == 1
+        assert loaded["n_negative_monitor"] == 7
+        assert loaded["patient_wall_clock_seconds"] == loaded["end_to_end_wall_clock"]
+        assert loaded["graph_strategy"] == "pearson"
+        assert loaded["sop_minutes"] == 30
         assert loaded["negative_control"] == "none"
         assert "auroc" not in loaded
         assert math.isfinite(loaded["best_monitor_bce"])
     finally:
         shutil.rmtree(root)
+
+
+def test_monitor_bce_is_finite_and_does_not_train():
     torch.manual_seed(123)
     model = TinyLogits()
     features, adjacency, labels = _tiny_set(8)

@@ -4,7 +4,7 @@ import tempfile
 
 import pytest
 
-from metrics import read_metrics, write_metrics
+from metrics import load_gate_metrics, read_metrics, write_metrics
 
 
 def test_write_and_read_metrics():
@@ -27,3 +27,23 @@ def test_missing_metrics_fails():
             read_metrics(folder)
     finally:
         shutil.rmtree(folder)
+
+
+def test_missing_gate_metrics_fail():
+    folder = tempfile.mkdtemp()
+    try:
+        with pytest.raises(ValueError, match="p0 gate metrics file is missing"):
+            load_gate_metrics(os.path.join(folder, "p0-gate-metrics.json"))
+    finally:
+        shutil.rmtree(folder)
+
+
+def test_gate_metrics_missing_key_fails():
+    handle = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False)
+    try:
+        handle.write("{}\n")
+        handle.close()
+        with pytest.raises(ValueError, match="p0 gate metrics missing"):
+            load_gate_metrics(handle.name)
+    finally:
+        os.remove(handle.name)

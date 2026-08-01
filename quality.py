@@ -4,6 +4,7 @@ import numpy as np
 EEG_RMS_MIN = 13.0
 EEG_RMS_MAX = 150.0
 FLAT_RUN_FRACTION = 0.5
+N_ELECTRICAL = 4
 
 
 def root_mean_square(samples):
@@ -26,11 +27,51 @@ def is_flat(samples):
 def samples_on_rail(samples, min_value, max_value):
     if min_value >= max_value:
         raise ValueError("rail min has to be below rail max")
+    if not np.isfinite(min_value) or not np.isfinite(max_value):
+        raise ValueError("rail bounds have to be finite")
     values = np.asarray(samples, dtype=np.float64)
     for value in values:
         if value <= min_value or value >= max_value:
             return True
     return False
+
+
+def need_four_rails(electrical_rails):
+    if electrical_rails is None:
+        raise ValueError("need converter rails from the edf header")
+    if len(electrical_rails) != N_ELECTRICAL:
+        raise ValueError(
+            f"need {N_ELECTRICAL} electrical rails, we got {len(electrical_rails)}"
+        )
+    index = 0
+    while index < N_ELECTRICAL:
+        pair = electrical_rails[index]
+        if len(pair) != 2:
+            raise ValueError(
+                f"each rail needs min and max, we got {pair}"
+            )
+        rail_min, rail_max = pair
+        if rail_min >= rail_max:
+            raise ValueError("rail min has to be below rail max")
+        if not np.isfinite(rail_min) or not np.isfinite(rail_max):
+            raise ValueError("rail bounds have to be finite")
+        index += 1
+
+
+def electrical_rail_reason(electrical_raw, electrical_rails):
+    need_four_rails(electrical_rails)
+    values = np.asarray(electrical_raw, dtype=np.float64)
+    if values.ndim != 2 or values.shape[0] != N_ELECTRICAL:
+        raise ValueError(
+            f"raw electrical should be ({N_ELECTRICAL}, samples), we got {values.shape}"
+        )
+    index = 0
+    while index < N_ELECTRICAL:
+        rail_min, rail_max = electrical_rails[index]
+        if samples_on_rail(values[index], rail_min, rail_max):
+            return "electrical_rail"
+        index += 1
+    return None
 
 
 def second_is_bad(
@@ -42,8 +83,6 @@ def second_is_bad(
     neck_gyro,
     chest_acc,
     chest_gyro,
-    rail_min=None,
-    rail_max=None,
 ):
     return (
         second_drop_reason(
@@ -55,8 +94,6 @@ def second_is_bad(
             neck_gyro,
             chest_acc,
             chest_gyro,
-            rail_min=rail_min,
-            rail_max=rail_max,
         )
         is not None
     )
@@ -71,17 +108,12 @@ def second_drop_reason(
     neck_gyro,
     chest_acc,
     chest_gyro,
-    rail_min=None,
-    rail_max=None,
 ):
     electrical = [eeg_a, eeg_b, ecg, emg]
     movement = [neck_acc, neck_gyro, chest_acc, chest_gyro]
     for series in electrical:
         if is_flat(series):
             return "electrical_flat"
-        if rail_min is not None and rail_max is not None:
-            if samples_on_rail(series, rail_min, rail_max):
-                return "electrical_rail"
     # both ears must fail 13 to 150. one quiet ear is still a live second
     if eeg_rms_is_out_of_band(eeg_a) and eeg_rms_is_out_of_band(eeg_b):
         return "both_ears_rms"

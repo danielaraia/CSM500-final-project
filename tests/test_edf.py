@@ -36,13 +36,19 @@ def test_reads_header_name_rate_and_samples():
 def test_load_run_stacks_four_files():
     paths = _write_tiny_run()
     try:
-        electrical, movement, picked = load_run(
+        electrical, movement, picked, rails = load_run(
             paths["eeg"], paths["ecg"], paths["emg"], paths["mov"]
         )
         assert electrical.shape == (4, 256)
         assert movement.shape == (12, 25)
         assert picked["eeg_a"] == "BTEleft SD"
         assert picked["eeg_b"] == "CROSStop SD"
+        assert rails == [
+            (-1000.0, 1000.0),
+            (-1000.0, 1000.0),
+            (-1000.0, 1000.0),
+            (-1000.0, 1000.0),
+        ]
         assert np.max(np.abs(electrical[0] - _wave(256, 50.0))) < 1.0
     finally:
         _remove_paths(paths)
