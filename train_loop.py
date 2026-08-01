@@ -10,12 +10,12 @@ from train_step import model_logits, one_train_step
 from windows import WINDOW_SECONDS
 
 
-def monitor_bce(model, features, adjacency, labels, pos_weight, batch_size=None):
+def monitor_bce(model, features, adjacency, labels, pos_weight, batch_size=None, device=None):
     if batch_size is None:
         batch_size = LOCKED["eval_batch_size"]
     if pos_weight <= 0:
         raise ValueError(f"pos_weight has to be > 0, we got {pos_weight}")
-    features, adjacency, labels = _as_tensors(features, adjacency, labels)
+    features, adjacency, labels = _as_tensors(features, adjacency, labels, device)
     model.eval()
     total = 0.0
     n_windows = 0
@@ -45,6 +45,40 @@ def monitor_bce(model, features, adjacency, labels, pos_weight, batch_size=None)
     return total / float(n_windows)
 
 
+def score_windows(model, features, adjacency, batch_size=None, device=None):
+    if batch_size is None:
+        batch_size = LOCKED["eval_batch_size"]
+    features = torch.as_tensor(features, dtype=torch.float32)
+    adjacency = torch.as_tensor(adjacency, dtype=torch.float32)
+    if features.shape[0] != adjacency.shape[0]:
+        raise ValueError(
+            "features and graphs need the same number of windows, "
+            f"we got {features.shape[0]} and {adjacency.shape[0]}"
+        )
+    if features.shape[0] < 1:
+        return 0
+    if device is not None:
+        features = features.to(device)
+        adjacency = adjacency.to(device)
+    model.eval()
+    n_windows = 0
+    start = 0
+    with torch.no_grad():
+        while start < features.shape[0]:
+            end = start + batch_size
+            if end > features.shape[0]:
+                end = features.shape[0]
+            model_logits(
+                model,
+                features[start:end],
+                _seq_lengths(end - start, features.device),
+                adjacency[start:end],
+            )
+            n_windows += end - start
+            start = end
+    return n_windows
+
+
 def train_until_stop(
     model,
     optimizer,
@@ -59,6 +93,7 @@ def train_until_stop(
     patience=None,
     train_batch_size=None,
     checkpoint_dir=None,
+    device=None,
 ):
     if max_epochs is None:
         max_epochs = LOCKED["max_epochs"]
@@ -71,7 +106,7 @@ def train_until_stop(
     if patience < 1:
         raise ValueError(f"patience has to be at least 1, we got {patience}")
     train_features, train_adjacency, train_labels = _as_tensors(
-        train_features, train_adjacency, train_labels
+        train_features, train_adjacency, train_labels, device
     )
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(
         optimizer, T_max=LOCKED["max_epochs"]
@@ -97,6 +132,7 @@ def train_until_stop(
             monitor_adjacency,
             monitor_labels,
             pos_weight,
+            device=device,
         )
         epoch += 1
         improved = best_loss is None or this_loss < best_loss
@@ -141,6 +177,7 @@ def train_and_write_metrics(
     max_epochs=None,
     patience=None,
     train_batch_size=None,
+    device=None,
 ):
     pos_weight, n_negative, n_positive = weight_from_class_numbers(train_labels)
     best_epoch, best_loss = train_until_stop(
@@ -157,6 +194,7 @@ def train_and_write_metrics(
         patience=patience,
         train_batch_size=train_batch_size,
         checkpoint_dir=os.path.join(folder, "checkpoints"),
+        device=device,
     )
     n_params = 0
     for parameter in model.parameters():
@@ -218,7 +256,7 @@ def _save_checkpoint(path, model, optimizer, epoch, monitor_loss):
     )
 
 
-def _as_tensors(features, adjacency, labels):
+def _as_tensors(features, adjacency, labels, device=None):
     features = torch.as_tensor(features, dtype=torch.float32)
     adjacency = torch.as_tensor(adjacency, dtype=torch.float32)
     labels = torch.as_tensor(labels, dtype=torch.float32)
@@ -227,6 +265,10 @@ def _as_tensors(features, adjacency, labels):
             "features, graphs and labels need the same number of windows, "
             f"we got {features.shape[0]}, {adjacency.shape[0]}, {labels.shape[0]}"
         )
+    if device is not None:
+        features = features.to(device)
+        adjacency = adjacency.to(device)
+        labels = labels.to(device)
     return features, adjacency, labels
 
 

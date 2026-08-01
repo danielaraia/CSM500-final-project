@@ -19,5 +19,9 @@
   "mamba_ssm_version": "2.2.4",
   "train_batch_size": 32,
   "command": "python time_cuda.py",
-  "end_to_end_wall_clock": "not run, no patient EDFs on this pod yet"
+  "end_to_end_wall_clock": 77.1731054969132,
+  "end_to_end_preprocess_seconds": 73.75008999183774,
+  "end_to_end_train_seconds": 2.331708719022572,
+  "end_to_end_score_seconds": 0.2671072753146291,
+  "end_to_end_compile_seconds": 3.009414006024599
 }

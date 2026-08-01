@@ -1,4 +1,5 @@
 import os
+import time
 
 import torch
 
@@ -7,9 +8,11 @@ from edf import edf_gap_spans, load_run
 from events import impd_spans, load_event_rows, seizure_spans
 from glue import build_windows, cut_monitoring_slice, keep_labelled_windows, split_labelled_windows
 from labels import seizures_with_full_sop, split_cut_times
+from metrics import write_metrics
 from normalize import apply_node_zscore, node_mean_and_std
 from pack import load_split, save_named_labels
-from train_loop import train_and_write_metrics
+from pos_weight import weight_from_class_numbers
+from train_loop import score_windows, train_and_write_metrics, train_until_stop
 from windows import TRAIN_STRIDE_SECONDS
 
 
@@ -35,15 +38,16 @@ def labelled_windows_from_files(
     if not os.path.isfile(events_path):
         raise ValueError(f"events file is missing: {events_path}")
     rows = load_event_rows(events_path)
-    features, graphs, ends = build_windows(
+    features, graphs, ends, drop_counts = build_windows(
         electrical,
         movement,
         stride_seconds=stride_seconds,
         drop_spans=impd_spans(rows),
     )
-    return keep_labelled_windows(
+    kept = keep_labelled_windows(
         features, graphs, ends, seizure_spans(rows)
     )
+    return kept[0], kept[1], kept[2], kept[3], drop_counts
 
 
 def write_labelled_run(
@@ -56,7 +60,7 @@ def write_labelled_run(
     events_path,
     extra=None,
 ):
-    features, graphs, _ends, labels = labelled_windows_from_files(
+    features, graphs, _ends, labels, _drop_counts = labelled_windows_from_files(
         eeg_path, ecg_path, emg_path, mov_path, events_path
     )
     folder = start_run(root, patient_id, extra)
@@ -74,7 +78,7 @@ def write_split_run(
     events_path,
     extra=None,
 ):
-    features, graphs, ends, labels = labelled_windows_from_files(
+    features, graphs, ends, labels, _drop_counts = labelled_windows_from_files(
         eeg_path, ecg_path, emg_path, mov_path, events_path
     )
     rows = load_event_rows(events_path)
@@ -134,7 +138,161 @@ def train_packed_run(
     max_epochs=None,
     patience=None,
     train_batch_size=None,
+    device=None,
 ):
+    train_f, train_g, train_y = _load_split_file(folder, "train.npz")
+    monitor_f, monitor_g, monitor_y = _load_split_file(folder, "monitor.npz")
+    packed_extra = {
+        "n_validation_windows": int(_load_split_file(folder, "val.npz")[2].shape[0]),
+        "n_test_windows": int(_load_split_file(folder, "test.npz")[2].shape[0]),
+    }
+    if extra is not None:
+        for key in extra:
+            packed_extra[key] = extra[key]
+    torch.manual_seed(LOCKED["seed"])
+    return train_and_write_metrics(
+        folder,
+        model,
+        optimizer,
+        train_f,
+        train_g,
+        train_y,
+        monitor_f,
+        monitor_g,
+        monitor_y,
+        extra=packed_extra,
+        max_epochs=max_epochs,
+        patience=patience,
+        train_batch_size=train_batch_size,
+        device=device,
+    )
+
+
+def timed_patient_run(
+    root,
+    patient_id,
+    eeg_path,
+    ecg_path,
+    emg_path,
+    mov_path,
+    events_path,
+    model,
+    optimizer,
+    extra=None,
+    device=None,
+    max_epochs=None,
+    patience=None,
+    train_batch_size=None,
+    compile_seconds=None,
+):
+    clock_start = time.perf_counter()
+    features, graphs, ends, labels, drop_counts = labelled_windows_from_files(
+        eeg_path, ecg_path, emg_path, mov_path, events_path
+    )
+    rows = load_event_rows(events_path)
+    seizures = seizures_with_full_sop(seizure_spans(rows))
+    folder = start_run(root, patient_id, extra)
+    split_counts = write_scaled_splits_from_seizures(
+        folder, features, graphs, ends, labels, seizures
+    )
+    preprocess_seconds = time.perf_counter() - clock_start
+    packed_extra = dict(drop_counts)
+    packed_extra["n_validation_windows"] = int(split_counts["n_validation_windows"])
+    packed_extra["n_test_windows"] = int(split_counts["n_test_windows"])
+    packed_extra["t1"] = split_counts["t1"]
+    packed_extra["t2"] = split_counts["t2"]
+    packed_extra["n_train_seizures"] = int(split_counts["n_train_seizures"])
+    packed_extra["n_test_seizures"] = int(split_counts["n_test_seizures"])
+    packed_extra["scored_at_train_stride"] = True
+    if extra is not None:
+        for key in extra:
+            packed_extra[key] = extra[key]
+    return train_score_and_write_metrics(
+        folder,
+        model,
+        optimizer,
+        packed_extra,
+        clock_start,
+        preprocess_seconds,
+        device=device,
+        max_epochs=max_epochs,
+        patience=patience,
+        train_batch_size=train_batch_size,
+        compile_seconds=compile_seconds,
+    )
+
+
+def train_score_and_write_metrics(
+    folder,
+    model,
+    optimizer,
+    extra,
+    clock_start,
+    preprocess_seconds,
+    device=None,
+    max_epochs=None,
+    patience=None,
+    train_batch_size=None,
+    compile_seconds=None,
+):
+    train_f, train_g, train_y = _load_split_file(folder, "train.npz")
+    monitor_f, monitor_g, monitor_y = _load_split_file(folder, "monitor.npz")
+    val_f, val_g, _val_y = _load_split_file(folder, "val.npz")
+    test_f, test_g, _test_y = _load_split_file(folder, "test.npz")
+    torch.manual_seed(LOCKED["seed"])
+    pos_weight, n_negative, n_positive = weight_from_class_numbers(train_y)
+    train_start = time.perf_counter()
+    best_epoch, best_loss = train_until_stop(
+        model,
+        optimizer,
+        train_f,
+        train_g,
+        train_y,
+        monitor_f,
+        monitor_g,
+        monitor_y,
+        pos_weight,
+        max_epochs=max_epochs,
+        patience=patience,
+        train_batch_size=train_batch_size,
+        checkpoint_dir=os.path.join(folder, "checkpoints"),
+        device=device,
+    )
+    train_seconds = time.perf_counter() - train_start
+    score_start = time.perf_counter()
+    n_val_scored = score_windows(model, val_f, val_g, device=device)
+    n_test_scored = score_windows(model, test_f, test_g, device=device)
+    score_seconds = time.perf_counter() - score_start
+    total_seconds = time.perf_counter() - clock_start
+    n_params = 0
+    for parameter in model.parameters():
+        n_params += parameter.numel()
+    metrics = {
+        "best_epoch": int(best_epoch),
+        "best_monitor_bce": float(best_loss),
+        "pos_weight": float(pos_weight),
+        "n_positive_train": int(n_positive),
+        "n_negative_train": int(n_negative),
+        "n_train_windows": int(len(train_y)),
+        "n_monitor_windows": int(len(monitor_y)),
+        "parameter_count": int(n_params),
+        "negative_control": "none",
+        "early_stopping_metric": LOCKED["early_stopping_metric"],
+        "preprocess_seconds": float(preprocess_seconds),
+        "train_seconds": float(train_seconds),
+        "score_seconds": float(score_seconds),
+        "end_to_end_wall_clock": float(total_seconds),
+        "n_seconds_scored": int(n_val_scored + n_test_scored),
+        "n_validation_windows_scored": int(n_val_scored),
+        "n_test_windows_scored": int(n_test_scored),
+    }
+    if compile_seconds is not None:
+        metrics["compile_seconds"] = float(compile_seconds)
+    if extra is not None:
+        for key in extra:
+            metrics[key] = extra[key]
+    write_metrics(folder, metrics)
+    return folder, metrics
     train_f, train_g, train_y = _load_split_file(folder, "train.npz")
     monitor_f, monitor_g, monitor_y = _load_split_file(folder, "monitor.npz")
     packed_extra = {

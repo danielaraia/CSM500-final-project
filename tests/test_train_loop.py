@@ -2,6 +2,7 @@ import math
 import os
 import shutil
 import tempfile
+import time
 
 import pytest
 import torch
@@ -9,13 +10,65 @@ import torch
 from config import start_run
 from metrics import read_metrics
 from pack import save_split
-from run import train_packed_run
+from run import train_packed_run, train_score_and_write_metrics
 from tiny_model import TinyLogits
-from train_loop import monitor_bce, train_and_write_metrics, train_until_stop
+from train_loop import monitor_bce, score_windows, train_and_write_metrics, train_until_stop
 from train_step import make_optimizer
 
 
-def test_monitor_bce_is_finite_and_does_not_train():
+def test_score_windows_counts_and_does_not_train():
+    torch.manual_seed(123)
+    model = TinyLogits()
+    features, adjacency, _labels = _tiny_set(8)
+    before = model.w.weight.detach().clone()
+    n_scored = score_windows(model, features, adjacency, batch_size=8)
+    after = model.w.weight.detach()
+    assert n_scored == 8
+    assert torch.equal(before, after)
+    empty_f = torch.zeros(0, 60, 8, 128)
+    empty_a = torch.zeros(0, 60, 8, 8)
+    assert score_windows(model, empty_f, empty_a, batch_size=8) == 0
+
+
+def test_train_score_and_write_metrics_has_wall_clock_keys():
+    torch.manual_seed(123)
+    root = tempfile.mkdtemp()
+    try:
+        folder = start_run(root, "sub-004")
+        _write_split(folder, "train.npz", _tiny_set(8))
+        _write_split(folder, "monitor.npz", _tiny_set(8))
+        _write_empty_split(folder, "val.npz")
+        _write_split(folder, "test.npz", _tiny_set(4))
+        model = TinyLogits()
+        clock_start = time.perf_counter()
+        _folder, metrics = train_score_and_write_metrics(
+            folder,
+            model,
+            make_optimizer(model),
+            extra={"n_steps_dropped_qc": 2, "n_steps_dropped_short_buffer": 3},
+            clock_start=clock_start,
+            preprocess_seconds=0.01,
+            max_epochs=1,
+            patience=5,
+            train_batch_size=8,
+            compile_seconds=1.5,
+        )
+        loaded = read_metrics(folder)
+        assert loaded["n_seconds_scored"] == 4
+        assert loaded["n_validation_windows_scored"] == 0
+        assert loaded["n_test_windows_scored"] == 4
+        assert loaded["preprocess_seconds"] == pytest.approx(0.01)
+        assert loaded["train_seconds"] > 0
+        assert loaded["score_seconds"] >= 0
+        assert loaded["end_to_end_wall_clock"] > 0
+        assert loaded["compile_seconds"] == pytest.approx(1.5)
+        assert loaded["n_steps_dropped_qc"] == 2
+        assert loaded["n_steps_dropped_short_buffer"] == 3
+        assert loaded["negative_control"] == "none"
+        assert "auroc" not in loaded
+        assert math.isfinite(loaded["best_monitor_bce"])
+    finally:
+        shutil.rmtree(root)
     torch.manual_seed(123)
     model = TinyLogits()
     features, adjacency, labels = _tiny_set(8)

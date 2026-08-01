@@ -45,21 +45,50 @@ def second_is_bad(
     rail_min=None,
     rail_max=None,
 ):
+    return (
+        second_drop_reason(
+            eeg_a,
+            eeg_b,
+            ecg,
+            emg,
+            neck_acc,
+            neck_gyro,
+            chest_acc,
+            chest_gyro,
+            rail_min=rail_min,
+            rail_max=rail_max,
+        )
+        is not None
+    )
+
+
+def second_drop_reason(
+    eeg_a,
+    eeg_b,
+    ecg,
+    emg,
+    neck_acc,
+    neck_gyro,
+    chest_acc,
+    chest_gyro,
+    rail_min=None,
+    rail_max=None,
+):
     electrical = [eeg_a, eeg_b, ecg, emg]
     movement = [neck_acc, neck_gyro, chest_acc, chest_gyro]
     for series in electrical:
         if is_flat(series):
-            return True
+            return "electrical_flat"
         if rail_min is not None and rail_max is not None:
             if samples_on_rail(series, rail_min, rail_max):
-                return True
+                return "electrical_rail"
     # both ears must fail 13 to 150. one quiet ear is still a live second
     if eeg_rms_is_out_of_band(eeg_a) and eeg_rms_is_out_of_band(eeg_b):
-        return True
+        return "both_ears_rms"
     for series in movement:
         if is_flat(series):
-            return True
-    return False
+            return "movement_flat"
+    return None
 
 
 def eeg_rms_is_out_of_band(samples):

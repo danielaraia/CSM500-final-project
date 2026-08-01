@@ -32,9 +32,11 @@ def test_fake_run_makes_one_sixty_step_window():
 
 def test_clean_eighty_seconds_has_two_train_windows():
     electrical, movement = _fake_run(80)
-    features, graphs, ends = build_windows(electrical, movement)
+    features, graphs, ends, drop_counts = build_windows(electrical, movement)
     # first 3 sec have no pearson buffer, so end 59 is a hole, 69 and 79 survive
     assert ends == [69, 79]
+    assert drop_counts["n_steps_dropped_short_buffer"] == 3
+    assert drop_counts["n_steps_dropped_qc"] == 0
     assert features.shape == (2, WINDOW_SECONDS, N_NODES, N_FFT_BINS)
     assert graphs.shape == (2, WINDOW_SECONDS, N_NODES, N_NODES)
 
@@ -44,19 +46,21 @@ def test_hole_at_fifteen_drops_the_early_train_window():
     start = 15 * 256
     electrical[0, start : start + 256] = 0.0
     electrical[1, start : start + 256] = 0.0
-    features, graphs, ends = build_windows(electrical, movement)
+    features, graphs, ends, drop_counts = build_windows(electrical, movement)
     assert ends == [79]
     assert features.shape[0] == 1
     assert graphs.shape[0] == 1
+    assert drop_counts["n_steps_dropped_qc"] >= 1
 
 
 def test_impd_span_drops_the_early_train_window():
     electrical, movement = _fake_run(80)
-    features, graphs, ends = build_windows(
+    features, graphs, ends, drop_counts = build_windows(
         electrical, movement, drop_spans=[(15.0, 16.0)]
     )
     assert ends == [79]
     assert features.shape[0] == 1
+    assert drop_counts["n_steps_qc_drop_span"] == 1
 
 
 def test_too_short_fails():

@@ -12,9 +12,10 @@ from pearson import (
     N_MOVEMENT_NODES,
     N_NODES,
     build_pearson_graph,
+    count_short_buffer_drops,
     steps_with_full_movement_buffer,
 )
-from quality import second_is_bad
+from quality import second_drop_reason, second_is_bad
 from spans import second_hits_a_span
 from windows import (
     EVAL_STRIDE_SECONDS,
@@ -32,7 +33,7 @@ SECONDS_NEEDED = SECONDS_BEFORE_FIRST_GRAPH + WINDOW_SECONDS
 
 
 def build_one_window(electrical, movement_axes):
-    features, graphs, _ends = build_windows(
+    features, graphs, _ends, _drop_counts = build_windows(
         electrical, movement_axes, stride_seconds=EVAL_STRIDE_SECONDS
     )
     if features.shape[0] < 1:
@@ -55,8 +56,9 @@ def build_windows(
     electrical_seconds = _cut_seconds(electrical, ELECTRICAL_SAMPLES_1S)
     movement_seconds = _cut_seconds(movement, SAMPLES_MOVEMENT_1S)
 
-    quality_ok = _quality_ok_seconds(electrical_seconds, movement_seconds)
-    quality_ok = _apply_drop_spans(quality_ok, drop_spans)
+    quality_ok, drop_counts = _quality_ok_and_drop_counts(
+        electrical_seconds, movement_seconds, drop_spans
+    )
     graph_ok = _graph_ok_seconds(quality_ok)
     ends = window_end_times(graph_ok, WINDOW_SECONDS, stride_seconds)
 
@@ -89,7 +91,7 @@ def build_windows(
             adjacency[window_index, step] = graph_by_second[index]
             step += 1
         window_index += 1
-    return features, adjacency, ends
+    return features, adjacency, ends, drop_counts
 
 
 def keep_labelled_windows(features, adjacency, ends, seizures):
@@ -231,6 +233,64 @@ def _n_seconds(electrical, movement_axes):
             f"we got {n_electrical} and {n_movement}"
         )
     return n_electrical
+
+
+def _quality_ok_and_drop_counts(electrical_seconds, movement_seconds, drop_spans):
+    quality_ok = _quality_ok_seconds(electrical_seconds, movement_seconds)
+    n_seconds = len(quality_ok)
+    n_electrical_flat = 0
+    n_electrical_rail = 0
+    n_both_ears_rms = 0
+    n_movement_flat = 0
+    n_drop_span = 0
+    second_index = 0
+    while second_index < n_seconds:
+        if not quality_ok[second_index]:
+            reason = second_drop_reason(
+                electrical_seconds[second_index, 0],
+                electrical_seconds[second_index, 1],
+                electrical_seconds[second_index, 2],
+                electrical_seconds[second_index, 3],
+                movement_seconds[second_index, 0],
+                movement_seconds[second_index, 1],
+                movement_seconds[second_index, 2],
+                movement_seconds[second_index, 3],
+            )
+            if reason is None:
+                raise ValueError(
+                    f"sec {second_index} failed quality but has no reason"
+                )
+            if reason == "electrical_flat":
+                n_electrical_flat += 1
+            elif reason == "electrical_rail":
+                n_electrical_rail += 1
+            elif reason == "both_ears_rms":
+                n_both_ears_rms += 1
+            elif reason == "movement_flat":
+                n_movement_flat += 1
+            else:
+                raise ValueError(f"unknown quality reason {reason}")
+        elif second_hits_a_span(second_index, drop_spans or []):
+            n_drop_span += 1
+        second_index += 1
+    quality_ok = _apply_drop_spans(quality_ok, drop_spans)
+    n_qc = (
+        n_electrical_flat
+        + n_electrical_rail
+        + n_both_ears_rms
+        + n_movement_flat
+        + n_drop_span
+    )
+    drop_counts = {
+        "n_steps_dropped_qc": n_qc,
+        "n_steps_dropped_short_buffer": count_short_buffer_drops(quality_ok),
+        "n_steps_qc_electrical_flat": n_electrical_flat,
+        "n_steps_qc_electrical_rail": n_electrical_rail,
+        "n_steps_qc_both_ears_rms": n_both_ears_rms,
+        "n_steps_qc_movement_flat": n_movement_flat,
+        "n_steps_qc_drop_span": n_drop_span,
+    }
+    return quality_ok, drop_counts
 
 
 def _apply_drop_spans(quality_ok, drop_spans):

@@ -28,7 +28,7 @@ from run import (
 def test_files_and_events_keep_the_sop_window():
     paths = _write_tiny_labelled_run(n_seconds=80)
     try:
-        features, graphs, ends, labels = labelled_windows_from_files(
+        features, graphs, ends, labels, drop_counts = labelled_windows_from_files(
             paths["eeg"],
             paths["ecg"],
             paths["emg"],
@@ -39,6 +39,7 @@ def test_files_and_events_keep_the_sop_window():
         assert labels == [LABEL_SOP]
         assert features.shape[0] == 1
         assert graphs.shape[0] == 1
+        assert drop_counts["n_steps_dropped_short_buffer"] >= 1
     finally:
         _remove_paths(paths)
 

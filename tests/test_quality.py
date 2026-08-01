@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from quality import EEG_RMS_MAX, EEG_RMS_MIN, is_flat, root_mean_square, second_is_bad
+from quality import EEG_RMS_MAX, EEG_RMS_MIN, is_flat, root_mean_square, second_drop_reason, second_is_bad
 
 
 def _ok_wave(scale):
@@ -37,6 +37,16 @@ def test_both_ears_quiet_drops_the_second():
     movement = _ok_wave(1.0)
     assert second_is_bad(quiet, quiet, loud_ok, loud_ok, movement, movement, movement, movement) is True
     assert second_is_bad(loud_ok, loud_ok, loud_ok, loud_ok, movement, movement, movement, movement) is False
+
+
+def test_drop_reason_names_the_fail():
+    quiet = _ok_wave(1.0)
+    loud_ok = _ok_wave(80.0)
+    movement = _ok_wave(1.0)
+    assert second_drop_reason(quiet, quiet, loud_ok, loud_ok, movement, movement, movement, movement) == "both_ears_rms"
+    assert second_drop_reason(loud_ok, loud_ok, loud_ok, loud_ok, movement, movement, movement, movement) is None
+    flat = np.ones(256)
+    assert second_drop_reason(flat, loud_ok, loud_ok, loud_ok, movement, movement, movement, movement) == "electrical_flat"
 
 
 def test_rail_hit_drops_the_second():
