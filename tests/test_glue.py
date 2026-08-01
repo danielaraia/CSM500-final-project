@@ -43,6 +43,7 @@ def test_hole_at_fifteen_drops_the_early_train_window():
     electrical, movement = _fake_run(80)
     start = 15 * 256
     electrical[0, start : start + 256] = 0.0
+    electrical[1, start : start + 256] = 0.0
     features, graphs, ends = build_windows(electrical, movement)
     assert ends == [79]
     assert features.shape[0] == 1

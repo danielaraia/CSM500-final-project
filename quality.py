@@ -53,14 +53,18 @@ def second_is_bad(
         if rail_min is not None and rail_max is not None:
             if samples_on_rail(series, rail_min, rail_max):
                 return True
-    for eeg in (eeg_a, eeg_b):
-        rms = root_mean_square(eeg)
-        if rms < EEG_RMS_MIN or rms > EEG_RMS_MAX:
-            return True
+    # both ears must fail 13 to 150. one quiet ear is still a live second
+    if eeg_rms_is_out_of_band(eeg_a) and eeg_rms_is_out_of_band(eeg_b):
+        return True
     for series in movement:
         if is_flat(series):
             return True
     return False
+
+
+def eeg_rms_is_out_of_band(samples):
+    rms = root_mean_square(samples)
+    return rms < EEG_RMS_MIN or rms > EEG_RMS_MAX
 
 
 def _longest_identical_run(values):

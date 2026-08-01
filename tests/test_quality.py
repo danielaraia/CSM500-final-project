@@ -21,13 +21,21 @@ def test_flat_is_true_when_all_the_same():
     assert is_flat(_ok_wave(50.0)) is False
 
 
-def test_eeg_too_quiet_drops_the_second():
+def test_one_quiet_ear_keeps_the_second():
     quiet = _ok_wave(1.0)
-    assert root_mean_square(quiet) < EEG_RMS_MIN
     loud_ok = _ok_wave(80.0)
+    movement = _ok_wave(1.0)
+    assert root_mean_square(quiet) < EEG_RMS_MIN
     assert EEG_RMS_MIN < root_mean_square(loud_ok) < EEG_RMS_MAX
-    movement = _ok_wave(1.0)[:256]
-    assert second_is_bad(quiet, loud_ok, loud_ok, loud_ok, movement, movement, movement, movement) is True
+    assert second_is_bad(quiet, loud_ok, loud_ok, loud_ok, movement, movement, movement, movement) is False
+    assert second_is_bad(loud_ok, quiet, loud_ok, loud_ok, movement, movement, movement, movement) is False
+
+
+def test_both_ears_quiet_drops_the_second():
+    quiet = _ok_wave(1.0)
+    loud_ok = _ok_wave(80.0)
+    movement = _ok_wave(1.0)
+    assert second_is_bad(quiet, quiet, loud_ok, loud_ok, movement, movement, movement, movement) is True
     assert second_is_bad(loud_ok, loud_ok, loud_ok, loud_ok, movement, movement, movement, movement) is False
 
 

@@ -14,6 +14,7 @@ def test_locked_learning_rate_is_not_the_code_default():
     assert LOCKED["train_batch_size"] == 32
     assert LOCKED["num_eigenvectors"] == 4
     assert LOCKED["rnn_units"] == 64
+    assert LOCKED["eeg_rms_rule"] == "drop a second only if both ears fail 13 to 150 uV"
 
 
 def test_write_and_read_config():
