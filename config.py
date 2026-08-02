@@ -18,6 +18,8 @@ LOCKED = {
     "learning_rate": 0.0001,
     "train_batch_size": 32,
     "eval_batch_size": 256,
+    "train_stride_seconds": 10,
+    "eval_stride_seconds": 1,
     "weight_decay": 0.0005,
     "dropout": 0.0,
     "max_epochs": 100,
@@ -59,7 +61,9 @@ def read_config(path):
         return json.load(handle)
 
 
-def run_folder_path(root, patient_id):
+def run_folder_path(root, patient_id, leaf="none"):
+    if leaf is None or leaf == "":
+        raise ValueError("need a run leaf folder name")
     return os.path.join(
         root,
         "experiments",
@@ -69,18 +73,19 @@ def run_folder_path(root, patient_id):
         "pearson",
         "sop30",
         "seed123",
-        "none",
+        leaf,
     )
 
 
-def start_run(root, patient_id, extra=None):
+def start_run(root, patient_id, extra=None, leaf="none"):
     if patient_id is None or patient_id == "":
         raise ValueError("need a patient id")
-    path = run_folder_path(root, patient_id)
+    path = run_folder_path(root, patient_id, leaf)
     if os.path.exists(path):
         raise ValueError(f"run folder already exists, we wont write over it: {path}")
     os.makedirs(path)
     extra = dict(extra or {})
     extra["patient_id"] = patient_id
+    extra["run_leaf"] = leaf
     write_config(os.path.join(path, "config.json"), extra)
     return path

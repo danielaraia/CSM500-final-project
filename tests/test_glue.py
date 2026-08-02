@@ -12,7 +12,7 @@ from glue import (
 )
 from labels import LABEL_INTERICTAL, LABEL_SOP, LABEL_UNUSED, label_second
 from pearson import N_NODES
-from windows import WINDOW_SECONDS
+from windows import EVAL_STRIDE_SECONDS, TRAIN_STRIDE_SECONDS, WINDOW_SECONDS
 
 
 WIDE_RAILS = [
@@ -186,6 +186,56 @@ def test_monitoring_cut_keeps_last_quarter():
     assert mon_f[3, 0, 0, 0] == 9.0
     assert train_labels[-1] == LABEL_INTERICTAL
     assert mon_labels[0] == LABEL_SOP
+
+
+def test_pack_keeps_train_hop_ten_and_eval_hop_one():
+    electrical, movement = _fake_run(180)
+    # far seizure: seconds 0 to 180 are all interictal
+    seizures = [(100000, 100100)]
+    features, graphs, ends, drop_counts = build_windows(
+        electrical,
+        movement,
+        stride_seconds=EVAL_STRIDE_SECONDS,
+        electrical_rails=WIDE_RAILS,
+        seizures=seizures,
+        t1=100,
+        train_stride_seconds=TRAIN_STRIDE_SECONDS,
+    )
+    assert drop_counts["n_steps_dropped_qc"] == 0
+    assert 62 not in ends
+    assert 69 in ends
+    assert 70 not in ends
+    assert 79 in ends
+    assert 89 in ends
+    assert 99 in ends
+    assert 100 in ends
+    assert 101 in ends
+    assert 179 in ends
+    train, val, test = split_labelled_windows(
+        features,
+        graphs,
+        ends,
+        [LABEL_INTERICTAL] * len(ends),
+        t1=100,
+        t2=150,
+    )
+    assert train[2] == [69, 79, 89, 99]
+    assert val[2][0] == 100
+    assert val[2][1] == 101
+    assert val[2][-1] == 149
+    assert test[2][0] == 150
+    assert test[2][-1] == 179
+
+
+def test_t1_without_train_stride_fails():
+    electrical, movement = _fake_run(80)
+    with pytest.raises(ValueError, match="t1 and train stride"):
+        build_windows(
+            electrical,
+            movement,
+            electrical_rails=WIDE_RAILS,
+            t1=70,
+        )
 
 
 def _fake_window():

@@ -13,7 +13,7 @@ from normalize import apply_node_zscore, node_mean_and_std
 from pack import load_split, save_named_labels
 from pos_weight import weight_from_class_numbers
 from train_loop import score_windows, train_and_write_metrics, train_until_stop
-from windows import TRAIN_STRIDE_SECONDS
+from windows import EVAL_STRIDE_SECONDS, TRAIN_STRIDE_SECONDS
 
 
 def labelled_windows_from_files(
@@ -23,6 +23,8 @@ def labelled_windows_from_files(
     mov_path,
     events_path,
     stride_seconds=TRAIN_STRIDE_SECONDS,
+    t1=None,
+    train_stride_seconds=None,
 ):
     electrical, movement, _picked, electrical_rails = load_run(
         eeg_path, ecg_path, emg_path, mov_path
@@ -38,15 +40,19 @@ def labelled_windows_from_files(
     if not os.path.isfile(events_path):
         raise ValueError(f"events file is missing: {events_path}")
     rows = load_event_rows(events_path)
+    seizures = seizure_spans(rows)
     features, graphs, ends, drop_counts = build_windows(
         electrical,
         movement,
         stride_seconds=stride_seconds,
         drop_spans=impd_spans(rows),
         electrical_rails=electrical_rails,
+        seizures=seizures,
+        t1=t1,
+        train_stride_seconds=train_stride_seconds,
     )
     kept = keep_labelled_windows(
-        features, graphs, ends, seizure_spans(rows)
+        features, graphs, ends, seizures
     )
     return kept[0], kept[1], kept[2], kept[3], drop_counts
 
@@ -60,16 +66,30 @@ def write_split_run(
     mov_path,
     events_path,
     extra=None,
+    leaf="none",
 ):
-    features, graphs, ends, labels, _drop_counts = labelled_windows_from_files(
-        eeg_path, ecg_path, emg_path, mov_path, events_path
-    )
     rows = load_event_rows(events_path)
     seizures = seizures_with_full_sop(seizure_spans(rows))
-    folder = start_run(root, patient_id, extra)
+    t1 = split_cut_times(seizures)[0]
+    features, graphs, ends, labels, drop_counts = labelled_windows_from_files(
+        eeg_path,
+        ecg_path,
+        emg_path,
+        mov_path,
+        events_path,
+        stride_seconds=EVAL_STRIDE_SECONDS,
+        t1=t1,
+        train_stride_seconds=TRAIN_STRIDE_SECONDS,
+    )
+    folder = start_run(root, patient_id, extra, leaf=leaf)
     counts = write_scaled_splits_from_seizures(
         folder, features, graphs, ends, labels, seizures
     )
+    for key in drop_counts:
+        counts[key] = drop_counts[key]
+    counts["train_stride_seconds"] = TRAIN_STRIDE_SECONDS
+    counts["eval_stride_seconds"] = EVAL_STRIDE_SECONDS
+    counts["scored_at_train_stride"] = False
     return folder, counts
 
 
@@ -99,10 +119,20 @@ def write_scaled_splits(folder, features, graphs, ends, labels, t1, t2):
     monitor_f = apply_node_zscore(monitor[0], means, stds)
     val_f = apply_node_zscore(val[0], means, stds)
     test_f = apply_node_zscore(test[0], means, stds)
-    save_named_labels(train_path, train_f, train[1], train[3])
-    save_named_labels(os.path.join(folder, "monitor.npz"), monitor_f, monitor[1], monitor[3])
-    save_named_labels(os.path.join(folder, "val.npz"), val_f, val[1], val[3])
-    save_named_labels(os.path.join(folder, "test.npz"), test_f, test[1], test[3])
+    save_named_labels(train_path, train_f, train[1], train[3], ends=train[2])
+    save_named_labels(
+        os.path.join(folder, "monitor.npz"),
+        monitor_f,
+        monitor[1],
+        monitor[3],
+        ends=monitor[2],
+    )
+    save_named_labels(
+        os.path.join(folder, "val.npz"), val_f, val[1], val[3], ends=val[2]
+    )
+    save_named_labels(
+        os.path.join(folder, "test.npz"), test_f, test[1], test[3], ends=test[2]
+    )
     return {
         "n_train_windows": int(train_f.shape[0]),
         "n_monitor_windows": int(monitor_f.shape[0]),
@@ -169,11 +199,19 @@ def timed_patient_run(
     compile_seconds=None,
 ):
     clock_start = time.perf_counter()
-    features, graphs, ends, labels, drop_counts = labelled_windows_from_files(
-        eeg_path, ecg_path, emg_path, mov_path, events_path
-    )
     rows = load_event_rows(events_path)
     seizures = seizures_with_full_sop(seizure_spans(rows))
+    t1 = split_cut_times(seizures)[0]
+    features, graphs, ends, labels, drop_counts = labelled_windows_from_files(
+        eeg_path,
+        ecg_path,
+        emg_path,
+        mov_path,
+        events_path,
+        stride_seconds=EVAL_STRIDE_SECONDS,
+        t1=t1,
+        train_stride_seconds=TRAIN_STRIDE_SECONDS,
+    )
     folder = start_run(root, patient_id)
     split_counts = write_scaled_splits_from_seizures(
         folder, features, graphs, ends, labels, seizures
@@ -186,7 +224,9 @@ def timed_patient_run(
     packed_extra["t2"] = split_counts["t2"]
     packed_extra["n_train_seizures"] = int(split_counts["n_train_seizures"])
     packed_extra["n_test_seizures"] = int(split_counts["n_test_seizures"])
-    packed_extra["scored_at_train_stride"] = True
+    packed_extra["scored_at_train_stride"] = False
+    packed_extra["train_stride_seconds"] = TRAIN_STRIDE_SECONDS
+    packed_extra["eval_stride_seconds"] = EVAL_STRIDE_SECONDS
     packed_extra["patient_id"] = patient_id
     if extra is not None:
         for key in extra:

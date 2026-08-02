@@ -4,7 +4,7 @@ import tempfile
 
 import pytest
 
-from config import LOCKED, read_config, start_run, write_config
+from config import LOCKED, read_config, run_folder_path, start_run, write_config
 
 
 def test_locked_learning_rate_is_not_the_code_default():
@@ -17,6 +17,8 @@ def test_locked_learning_rate_is_not_the_code_default():
     assert LOCKED["eeg_rms_rule"] == "drop a second only if both ears fail 13 to 150 uV"
     assert LOCKED["filter_call"] == "scipy.signal.butter SOS then sosfiltfilt"
     assert LOCKED["early_stopping_direction"] == "minimise"
+    assert LOCKED["train_stride_seconds"] == 10
+    assert LOCKED["eval_stride_seconds"] == 1
 
 
 def test_write_and_read_config():
@@ -51,5 +53,20 @@ def test_start_run_writes_locked_config_and_wont_overwrite():
         assert loaded["seed"] == 123
         with pytest.raises(ValueError, match="wont write over"):
             start_run(root, "sub-004")
+    finally:
+        shutil.rmtree(root)
+
+
+def test_start_run_leaf_eval1_is_a_new_folder():
+    root = tempfile.mkdtemp()
+    try:
+        none_path = start_run(root, "sub-004")
+        eval_path = start_run(root, "sub-004", leaf="eval1")
+        assert none_path != eval_path
+        assert eval_path == run_folder_path(root, "sub-004", "eval1")
+        loaded = read_config(os.path.join(eval_path, "config.json"))
+        assert loaded["run_leaf"] == "eval1"
+        assert loaded["train_stride_seconds"] == 10
+        assert loaded["eval_stride_seconds"] == 1
     finally:
         shutil.rmtree(root)

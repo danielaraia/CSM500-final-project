@@ -42,6 +42,30 @@ def test_files_and_events_keep_the_sop_window():
         _remove_paths(paths)
 
 
+def test_files_keep_train_hop_ten_before_t1():
+    paths = _write_tiny_labelled_run(n_seconds=80)
+    try:
+        features, graphs, ends, labels, drop_counts = labelled_windows_from_files(
+            paths["eeg"],
+            paths["ecg"],
+            paths["emg"],
+            paths["mov"],
+            paths["events"],
+            stride_seconds=1,
+            t1=70,
+            train_stride_seconds=10,
+        )
+        assert 69 in ends
+        assert 70 in ends
+        assert 71 in ends
+        assert 68 not in ends
+        assert 75 not in ends
+        assert labels[0] == LABEL_SOP
+        assert drop_counts["n_steps_dropped_short_buffer"] >= 1
+    finally:
+        _remove_paths(paths)
+
+
 def test_impd_on_the_sop_window_leaves_nothing():
     paths = _write_tiny_labelled_run(n_seconds=80, impd=(15.0, 1.0))
     try:
@@ -105,6 +129,8 @@ def test_write_scaled_splits_zscore_from_train_only():
         mon_f, _mg, mon_y = load_split(os.path.join(folder, "monitor.npz"))
         _val_f, _vg, val_y = load_split(os.path.join(folder, "val.npz"))
         test_f, _tg, test_y = load_split(os.path.join(folder, "test.npz"))
+        packed = np.load(os.path.join(folder, "test.npz"))
+        np.testing.assert_array_equal(packed["ends"], np.array([18, 19]))
         assert train_f[0, 0, 0, 0] == pytest.approx(-1.0)
         assert train_f[1, 0, 0, 0] == pytest.approx(1.0)
         # 100 used train stats, not its own

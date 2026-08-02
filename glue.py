@@ -21,6 +21,7 @@ from windows import (
     EVAL_STRIDE_SECONDS,
     TRAIN_STRIDE_SECONDS,
     WINDOW_SECONDS,
+    end_is_on_stride,
     window_end_times,
 )
 
@@ -50,7 +51,12 @@ def build_windows(
     stride_seconds=TRAIN_STRIDE_SECONDS,
     drop_spans=None,
     electrical_rails=None,
+    seizures=None,
+    t1=None,
+    train_stride_seconds=None,
 ):
+    if (t1 is None) != (train_stride_seconds is None):
+        raise ValueError("t1 and train stride have to be set together, or neither")
     need_four_rails(electrical_rails)
     electrical = np.asarray(electrical, dtype=np.float64)
     movement_axes = np.asarray(movement_axes, dtype=np.float64)
@@ -71,6 +77,7 @@ def build_windows(
     )
     graph_ok = _graph_ok_seconds(quality_ok)
     ends = window_end_times(graph_ok, WINDOW_SECONDS, stride_seconds)
+    ends = _keep_pack_ends(ends, seizures, t1, train_stride_seconds)
 
     n_windows = len(ends)
     features = np.zeros((n_windows, WINDOW_SECONDS, N_NODES, 128), dtype=np.float64)
@@ -193,6 +200,22 @@ def cut_monitoring_slice(features, adjacency, ends, labels):
     train = _gather_windows(train_i, features, adjacency, ends, labels)
     monitor = _gather_windows(monitor_i, features, adjacency, ends, labels)
     return train, monitor, monitor_start, n_positive, n_negative
+
+
+def _keep_pack_ends(ends, seizures, t1, train_stride_seconds):
+    kept = []
+    index = 0
+    while index < len(ends):
+        end_time = ends[index]
+        index += 1
+        if seizures is not None:
+            if label_second(end_time, seizures) == LABEL_UNUSED:
+                continue
+        if t1 is not None and end_time < t1:
+            if not end_is_on_stride(end_time, train_stride_seconds):
+                continue
+        kept.append(end_time)
+    return kept
 
 
 def _gather_windows(indices, features, adjacency, ends, labels):

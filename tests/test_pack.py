@@ -49,3 +49,18 @@ def test_named_labels_round_trip_as_zeros_and_ones():
         np.testing.assert_array_equal(labels, np.array([0, 1]))
     finally:
         os.remove(handle.name)
+
+
+def test_saved_ends_match_the_clock():
+    features = np.ones((2, 60, 8, 128))
+    adjacency = np.zeros((2, 60, 8, 8))
+    labels = np.array([0, 1])
+    ends = np.array([69, 70])
+    handle = tempfile.NamedTemporaryFile(suffix=".npz", delete=False)
+    handle.close()
+    try:
+        save_split(handle.name, features, adjacency, labels, ends=ends)
+        packed = np.load(handle.name)
+        np.testing.assert_array_equal(packed["ends"], ends)
+    finally:
+        os.remove(handle.name)

@@ -3,7 +3,7 @@ import numpy as np
 from labels import LABEL_INTERICTAL, LABEL_SOP
 
 
-def save_split(path, features, adjacency, labels):
+def save_split(path, features, adjacency, labels, ends=None):
     features = np.asarray(features)
     adjacency = np.asarray(adjacency)
     labels = np.asarray(labels)
@@ -13,11 +13,26 @@ def save_split(path, features, adjacency, labels):
             f"we got {features.shape[0]}, {adjacency.shape[0]}, {labels.shape[0]}"
         )
     # one npz per split, not one file per window
+    if ends is None:
+        np.savez_compressed(
+            path,
+            features=features,
+            adjacency=adjacency,
+            labels=labels,
+        )
+        return
+    ends = np.asarray(ends)
+    if ends.shape[0] != features.shape[0]:
+        raise ValueError(
+            "ends need the same number of windows as features, "
+            f"we got {ends.shape[0]} and {features.shape[0]}"
+        )
     np.savez_compressed(
         path,
         features=features,
         adjacency=adjacency,
         labels=labels,
+        ends=ends,
     )
 
 
@@ -26,13 +41,19 @@ def load_split(path):
     return loaded["features"], loaded["adjacency"], loaded["labels"]
 
 
-def save_named_labels(path, features, adjacency, named_labels):
+def save_named_labels(path, features, adjacency, named_labels, ends=None):
     numbers = []
     index = 0
     while index < len(named_labels):
         numbers.append(label_to_class_number(named_labels[index]))
         index += 1
-    save_split(path, features, adjacency, np.asarray(numbers, dtype=np.int64))
+    save_split(
+        path,
+        features,
+        adjacency,
+        np.asarray(numbers, dtype=np.int64),
+        ends=ends,
+    )
 
 
 def label_to_class_number(label):

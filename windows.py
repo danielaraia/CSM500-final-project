@@ -18,6 +18,17 @@ def window_end_times(step_is_valid, window_seconds=WINDOW_SECONDS, stride_second
     return ends
 
 
+def end_is_on_stride(end_time, stride_seconds, window_seconds=WINDOW_SECONDS):
+    if stride_seconds < 1:
+        raise ValueError("stride has to be at least 1")
+    if window_seconds < 1:
+        raise ValueError("window has to be at least 1 sec")
+    first_end = window_seconds - 1
+    if end_time < first_end:
+        return False
+    return (end_time - first_end) % stride_seconds == 0
+
+
 def window_has_no_hole(step_is_valid, end_time, window_seconds=WINDOW_SECONDS):
     # a hole inside the 60 sec means we dont build that window at all
     start_time = end_time - window_seconds + 1
