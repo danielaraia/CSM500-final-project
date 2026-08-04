@@ -125,10 +125,10 @@ def test_write_scaled_splits_zscore_from_train_only():
         assert counts["n_monitor_windows"] == 4
         assert counts["n_validation_windows"] == 2
         assert counts["n_test_windows"] == 2
-        train_f, _g, train_y = load_split(os.path.join(folder, "train.npz"))
-        mon_f, _mg, mon_y = load_split(os.path.join(folder, "monitor.npz"))
-        _val_f, _vg, val_y = load_split(os.path.join(folder, "val.npz"))
-        test_f, _tg, test_y = load_split(os.path.join(folder, "test.npz"))
+        train_f, _g, train_y, _train_ends = load_split(os.path.join(folder, "train.npz"))
+        mon_f, _mg, mon_y, _mon_ends = load_split(os.path.join(folder, "monitor.npz"))
+        _val_f, _vg, val_y, _val_ends = load_split(os.path.join(folder, "val.npz"))
+        test_f, _tg, test_y, _test_ends = load_split(os.path.join(folder, "test.npz"))
         packed = np.load(os.path.join(folder, "test.npz"))
         np.testing.assert_array_equal(packed["ends"], np.array([18, 19]))
         assert train_f[0, 0, 0, 0] == pytest.approx(-1.0)
@@ -182,8 +182,8 @@ def test_write_scaled_splits_uses_seizure_cut_times():
         assert counts["n_monitor_windows"] == 4
         assert counts["n_validation_windows"] == 2
         assert counts["n_test_windows"] == 2
-        _val_f, _vg, val_y = load_split(os.path.join(folder, "val.npz"))
-        _test_f, _tg, test_y = load_split(os.path.join(folder, "test.npz"))
+        _val_f, _vg, val_y, _val_ends = load_split(os.path.join(folder, "val.npz"))
+        _test_f, _tg, test_y, _test_ends = load_split(os.path.join(folder, "test.npz"))
         np.testing.assert_array_equal(val_y, np.array([1, 1]))
         np.testing.assert_array_equal(test_y, np.array([1, 0]))
     finally:

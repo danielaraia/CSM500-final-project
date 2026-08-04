@@ -38,7 +38,10 @@ def save_split(path, features, adjacency, labels, ends=None):
 
 def load_split(path):
     loaded = np.load(path)
-    return loaded["features"], loaded["adjacency"], loaded["labels"]
+    ends = None
+    if "ends" in loaded.files:
+        ends = loaded["ends"]
+    return loaded["features"], loaded["adjacency"], loaded["labels"], ends
 
 
 def save_named_labels(path, features, adjacency, named_labels, ends=None):

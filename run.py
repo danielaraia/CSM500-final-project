@@ -153,8 +153,10 @@ def train_packed_run(
     train_batch_size=None,
     device=None,
 ):
-    train_f, train_g, train_y = _load_split_file(folder, "train.npz")
-    monitor_f, monitor_g, monitor_y = _load_split_file(folder, "monitor.npz")
+    train_f, train_g, train_y, _train_ends = _load_split_file(folder, "train.npz")
+    monitor_f, monitor_g, monitor_y, _monitor_ends = _load_split_file(
+        folder, "monitor.npz"
+    )
     packed_extra = {
         "n_validation_windows": int(_load_split_file(folder, "val.npz")[2].shape[0]),
         "n_test_windows": int(_load_split_file(folder, "test.npz")[2].shape[0]),
@@ -259,10 +261,12 @@ def train_score_and_write_metrics(
     train_batch_size=None,
     compile_seconds=None,
 ):
-    train_f, train_g, train_y = _load_split_file(folder, "train.npz")
-    monitor_f, monitor_g, monitor_y = _load_split_file(folder, "monitor.npz")
-    val_f, val_g, _val_y = _load_split_file(folder, "val.npz")
-    test_f, test_g, _test_y = _load_split_file(folder, "test.npz")
+    train_f, train_g, train_y, _train_ends = _load_split_file(folder, "train.npz")
+    monitor_f, monitor_g, monitor_y, _monitor_ends = _load_split_file(
+        folder, "monitor.npz"
+    )
+    val_f, val_g, _val_y, _val_ends = _load_split_file(folder, "val.npz")
+    test_f, test_g, _test_y, _test_ends = _load_split_file(folder, "test.npz")
     torch.manual_seed(LOCKED["seed"])
     pos_weight, n_negative, n_positive = weight_from_class_numbers(train_y)
     _mon_w, n_negative_monitor, n_positive_monitor = weight_from_class_numbers(monitor_y)

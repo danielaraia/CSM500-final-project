@@ -18,10 +18,11 @@ def test_round_trip_one_file_not_one_per_window():
     handle.close()
     try:
         save_split(handle.name, features, adjacency, labels)
-        f2, a2, l2 = load_split(handle.name)
+        f2, a2, l2, ends = load_split(handle.name)
         np.testing.assert_array_equal(f2, features)
         np.testing.assert_array_equal(l2, labels)
         assert f2.shape[0] == 3
+        assert ends is None
     finally:
         os.remove(handle.name)
 
@@ -45,8 +46,9 @@ def test_named_labels_round_trip_as_zeros_and_ones():
         save_named_labels(
             handle.name, features, adjacency, [LABEL_INTERICTAL, LABEL_SOP]
         )
-        _f2, _a2, labels = load_split(handle.name)
+        _f2, _a2, labels, ends = load_split(handle.name)
         np.testing.assert_array_equal(labels, np.array([0, 1]))
+        assert ends is None
     finally:
         os.remove(handle.name)
 
@@ -62,5 +64,7 @@ def test_saved_ends_match_the_clock():
         save_split(handle.name, features, adjacency, labels, ends=ends)
         packed = np.load(handle.name)
         np.testing.assert_array_equal(packed["ends"], ends)
+        _f2, _a2, _labels, loaded_ends = load_split(handle.name)
+        np.testing.assert_array_equal(loaded_ends, ends)
     finally:
         os.remove(handle.name)
