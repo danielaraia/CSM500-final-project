@@ -141,6 +141,35 @@ def test_write_scaled_splits_zscore_from_train_only():
         np.testing.assert_array_equal(mon_y, np.array([1, 1, 0, 0]))
         np.testing.assert_array_equal(val_y, np.array([1, 1]))
         np.testing.assert_array_equal(test_y, np.array([1, 0]))
+        assert counts["n_positive_train"] == 2
+        assert counts["n_negative_train"] == 10
+        assert counts["n_positive_monitor"] == 2
+        assert counts["n_negative_monitor"] == 2
+        assert counts["n_positive_test"] == 1
+        assert counts["n_negative_test"] == 1
+    finally:
+        shutil.rmtree(folder)
+
+
+def test_write_scaled_splits_fails_when_train_has_no_sop():
+    n_windows = 20
+    features = np.zeros((n_windows, 1, 8, 1))
+    graphs = np.zeros((n_windows, 1, 8, 8))
+    ends = list(range(n_windows))
+    labels = (
+        [LABEL_INTERICTAL] * 12
+        + [LABEL_SOP] * 2
+        + [LABEL_INTERICTAL] * 2
+        + [LABEL_SOP] * 2
+        + [LABEL_SOP, LABEL_INTERICTAL]
+    )
+    folder = tempfile.mkdtemp()
+    try:
+        with pytest.raises(ValueError, match="gradient train has no sop windows"):
+            write_scaled_splits(
+                folder, features, graphs, ends, labels, t1=16, t2=18
+            )
+        assert not os.path.exists(os.path.join(folder, "train.npz"))
     finally:
         shutil.rmtree(folder)
 

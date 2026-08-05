@@ -1,4 +1,5 @@
 import os
+import shutil
 import time
 
 import torch
@@ -7,7 +8,7 @@ from config import LOCKED, start_run
 from edf import edf_gap_spans, load_run
 from events import impd_spans, load_event_rows, seizure_spans
 from glue import build_windows, cut_monitoring_slice, keep_labelled_windows, split_labelled_windows
-from labels import seizures_with_full_sop, split_cut_times
+from labels import LABEL_INTERICTAL, LABEL_SOP, seizures_with_full_sop, split_cut_times
 from metrics import write_metrics
 from normalize import apply_node_zscore, node_mean_and_std
 from pack import load_split, save_named_labels
@@ -82,9 +83,13 @@ def write_split_run(
         train_stride_seconds=TRAIN_STRIDE_SECONDS,
     )
     folder = start_run(root, patient_id, extra, leaf=leaf)
-    counts = write_scaled_splits_from_seizures(
-        folder, features, graphs, ends, labels, seizures
-    )
+    try:
+        counts = write_scaled_splits_from_seizures(
+            folder, features, graphs, ends, labels, seizures
+        )
+    except Exception:
+        shutil.rmtree(folder)
+        raise
     for key in drop_counts:
         counts[key] = drop_counts[key]
     counts["train_stride_seconds"] = TRAIN_STRIDE_SECONDS
@@ -110,9 +115,20 @@ def write_scaled_splits(folder, features, graphs, ends, labels, t1, t2):
     if os.path.exists(train_path):
         raise ValueError(f"split files already exist, we wont write over them: {train_path}")
     train, val, test = split_labelled_windows(features, graphs, ends, labels, t1, t2)
-    train, monitor, _monitor_start, _n_pos, _n_neg = cut_monitoring_slice(
-        train[0], train[1], train[2], train[3]
+    train, monitor, _monitor_start, n_positive_monitor, n_negative_monitor = (
+        cut_monitoring_slice(train[0], train[1], train[2], train[3])
     )
+    n_positive_train, n_negative_train = _count_named_classes(
+        train[3], "gradient train"
+    )
+    if n_positive_train < 1:
+        raise ValueError(
+            "gradient train has no sop windows, "
+            f"we got n_positive_train={n_positive_train} "
+            f"n_negative_train={n_negative_train}"
+        )
+    n_positive_val, n_negative_val = _count_named_classes(val[3], "validation")
+    n_positive_test, n_negative_test = _count_named_classes(test[3], "test")
     # zscore from gradient train only, then the same numbers on monitor, val, and test
     means, stds = node_mean_and_std(train[0])
     train_f = apply_node_zscore(train[0], means, stds)
@@ -138,6 +154,14 @@ def write_scaled_splits(folder, features, graphs, ends, labels, t1, t2):
         "n_monitor_windows": int(monitor_f.shape[0]),
         "n_validation_windows": int(val_f.shape[0]),
         "n_test_windows": int(test_f.shape[0]),
+        "n_positive_train": int(n_positive_train),
+        "n_negative_train": int(n_negative_train),
+        "n_positive_monitor": int(n_positive_monitor),
+        "n_negative_monitor": int(n_negative_monitor),
+        "n_positive_val": int(n_positive_val),
+        "n_negative_val": int(n_negative_val),
+        "n_positive_test": int(n_positive_test),
+        "n_negative_test": int(n_negative_test),
         "means": means,
         "stds": stds,
     }
@@ -349,3 +373,19 @@ def _load_split_file(folder, name):
     if not os.path.isfile(path):
         raise ValueError(f"split file is missing: {path}")
     return load_split(path)
+
+
+def _count_named_classes(labels, where):
+    n_positive = 0
+    n_negative = 0
+    index = 0
+    while index < len(labels):
+        lab = labels[index]
+        if lab == LABEL_SOP:
+            n_positive += 1
+        elif lab == LABEL_INTERICTAL:
+            n_negative += 1
+        else:
+            raise ValueError(f"{where} labels cant include {lab}")
+        index += 1
+    return n_positive, n_negative
