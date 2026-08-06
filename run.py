@@ -4,12 +4,12 @@ import time
 
 import torch
 
-from config import LOCKED, start_run
+from config import LOCKED, read_config, start_run
 from edf import edf_gap_spans, load_run
 from events import impd_spans, load_event_rows, seizure_spans
 from glue import build_windows, cut_monitoring_slice, keep_labelled_windows, split_labelled_windows
 from labels import LABEL_INTERICTAL, LABEL_SOP, seizures_with_full_sop, split_cut_times
-from metrics import write_metrics
+from metrics import merge_metrics, write_metrics
 from normalize import apply_node_zscore, node_mean_and_std
 from pack import load_split, save_named_labels
 from pos_weight import weight_from_class_numbers
@@ -272,6 +272,76 @@ def timed_patient_run(
     )
 
 
+def train_packed_eval_run(
+    folder,
+    model,
+    optimizer,
+    extra=None,
+    device=None,
+    max_epochs=None,
+    patience=None,
+    train_batch_size=None,
+    compile_seconds=None,
+):
+    config_path = os.path.join(folder, "config.json")
+    if not os.path.isfile(config_path):
+        raise ValueError(f"config is missing: {config_path}")
+    cfg = read_config(config_path)
+    if cfg.get("run_leaf") != "eval1":
+        raise ValueError(
+            "this trainer only loads eval1 packs, "
+            f"we got run_leaf={cfg.get('run_leaf')!r} in {config_path}"
+        )
+    train_f, train_g, train_y, train_ends = _load_split_file(folder, "train.npz")
+    _monitor_f, _monitor_g, _monitor_y, monitor_ends = _load_split_file(
+        folder, "monitor.npz"
+    )
+    val_f, _val_g, val_y, val_ends = _load_split_file(folder, "val.npz")
+    test_f, _test_g, test_y, test_ends = _load_split_file(folder, "test.npz")
+    _require_stored_ends("train", train_y, train_ends)
+    _require_stored_ends("monitor", _monitor_y, monitor_ends)
+    _require_stored_ends("validation", val_y, val_ends)
+    _require_stored_ends("test", test_y, test_ends)
+    n_positive, n_negative_train = _count_class_numbers(train_y, "gradient train")
+    if n_positive < 1:
+        raise ValueError(
+            "gradient train has no sop windows, "
+            f"we got n_positive_train={n_positive} "
+            f"n_negative_train={n_negative_train}"
+        )
+    packed_extra = {
+        "used_stored_ends": True,
+        "scored_at_train_stride": False,
+        "n_train_ends": int(len(train_ends)),
+        "n_monitor_ends": int(len(monitor_ends)),
+        "n_validation_ends": int(len(val_ends)),
+        "n_test_ends": int(len(test_ends)),
+        "patient_id": cfg.get("patient_id"),
+        "run_leaf": "eval1",
+    }
+    if extra is not None:
+        for key in extra:
+            packed_extra[key] = extra[key]
+    del train_f, train_g, train_y, train_ends
+    del val_f, val_y, val_ends
+    del test_f, test_y, test_ends
+    clock_start = time.perf_counter()
+    return train_score_and_write_metrics(
+        folder,
+        model,
+        optimizer,
+        packed_extra,
+        clock_start,
+        preprocess_seconds=0.0,
+        device=device,
+        max_epochs=max_epochs,
+        patience=patience,
+        train_batch_size=train_batch_size,
+        compile_seconds=compile_seconds,
+        merge_existing=True,
+    )
+
+
 def train_score_and_write_metrics(
     folder,
     model,
@@ -284,6 +354,7 @@ def train_score_and_write_metrics(
     patience=None,
     train_batch_size=None,
     compile_seconds=None,
+    merge_existing=False,
 ):
     train_f, train_g, train_y, _train_ends = _load_split_file(folder, "train.npz")
     monitor_f, monitor_g, monitor_y, _monitor_ends = _load_split_file(
@@ -364,7 +435,10 @@ def train_score_and_write_metrics(
             )
     if "batch_128_one_step_fits" in metrics:
         metrics["batch_128_fits_24gb"] = metrics["batch_128_one_step_fits"]
-    write_metrics(folder, metrics)
+    if merge_existing:
+        merge_metrics(folder, metrics)
+    else:
+        write_metrics(folder, metrics)
     return folder, metrics
 
 
@@ -389,3 +463,31 @@ def _count_named_classes(labels, where):
             raise ValueError(f"{where} labels cant include {lab}")
         index += 1
     return n_positive, n_negative
+
+
+def _count_class_numbers(labels, where):
+    n_positive = 0
+    n_negative = 0
+    index = 0
+    while index < len(labels):
+        lab = int(labels[index])
+        if lab == 1:
+            n_positive += 1
+        elif lab == 0:
+            n_negative += 1
+        else:
+            raise ValueError(f"{where} class numbers have to be 0 or 1, we got {lab}")
+        index += 1
+    return n_positive, n_negative
+
+
+def _require_stored_ends(where, labels, ends):
+    if ends is None:
+        raise ValueError(
+            f"{where} pack has no stored ends, load the eval1 pack not the hop 10 none pack"
+        )
+    if len(ends) != len(labels):
+        raise ValueError(
+            f"{where} ends need the same number of windows as labels, "
+            f"we got {len(ends)} and {len(labels)}"
+        )

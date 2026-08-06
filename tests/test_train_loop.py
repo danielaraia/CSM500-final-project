@@ -8,9 +8,9 @@ import pytest
 import torch
 
 from config import start_run
-from metrics import read_metrics
+from metrics import read_metrics, write_metrics
 from pack import save_split
-from run import train_packed_run, train_score_and_write_metrics
+from run import train_packed_eval_run, train_packed_run, train_score_and_write_metrics
 from tiny_model import TinyLogits
 from train_loop import monitor_bce, score_windows, train_and_write_metrics, train_until_stop
 from train_step import make_optimizer
@@ -265,22 +265,148 @@ def test_train_packed_run_fails_when_train_split_is_missing():
         shutil.rmtree(root)
 
 
-def _write_split(folder, name, tensors):
+def test_train_packed_eval_run_merges_into_pack_metrics():
+    torch.manual_seed(123)
+    root = tempfile.mkdtemp()
+    try:
+        folder = start_run(root, "sub-004", extra={"command": "python pack_eval.py"}, leaf="eval1")
+        _write_split(folder, "train.npz", _tiny_set(8), ends=True)
+        _write_split(folder, "monitor.npz", _tiny_set(8), ends=True)
+        _write_empty_split(folder, "val.npz", ends=True)
+        _write_split(folder, "test.npz", _tiny_set(4), ends=True)
+        write_metrics(
+            folder,
+            {
+                "command": "python pack_eval.py",
+                "pack_seconds": 1.25,
+                "n_test_windows": 4,
+            },
+        )
+        model = TinyLogits()
+        train_packed_eval_run(
+            folder,
+            model,
+            make_optimizer(model),
+            extra={"train_model": "laptop stand in", "command": "python train_eval1.py"},
+            max_epochs=1,
+            patience=5,
+            train_batch_size=8,
+        )
+        loaded = read_metrics(folder)
+        assert loaded["pack_command"] == "python pack_eval.py"
+        assert loaded["pack_seconds"] == 1.25
+        assert loaded["used_stored_ends"] is True
+        assert loaded["scored_at_train_stride"] is False
+        assert loaded["n_test_windows_scored"] == 4
+        assert loaded["n_validation_windows_scored"] == 0
+        assert loaded["n_test_ends"] == 4
+        assert loaded["train_model"] == "laptop stand in"
+        assert loaded["run_leaf"] == "eval1"
+        assert math.isfinite(loaded["best_monitor_bce"])
+        assert loaded["train_seconds"] > 0
+        assert "auroc" not in loaded
+        with pytest.raises(ValueError, match="train metrics already exist"):
+            train_packed_eval_run(
+                folder,
+                TinyLogits(),
+                make_optimizer(TinyLogits()),
+                max_epochs=1,
+                patience=1,
+                train_batch_size=8,
+            )
+    finally:
+        shutil.rmtree(root)
+
+
+def test_train_packed_eval_run_fails_without_stored_ends():
+    root = tempfile.mkdtemp()
+    try:
+        folder = start_run(root, "sub-004", leaf="eval1")
+        _write_split(folder, "train.npz", _tiny_set(8))
+        _write_split(folder, "monitor.npz", _tiny_set(8))
+        _write_empty_split(folder, "val.npz")
+        _write_split(folder, "test.npz", _tiny_set(4))
+        write_metrics(folder, {"command": "python pack_eval.py"})
+        model = TinyLogits()
+        with pytest.raises(ValueError, match="no stored ends"):
+            train_packed_eval_run(
+                folder,
+                model,
+                make_optimizer(model),
+                max_epochs=1,
+                patience=1,
+                train_batch_size=8,
+            )
+    finally:
+        shutil.rmtree(root)
+
+
+def test_train_packed_eval_run_fails_when_train_has_no_sop():
+    root = tempfile.mkdtemp()
+    try:
+        folder = start_run(root, "sub-004", leaf="eval1")
+        empty_pos = _tiny_set(8)
+        empty_pos[2][:] = 0
+        _write_split(folder, "train.npz", empty_pos, ends=True)
+        _write_split(folder, "monitor.npz", _tiny_set(8), ends=True)
+        _write_empty_split(folder, "val.npz", ends=True)
+        _write_split(folder, "test.npz", _tiny_set(4), ends=True)
+        write_metrics(folder, {"command": "python pack_eval.py"})
+        model = TinyLogits()
+        with pytest.raises(ValueError, match="gradient train has no sop"):
+            train_packed_eval_run(
+                folder,
+                model,
+                make_optimizer(model),
+                max_epochs=1,
+                patience=1,
+                train_batch_size=8,
+            )
+    finally:
+        shutil.rmtree(root)
+
+
+def test_train_packed_eval_run_rejects_none_leaf():
+    root = tempfile.mkdtemp()
+    try:
+        folder = start_run(root, "sub-004", leaf="none")
+        model = TinyLogits()
+        with pytest.raises(ValueError, match="only loads eval1 packs"):
+            train_packed_eval_run(
+                folder,
+                model,
+                make_optimizer(model),
+                max_epochs=1,
+                patience=1,
+            )
+    finally:
+        shutil.rmtree(root)
+
+
+def _write_split(folder, name, tensors, ends=False):
     features, adjacency, labels = tensors
+    end_times = None
+    if ends:
+        end_times = list(range(len(labels)))
     save_split(
         os.path.join(folder, name),
         features.detach().numpy(),
         adjacency.detach().numpy(),
         labels.detach().numpy(),
+        ends=end_times,
     )
 
 
-def _write_empty_split(folder, name):
+def _write_empty_split(folder, name, ends=False):
+    end_times = None
+    if ends:
+        end_times = []
     save_split(
         os.path.join(folder, name),
         torch.zeros(0, 60, 8, 128).numpy(),
         torch.zeros(0, 60, 8, 8).numpy(),
         torch.zeros(0).numpy(),
+        ends=end_times,
     )
 
 
