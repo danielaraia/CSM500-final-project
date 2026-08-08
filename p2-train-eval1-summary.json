@@ -1,0 +1,51 @@
+{
+  "command": "python train_eval1.py",
+  "ran_as_one_script": false,
+  "why_separate_calls": "first person already had train_seconds so a second full script run would refuse the merge",
+  "compile_seconds": 2.367169698700309,
+  "gpu_name": "NVIDIA GeForce RTX 4090",
+  "gpu_memory_bytes": 25280839680,
+  "cuda_version": "12.8",
+  "torch_version": "2.8.0.dev20250319+cu128",
+  "mamba_ssm_version": "2.2.4",
+  "pod_id": "ny6lyqm4t6seiv",
+  "pod_deleted": true,
+  "patients": [
+    {
+      "patient_id": "sub-004",
+      "best_epoch": 1,
+      "best_monitor_bce": 1.3117005825042725,
+      "train_seconds": 1.3093419121578336,
+      "score_seconds": 2.6425440600141883,
+      "end_to_end_wall_clock": 8.822017316706479,
+      "n_seconds_scored": 2143,
+      "n_test_windows_scored": 2143,
+      "n_validation_windows_scored": 0,
+      "pos_weight": 3.6666666666666665,
+      "used_stored_ends": true,
+      "scored_at_train_stride": false,
+      "parameter_count": 283846,
+      "n_positive_train": 18,
+      "n_negative_train": 66,
+      "compile_seconds": 2.47869461402297
+    },
+    {
+      "patient_id": "sub-051",
+      "best_epoch": 1,
+      "best_monitor_bce": 12.903230298321773,
+      "train_seconds": 12.97043326124549,
+      "score_seconds": 15.615828663110733,
+      "end_to_end_wall_clock": 67.67824714351445,
+      "n_seconds_scored": 13479,
+      "n_test_windows_scored": 7608,
+      "n_validation_windows_scored": 5871,
+      "pos_weight": 32.13333333333333,
+      "used_stored_ends": true,
+      "scored_at_train_stride": false,
+      "parameter_count": 283846,
+      "n_positive_train": 30,
+      "n_negative_train": 964,
+      "compile_seconds": 2.367169698700309
+    }
+  ]
+}
