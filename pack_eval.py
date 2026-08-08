@@ -5,8 +5,8 @@ import time
 from metrics import write_metrics
 from run import write_split_run
 
-PATIENT_ID = "sub-051"
-RUN_ID = "01"
+PATIENT_ID = "sub-113"
+RUN_ID = "04"
 LEAF = "eval1"
 
 
