@@ -4,7 +4,7 @@ import tempfile
 
 import pytest
 
-from metrics import load_gate_metrics, merge_metrics, read_metrics, write_metrics
+from metrics import load_gate_metrics, merge_alarm_metrics, merge_metrics, read_metrics, write_metrics
 
 
 def test_write_and_read_metrics():
@@ -40,6 +40,15 @@ def test_merge_metrics_keeps_pack_keys_and_saves_pack_command():
         assert loaded["best_monitor_bce"] == 1.1
         with pytest.raises(ValueError, match="train metrics already exist"):
             merge_metrics(folder, {"train_seconds": 9.0})
+        merge_alarm_metrics(
+            folder,
+            {"event_sensitivity": 0.0, "false_alarms_per_hour": 0.0},
+        )
+        loaded_alarm = read_metrics(folder)
+        assert loaded_alarm["event_sensitivity"] == 0.0
+        assert loaded_alarm["train_seconds"] == 2.0
+        with pytest.raises(ValueError, match="alarm metrics already exist"):
+            merge_alarm_metrics(folder, {"event_sensitivity": 1.0})
     finally:
         shutil.rmtree(folder)
 

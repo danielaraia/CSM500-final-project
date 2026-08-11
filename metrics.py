@@ -55,6 +55,23 @@ def merge_metrics(folder, extra):
     return path
 
 
+def merge_alarm_metrics(folder, extra):
+    loaded = read_metrics(folder)
+    if "event_sensitivity" in loaded:
+        raise ValueError(
+            "alarm metrics already exist, we wont write over them: "
+            + os.path.join(folder, "metrics.json")
+        )
+    merged = dict(loaded)
+    for key in extra:
+        merged[key] = extra[key]
+    path = os.path.join(folder, "metrics.json")
+    with open(path, "w") as handle:
+        json.dump(merged, handle, indent=2)
+        handle.write("\n")
+    return path
+
+
 def read_metrics(folder):
     path = os.path.join(folder, "metrics.json")
     if not os.path.isfile(path):
