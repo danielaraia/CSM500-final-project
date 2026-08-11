@@ -56,27 +56,29 @@ def score_windows(model, features, adjacency, batch_size=None, device=None):
             f"we got {features.shape[0]} and {adjacency.shape[0]}"
         )
     if features.shape[0] < 1:
-        return 0
+        return torch.zeros(0)
     if device is not None:
         features = features.to(device)
         adjacency = adjacency.to(device)
     model.eval()
-    n_windows = 0
+    chunks = []
     start = 0
     with torch.no_grad():
         while start < features.shape[0]:
             end = start + batch_size
             if end > features.shape[0]:
                 end = features.shape[0]
-            model_logits(
+            logits = model_logits(
                 model,
                 features[start:end],
                 _seq_lengths(end - start, features.device),
                 adjacency[start:end],
             )
-            n_windows += end - start
+            chunks.append(logits.detach().cpu())
             start = end
-    return n_windows
+    if len(chunks) == 0:
+        return torch.zeros(0)
+    return torch.cat(chunks, dim=0)
 
 
 def train_until_stop(
@@ -160,7 +162,9 @@ def train_until_stop(
                 )
         if wait >= patience:
             break
-    return best_epoch, best_loss
+    if checkpoint_dir is not None and best_epoch > 0:
+        _load_checkpoint(os.path.join(checkpoint_dir, "best.pth.tar"), model)
+    return best_epoch, best_loss, epoch
 
 
 def train_and_write_metrics(
@@ -180,7 +184,7 @@ def train_and_write_metrics(
     device=None,
 ):
     pos_weight, n_negative, n_positive = weight_from_class_numbers(train_labels)
-    best_epoch, best_loss = train_until_stop(
+    best_epoch, best_loss, n_epochs_run = train_until_stop(
         model,
         optimizer,
         train_features,
@@ -201,6 +205,7 @@ def train_and_write_metrics(
         n_params += parameter.numel()
     metrics = {
         "best_epoch": int(best_epoch),
+        "n_epochs_run": int(n_epochs_run),
         "best_monitor_bce": float(best_loss),
         "pos_weight": float(pos_weight),
         "n_positive_train": int(n_positive),
@@ -254,6 +259,13 @@ def _save_checkpoint(path, model, optimizer, epoch, monitor_loss):
         },
         path,
     )
+
+
+def _load_checkpoint(path, model):
+    device = next(model.parameters()).device
+    blob = torch.load(path, map_location=device, weights_only=True)
+    model.load_state_dict(blob["model"])
+    return blob
 
 
 def _as_tensors(features, adjacency, labels, device=None):

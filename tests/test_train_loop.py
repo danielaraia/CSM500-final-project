@@ -21,13 +21,14 @@ def test_score_windows_counts_and_does_not_train():
     model = TinyLogits()
     features, adjacency, _labels = _tiny_set(8)
     before = model.w.weight.detach().clone()
-    n_scored = score_windows(model, features, adjacency, batch_size=8)
+    logits = score_windows(model, features, adjacency, batch_size=8)
     after = model.w.weight.detach()
-    assert n_scored == 8
+    assert logits.shape[0] == 8
     assert torch.equal(before, after)
     empty_f = torch.zeros(0, 60, 8, 128)
     empty_a = torch.zeros(0, 60, 8, 8)
-    assert score_windows(model, empty_f, empty_a, batch_size=8) == 0
+    empty_logits = score_windows(model, empty_f, empty_a, batch_size=8)
+    assert empty_logits.shape[0] == 0
 
 
 def test_train_score_and_write_metrics_has_wall_clock_keys():
@@ -57,6 +58,8 @@ def test_train_score_and_write_metrics_has_wall_clock_keys():
         assert loaded["n_seconds_scored"] == 4
         assert loaded["n_validation_windows_scored"] == 0
         assert loaded["n_test_windows_scored"] == 4
+        assert loaded["n_epochs_run"] == 1
+        assert loaded["scored_from_best_checkpoint"] is True
         assert loaded["preprocess_seconds"] == pytest.approx(0.01)
         assert loaded["train_seconds"] > 0
         assert loaded["score_seconds"] >= 0
@@ -93,7 +96,7 @@ def test_zero_lr_stops_when_monitor_does_not_improve():
     optimizer = torch.optim.Adam(model.parameters(), lr=0.0)
     train = _tiny_set(8)
     monitor = _tiny_set(8)
-    best_epoch, best_loss = train_until_stop(
+    best_epoch, best_loss, n_epochs_run = train_until_stop(
         model,
         optimizer,
         train[0],
@@ -108,6 +111,7 @@ def test_zero_lr_stops_when_monitor_does_not_improve():
         train_batch_size=8,
     )
     assert best_epoch == 1
+    assert n_epochs_run == 3
     assert math.isfinite(best_loss)
 
 
@@ -145,6 +149,8 @@ def test_writes_last_and_best_checkpoints():
         assert last["epoch"] == 1
         assert best["epoch"] == 1
         assert math.isfinite(best["monitor_loss"])
+        for name, parameter in model.named_parameters():
+            assert torch.equal(parameter.detach().cpu(), best["model"][name].cpu())
     finally:
         shutil.rmtree(folder)
 
@@ -305,15 +311,19 @@ def test_train_packed_eval_run_merges_into_pack_metrics():
         assert math.isfinite(loaded["best_monitor_bce"])
         assert loaded["train_seconds"] > 0
         assert "auroc" not in loaded
-        with pytest.raises(ValueError, match="train metrics already exist"):
-            train_packed_eval_run(
-                folder,
-                TinyLogits(),
-                make_optimizer(TinyLogits()),
-                max_epochs=1,
-                patience=1,
-                train_batch_size=8,
-            )
+        first_train = loaded["train_seconds"]
+        train_packed_eval_run(
+            folder,
+            TinyLogits(),
+            make_optimizer(TinyLogits()),
+            max_epochs=1,
+            patience=1,
+            train_batch_size=8,
+        )
+        loaded_again = read_metrics(folder)
+        assert loaded_again["train_seconds"] == first_train
+        assert os.path.isfile(os.path.join(folder, "val_scores.npz"))
+        assert os.path.isfile(os.path.join(folder, "test_scores.npz"))
     finally:
         shutil.rmtree(root)
 

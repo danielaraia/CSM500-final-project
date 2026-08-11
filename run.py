@@ -4,12 +4,13 @@ import time
 
 import torch
 
+from alarms import save_window_scores
 from config import LOCKED, read_config, start_run
 from edf import edf_gap_spans, load_run
 from events import impd_spans, load_event_rows, seizure_spans
 from glue import build_windows, cut_monitoring_slice, keep_labelled_windows, split_labelled_windows
 from labels import LABEL_INTERICTAL, LABEL_SOP, seizures_with_full_sop, split_cut_times
-from metrics import merge_metrics, write_metrics
+from metrics import merge_metrics, read_metrics, write_metrics
 from normalize import apply_node_zscore, node_mean_and_std
 from pack import load_split, save_named_labels
 from pos_weight import weight_from_class_numbers
@@ -360,13 +361,13 @@ def train_score_and_write_metrics(
     monitor_f, monitor_g, monitor_y, _monitor_ends = _load_split_file(
         folder, "monitor.npz"
     )
-    val_f, val_g, _val_y, _val_ends = _load_split_file(folder, "val.npz")
-    test_f, test_g, _test_y, _test_ends = _load_split_file(folder, "test.npz")
+    val_f, val_g, _val_y, val_ends = _load_split_file(folder, "val.npz")
+    test_f, test_g, _test_y, test_ends = _load_split_file(folder, "test.npz")
     torch.manual_seed(LOCKED["seed"])
     pos_weight, n_negative, n_positive = weight_from_class_numbers(train_y)
     _mon_w, n_negative_monitor, n_positive_monitor = weight_from_class_numbers(monitor_y)
     train_start = time.perf_counter()
-    best_epoch, best_loss = train_until_stop(
+    best_epoch, best_loss, n_epochs_run = train_until_stop(
         model,
         optimizer,
         train_f,
@@ -384,15 +385,26 @@ def train_score_and_write_metrics(
     )
     train_seconds = time.perf_counter() - train_start
     score_start = time.perf_counter()
-    n_val_scored = score_windows(model, val_f, val_g, device=device)
-    n_test_scored = score_windows(model, test_f, test_g, device=device)
+    val_logits = score_windows(model, val_f, val_g, device=device)
+    test_logits = score_windows(model, test_f, test_g, device=device)
     score_seconds = time.perf_counter() - score_start
+    n_val_scored = int(val_logits.shape[0])
+    n_test_scored = int(test_logits.shape[0])
+    if val_ends is not None:
+        save_window_scores(
+            os.path.join(folder, "val_scores.npz"), val_ends, val_logits.numpy()
+        )
+        save_window_scores(
+            os.path.join(folder, "test_scores.npz"), test_ends, test_logits.numpy()
+        )
     total_seconds = time.perf_counter() - clock_start
     n_params = 0
     for parameter in model.parameters():
         n_params += parameter.numel()
     metrics = {
         "best_epoch": int(best_epoch),
+        "n_epochs_run": int(n_epochs_run),
+        "scored_from_best_checkpoint": True,
         "best_monitor_bce": float(best_loss),
         "pos_weight": float(pos_weight),
         "n_positive_train": int(n_positive),
@@ -436,7 +448,11 @@ def train_score_and_write_metrics(
     if "batch_128_one_step_fits" in metrics:
         metrics["batch_128_fits_24gb"] = metrics["batch_128_one_step_fits"]
     if merge_existing:
-        merge_metrics(folder, metrics)
+        loaded = read_metrics(folder)
+        if "train_seconds" in loaded:
+            pass
+        else:
+            merge_metrics(folder, metrics)
     else:
         write_metrics(folder, metrics)
     return folder, metrics
