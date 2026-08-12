@@ -1,0 +1,29 @@
+{
+  "command": "python score_alarms.py",
+  "patients": [
+    {
+      "patient_id": "sub-004",
+      "n_seizures_caught": 0,
+      "n_seizures_missed": 1,
+      "event_sensitivity": 0.0,
+      "n_false_alarms": 0,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_day": 0.0,
+      "scorable_interictal_hours": 0.1288888888888889,
+      "threshold_rule": "highest, val scorable interictal hours are 0",
+      "study_criterion_met": false
+    },
+    {
+      "patient_id": "sub-051",
+      "n_seizures_caught": 1,
+      "n_seizures_missed": 0,
+      "event_sensitivity": 1.0,
+      "n_false_alarms": 2,
+      "false_alarms_per_hour": 1.2790904245869603,
+      "false_alarms_per_day": 30.698170190087048,
+      "scorable_interictal_hours": 1.563611111111111,
+      "threshold_rule": "lowest threshold with val false alarms per hour at most 0.15",
+      "study_criterion_met": false
+    }
+  ]
+}
