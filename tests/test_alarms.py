@@ -291,12 +291,22 @@ def test_save_and_load_window_scores():
 
 
 def test_folder_alarm_metrics_fail_without_scores():
+    from metrics import write_metrics
     from score_alarms import alarm_metrics_from_folder
 
-    folder = "experiments/runs/within_patient/sub-004/pearson/sop30/seed123/eval1"
-    events = (
-        "data/seizeit2/sub-004/ses-01/eeg/"
-        "sub-004_ses-01_task-szMonitoring_run-01_events.tsv"
-    )
-    with pytest.raises(ValueError, match="window scores are missing"):
-        alarm_metrics_from_folder(folder, events)
+    folder = tempfile.mkdtemp()
+    try:
+        write_metrics(
+            folder,
+            {
+                "patient_id": "sub-004",
+                "t1": 1.0,
+                "t2": 2.0,
+                "n_test_seizures": 1,
+            },
+        )
+        with pytest.raises(ValueError, match="window scores are missing"):
+            alarm_metrics_from_folder(folder, "missing_events.tsv")
+    finally:
+        os.remove(os.path.join(folder, "metrics.json"))
+        os.rmdir(folder)
