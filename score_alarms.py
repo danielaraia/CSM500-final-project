@@ -4,9 +4,9 @@ import os
 
 from alarms import (
     FP_MAX_PER_HOUR,
+    choose_operating_threshold,
     load_window_scores,
     logit_to_probability,
-    pick_threshold,
     score_at_threshold,
     score_map,
     study_criterion_met,
@@ -14,6 +14,51 @@ from alarms import (
 )
 from events import load_event_rows, seizure_spans
 from metrics import merge_alarm_metrics, read_metrics
+from pack import load_split
+from windows import TRAIN_STRIDE_SECONDS
+
+
+KNOWN_EVENTS = {
+    "sub-004": os.path.join(
+        "data",
+        "seizeit2",
+        "sub-004",
+        "ses-01",
+        "eeg",
+        "sub-004_ses-01_task-szMonitoring_run-01_events.tsv",
+    ),
+    "sub-051": os.path.join(
+        "data",
+        "seizeit2",
+        "sub-051",
+        "ses-01",
+        "eeg",
+        "sub-051_ses-01_task-szMonitoring_run-01_events.tsv",
+    ),
+    "sub-052": os.path.join(
+        "data",
+        "seizeit2",
+        "sub-052",
+        "ses-01",
+        "eeg",
+        "sub-052_ses-01_task-szMonitoring_run-07_events.tsv",
+    ),
+    "sub-113": os.path.join(
+        "data",
+        "seizeit2",
+        "sub-113",
+        "ses-01",
+        "eeg",
+        "sub-113_ses-01_task-szMonitoring_run-04_events.tsv",
+    ),
+}
+
+PACKED_FOLDERS = (
+    "experiments/runs/within_patient/sub-004/pearson/sop30/seed123/eval1",
+    "experiments/runs/within_patient/sub-051/pearson/sop30/seed123/eval1",
+    "experiments/runs/within_patient/sub-052/pearson/sop30/seed123/eval1",
+    "experiments/runs/within_patient/sub-113/pearson/sop30/seed123/eval1",
+)
 
 
 KNOWN_EVENTS = {
@@ -77,8 +122,54 @@ def alarm_metrics_from_folder(folder, events_path):
             "n_test_seizures in metrics does not match the events file, "
             f"metrics {metrics['n_test_seizures']} events {n_test}"
         )
-    threshold, val_info = pick_threshold(
-        score_at, seizures, duration_seconds, t1, t2
+    monitor_path = os.path.join(folder, "monitor_scores.npz")
+    fallback_start = None
+    fallback_end = None
+    fallback_interictal_logits = None
+    n_monitor_windows_with_scores = 0
+    if os.path.isfile(monitor_path):
+        monitor_ends, monitor_logits = load_window_scores(monitor_path)
+        n_monitor_windows_with_scores = int(len(monitor_ends))
+        monitor_map = score_map(monitor_ends, monitor_logits)
+        for second in monitor_map:
+            if second in score_at:
+                raise ValueError(f"monitor and val or test both scored second {second}")
+            score_at[second] = monitor_map[second]
+        if len(monitor_ends) > 0:
+            fallback_start = int(min(monitor_ends))
+            fallback_end = int(max(monitor_ends)) + 1
+        pack_features, pack_graphs, pack_labels, pack_ends = load_split(
+            os.path.join(folder, "monitor.npz")
+        )
+        del pack_features, pack_graphs
+        if pack_ends is None:
+            raise ValueError("monitor pack has no stored ends")
+        if len(pack_ends) != len(monitor_ends):
+            raise ValueError(
+                "monitor scores and monitor pack need the same number of windows, "
+                f"we got {len(monitor_ends)} and {len(pack_ends)}"
+            )
+        fallback_interictal_logits = []
+        index = 0
+        while index < len(monitor_ends):
+            if int(pack_ends[index]) != int(monitor_ends[index]):
+                raise ValueError(
+                    "monitor score ends do not match the pack, "
+                    f"pack {int(pack_ends[index])} scores {int(monitor_ends[index])}"
+                )
+            if int(pack_labels[index]) == 0:
+                fallback_interictal_logits.append(float(monitor_logits[index]))
+            index += 1
+    threshold, val_info = choose_operating_threshold(
+        score_at,
+        seizures,
+        duration_seconds,
+        t1,
+        t2,
+        fallback_start=fallback_start,
+        fallback_end=fallback_end,
+        fallback_interictal_logits=fallback_interictal_logits,
+        fallback_stride_seconds=TRAIN_STRIDE_SECONDS,
     )
     test_scored = score_at_threshold(
         score_at,
@@ -111,6 +202,7 @@ def alarm_metrics_from_folder(folder, events_path):
         "alarm_threshold": None if math.isinf(threshold) else float(threshold),
         "alarm_threshold_probability": threshold_probability,
         "threshold_rule": val_info["threshold_rule"],
+        "threshold_set": val_info["threshold_set"],
         "val_cap_met": val_info["val_cap_met"],
         "val_false_alarms_per_hour": val_info["val_false_alarms_per_hour"],
         "val_scorable_interictal_hours": val_info["val_scorable_interictal_hours"],
@@ -127,6 +219,7 @@ def alarm_metrics_from_folder(folder, events_path):
         "alarm_silent_seconds": 2100,
         "n_test_windows_with_scores": int(len(test_ends)),
         "n_val_windows_with_scores": int(len(val_ends)),
+        "n_monitor_windows_with_scores": n_monitor_windows_with_scores,
     }
     return extra
 
@@ -143,7 +236,7 @@ def main():
         extra = alarm_metrics_from_folder(
             folder, os.path.join(here, KNOWN_EVENTS[patient_id])
         )
-        merge_alarm_metrics(folder, extra)
+        merge_alarm_metrics(folder, extra, replace=True)
         row = {
             "patient_id": patient_id,
             "n_seizures_caught": extra["n_seizures_caught"],
@@ -154,6 +247,7 @@ def main():
             "false_alarms_per_day": extra["false_alarms_per_day"],
             "scorable_interictal_hours": extra["scorable_interictal_hours"],
             "threshold_rule": extra["threshold_rule"],
+            "threshold_set": extra["threshold_set"],
             "study_criterion_met": extra["study_criterion_met"],
         }
         summary["patients"].append(row)

@@ -49,6 +49,15 @@ def test_merge_metrics_keeps_pack_keys_and_saves_pack_command():
         assert loaded_alarm["train_seconds"] == 2.0
         with pytest.raises(ValueError, match="alarm metrics already exist"):
             merge_alarm_metrics(folder, {"event_sensitivity": 1.0})
+        merge_alarm_metrics(
+            folder,
+            {"event_sensitivity": 0.5, "false_alarms_per_hour": 0.1},
+            replace=True,
+        )
+        loaded_replaced = read_metrics(folder)
+        assert loaded_replaced["event_sensitivity"] == 0.5
+        assert loaded_replaced["false_alarms_per_hour"] == 0.1
+        assert loaded_replaced["train_seconds"] == 2.0
     finally:
         shutil.rmtree(folder)
 
