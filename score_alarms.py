@@ -61,31 +61,6 @@ PACKED_FOLDERS = (
 )
 
 
-KNOWN_EVENTS = {
-    "sub-004": os.path.join(
-        "data",
-        "seizeit2",
-        "sub-004",
-        "ses-01",
-        "eeg",
-        "sub-004_ses-01_task-szMonitoring_run-01_events.tsv",
-    ),
-    "sub-051": os.path.join(
-        "data",
-        "seizeit2",
-        "sub-051",
-        "ses-01",
-        "eeg",
-        "sub-051_ses-01_task-szMonitoring_run-01_events.tsv",
-    ),
-}
-
-PACKED_FOLDERS = (
-    "experiments/runs/within_patient/sub-004/pearson/sop30/seed123/eval1",
-    "experiments/runs/within_patient/sub-051/pearson/sop30/seed123/eval1",
-)
-
-
 def recording_duration_seconds(rows):
     if len(rows) < 1:
         raise ValueError("events file is empty")
