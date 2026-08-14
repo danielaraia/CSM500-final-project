@@ -12,8 +12,18 @@ from train_step import make_optimizer, one_train_step
 
 
 PACKED_FOLDERS = (
-    "experiments/runs/within_patient/sub-004/pearson/sop30/seed123/eval1",
-    "experiments/runs/within_patient/sub-051/pearson/sop30/seed123/eval1",
+    (
+        "experiments/runs/within_patient/sub-004/pearson/sop30/seed123/eval1",
+        True,
+    ),
+    (
+        "experiments/runs/within_patient/sub-052/pearson/sop30/seed123/eval1",
+        False,
+    ),
+    (
+        "experiments/runs/within_patient/sub-113/pearson/sop30/seed123/eval1",
+        False,
+    ),
 )
 
 
@@ -45,7 +55,7 @@ def main():
         "patients": [],
     }
     wall_start = time.perf_counter()
-    for rel in PACKED_FOLDERS:
+    for rel, replace_existing_train in PACKED_FOLDERS:
         folder = os.path.join(here, rel)
         model = load_evobrain(device=device)
         model = model.to(device)
@@ -71,6 +81,7 @@ def main():
             extra=extra,
             device=device,
             compile_seconds=compile_seconds,
+            replace_existing_train=replace_existing_train,
         )
         row = {
             "patient_id": metrics.get("patient_id"),

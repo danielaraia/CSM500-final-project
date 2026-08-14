@@ -10,7 +10,7 @@ from edf import edf_gap_spans, load_run
 from events import impd_spans, load_event_rows, seizure_spans
 from glue import build_windows, cut_monitoring_slice, keep_labelled_windows, split_labelled_windows
 from labels import LABEL_INTERICTAL, LABEL_SOP, seizures_with_full_sop, split_cut_times
-from metrics import merge_metrics, read_metrics, write_metrics
+from metrics import merge_metrics, read_metrics, replace_metrics_keys, write_metrics
 from normalize import apply_node_zscore, node_mean_and_std
 from pack import load_split, save_named_labels
 from pos_weight import weight_from_class_numbers
@@ -283,6 +283,7 @@ def train_packed_eval_run(
     patience=None,
     train_batch_size=None,
     compile_seconds=None,
+    replace_existing_train=False,
 ):
     config_path = os.path.join(folder, "config.json")
     if not os.path.isfile(config_path):
@@ -340,6 +341,7 @@ def train_packed_eval_run(
         train_batch_size=train_batch_size,
         compile_seconds=compile_seconds,
         merge_existing=True,
+        replace_existing_train=replace_existing_train,
     )
 
 
@@ -356,9 +358,10 @@ def train_score_and_write_metrics(
     train_batch_size=None,
     compile_seconds=None,
     merge_existing=False,
+    replace_existing_train=False,
 ):
     train_f, train_g, train_y, _train_ends = _load_split_file(folder, "train.npz")
-    monitor_f, monitor_g, monitor_y, _monitor_ends = _load_split_file(
+    monitor_f, monitor_g, monitor_y, monitor_ends = _load_split_file(
         folder, "monitor.npz"
     )
     val_f, val_g, _val_y, val_ends = _load_split_file(folder, "val.npz")
@@ -385,11 +388,19 @@ def train_score_and_write_metrics(
     )
     train_seconds = time.perf_counter() - train_start
     score_start = time.perf_counter()
+    monitor_logits = score_windows(model, monitor_f, monitor_g, device=device)
     val_logits = score_windows(model, val_f, val_g, device=device)
     test_logits = score_windows(model, test_f, test_g, device=device)
     score_seconds = time.perf_counter() - score_start
+    n_monitor_scored = int(monitor_logits.shape[0])
     n_val_scored = int(val_logits.shape[0])
     n_test_scored = int(test_logits.shape[0])
+    if monitor_ends is not None:
+        save_window_scores(
+            os.path.join(folder, "monitor_scores.npz"),
+            monitor_ends,
+            monitor_logits.numpy(),
+        )
     if val_ends is not None:
         save_window_scores(
             os.path.join(folder, "val_scores.npz"), val_ends, val_logits.numpy()
@@ -424,6 +435,7 @@ def train_score_and_write_metrics(
         "n_seconds_scored": int(n_val_scored + n_test_scored),
         "n_validation_windows_scored": int(n_val_scored),
         "n_test_windows_scored": int(n_test_scored),
+        "n_monitor_windows_scored": int(n_monitor_scored),
         "patient_id": extra.get("patient_id") if extra else None,
         "graph_strategy": LOCKED["graph_strategy"],
         "sop_minutes": LOCKED["sop_minutes"],
@@ -450,7 +462,8 @@ def train_score_and_write_metrics(
     if merge_existing:
         loaded = read_metrics(folder)
         if "train_seconds" in loaded:
-            pass
+            if replace_existing_train:
+                replace_metrics_keys(folder, metrics)
         else:
             merge_metrics(folder, metrics)
     else:

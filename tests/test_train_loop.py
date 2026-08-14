@@ -324,6 +324,8 @@ def test_train_packed_eval_run_merges_into_pack_metrics():
         assert loaded_again["train_seconds"] == first_train
         assert os.path.isfile(os.path.join(folder, "val_scores.npz"))
         assert os.path.isfile(os.path.join(folder, "test_scores.npz"))
+        assert os.path.isfile(os.path.join(folder, "monitor_scores.npz"))
+        assert loaded["n_monitor_windows_scored"] == 8
     finally:
         shutil.rmtree(root)
 
