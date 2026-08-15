@@ -10,8 +10,8 @@
       "false_alarms_per_hour": 0.0,
       "false_alarms_per_day": 0.0,
       "scorable_interictal_hours": 0.1288888888888889,
-      "threshold_rule": "lowest monitor window threshold with false alarms per hour at most 0.15",
-      "threshold_set": "monitor windows",
+      "threshold_rule": "highest, monitor scorable interictal hours are 0",
+      "threshold_set": "monitor",
       "study_criterion_met": false
     },
     {
@@ -36,8 +36,8 @@
       "false_alarms_per_hour": 0.0,
       "false_alarms_per_day": 0.0,
       "scorable_interictal_hours": 0.5177777777777778,
-      "threshold_rule": "lowest monitor window threshold with false alarms per hour at most 0.15",
-      "threshold_set": "monitor windows",
+      "threshold_rule": "highest, monitor scorable interictal hours are 0",
+      "threshold_set": "monitor",
       "study_criterion_met": false
     },
     {
@@ -49,8 +49,8 @@
       "false_alarms_per_hour": 0.0,
       "false_alarms_per_day": 0.0,
       "scorable_interictal_hours": 0.05638888888888889,
-      "threshold_rule": "lowest monitor window threshold with false alarms per hour at most 0.15",
-      "threshold_set": "monitor windows",
+      "threshold_rule": "highest, monitor scorable interictal hours are 0",
+      "threshold_set": "monitor",
       "study_criterion_met": false
     }
   ]
