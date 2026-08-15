@@ -91,5 +91,7 @@
   "alarm_vote_need": 240,
   "alarm_silent_seconds": 2100,
   "n_test_windows_with_scores": 7608,
-  "n_val_windows_with_scores": 5871
+  "n_val_windows_with_scores": 5871,
+  "threshold_set": "val",
+  "n_monitor_windows_with_scores": 0
 }
