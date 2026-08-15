@@ -15,7 +15,6 @@ from alarms import (
 from events import load_event_rows, seizure_spans
 from metrics import merge_alarm_metrics, read_metrics
 from pack import load_split
-from windows import TRAIN_STRIDE_SECONDS
 
 
 KNOWN_EVENTS = {
@@ -100,7 +99,6 @@ def alarm_metrics_from_folder(folder, events_path):
     monitor_path = os.path.join(folder, "monitor_scores.npz")
     fallback_start = None
     fallback_end = None
-    fallback_interictal_logits = None
     n_monitor_windows_with_scores = 0
     if os.path.isfile(monitor_path):
         monitor_ends, monitor_logits = load_window_scores(monitor_path)
@@ -116,7 +114,7 @@ def alarm_metrics_from_folder(folder, events_path):
         pack_features, pack_graphs, pack_labels, pack_ends = load_split(
             os.path.join(folder, "monitor.npz")
         )
-        del pack_features, pack_graphs
+        del pack_features, pack_graphs, pack_labels
         if pack_ends is None:
             raise ValueError("monitor pack has no stored ends")
         if len(pack_ends) != len(monitor_ends):
@@ -124,7 +122,6 @@ def alarm_metrics_from_folder(folder, events_path):
                 "monitor scores and monitor pack need the same number of windows, "
                 f"we got {len(monitor_ends)} and {len(pack_ends)}"
             )
-        fallback_interictal_logits = []
         index = 0
         while index < len(monitor_ends):
             if int(pack_ends[index]) != int(monitor_ends[index]):
@@ -132,8 +129,6 @@ def alarm_metrics_from_folder(folder, events_path):
                     "monitor score ends do not match the pack, "
                     f"pack {int(pack_ends[index])} scores {int(monitor_ends[index])}"
                 )
-            if int(pack_labels[index]) == 0:
-                fallback_interictal_logits.append(float(monitor_logits[index]))
             index += 1
     threshold, val_info = choose_operating_threshold(
         score_at,
@@ -143,8 +138,6 @@ def alarm_metrics_from_folder(folder, events_path):
         t2,
         fallback_start=fallback_start,
         fallback_end=fallback_end,
-        fallback_interictal_logits=fallback_interictal_logits,
-        fallback_stride_seconds=TRAIN_STRIDE_SECONDS,
     )
     test_scored = score_at_threshold(
         score_at,

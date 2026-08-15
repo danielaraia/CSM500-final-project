@@ -13,7 +13,6 @@ from alarms import (
     lookback_seconds,
     merge_lead_onsets,
     pick_threshold,
-    pick_window_threshold,
     raise_alarms,
     save_window_scores,
     score_at_threshold,
@@ -235,8 +234,6 @@ def test_empty_val_uses_monitor_not_test():
         val_end=50,
         fallback_start=200,
         fallback_end=4000,
-        fallback_interictal_logits=None,
-        fallback_stride_seconds=10,
         lookback=5,
         need=4,
         silent=2100,
@@ -281,7 +278,7 @@ def test_empty_val_without_monitor_fails():
         )
 
 
-def test_empty_val_hop10_monitor_uses_window_rate():
+def test_empty_val_hop10_monitor_keeps_locked_event_sweep():
     seizures = [(80_000.0, 80_040.0)]
     duration = 8 * 3600
     scores = {}
@@ -294,13 +291,7 @@ def test_empty_val_hop10_monitor_uses_window_rate():
     while t < 700:
         scores[t] = -0.2
         t += 10
-    # test scores must not set the threshold
     scores[20_000] = 50.0
-    interictal = []
-    t = 100
-    while t < 700:
-        interictal.append(scores[t])
-        t += 10
     threshold, info = choose_operating_threshold(
         scores,
         seizures,
@@ -309,8 +300,6 @@ def test_empty_val_hop10_monitor_uses_window_rate():
         val_end=50,
         fallback_start=100,
         fallback_end=700,
-        fallback_interictal_logits=interictal,
-        fallback_stride_seconds=10,
         lookback=300,
         need=240,
         silent=2100,
@@ -318,24 +307,46 @@ def test_empty_val_hop10_monitor_uses_window_rate():
         sop_seconds=SOP_SECONDS,
         fp_max_per_hour=FP_MAX_PER_HOUR,
     )
-    assert info["threshold_set"] == "monitor windows"
-    assert threshold == pytest.approx(1.5)
-    assert 50.0 not in (threshold,)
-    n_false = 0
-    index = 0
-    while index < len(interictal):
-        if interictal[index] > threshold:
-            n_false += 1
-        index += 1
-    assert n_false == 0
+    assert info["threshold_set"] == "monitor"
+    assert math.isinf(threshold)
+    assert info["val_scorable_interictal_hours"] == 0
+    assert info["val_cap_met"] is False
+    assert threshold != 1.5
+    assert threshold != 50.0
 
 
-def test_window_threshold_keeps_zero_false_when_hours_are_short():
-    logits = [0.4, 0.1, -0.2, 0.4]
-    threshold, info = pick_window_threshold(logits, stride_seconds=10)
-    assert threshold == pytest.approx(0.4)
-    assert info["threshold_set"] == "monitor windows"
-    assert info["val_false_alarms_per_hour"] == pytest.approx(0.0)
+def test_empty_val_monitor_event_sweep_is_not_max_logit():
+    seizures = [(80_000.0, 80_040.0)]
+    duration = 8 * 3600
+    scores = {}
+    t = 200
+    while t < 800:
+        scores[t] = 0.0
+        t += 1
+    scores[250] = 5.0
+    scores[400] = 5.0
+    scores[550] = 5.0
+    scores[20_000] = 50.0
+    threshold, info = choose_operating_threshold(
+        scores,
+        seizures,
+        duration_seconds=duration,
+        val_start=0,
+        val_end=50,
+        fallback_start=200,
+        fallback_end=800,
+        lookback=5,
+        need=4,
+        silent=2100,
+        sph_seconds=SPH_SECONDS,
+        sop_seconds=SOP_SECONDS,
+        fp_max_per_hour=FP_MAX_PER_HOUR,
+    )
+    assert info["threshold_set"] == "monitor"
+    assert info["val_scorable_interictal_hours"] > 0
+    assert threshold == pytest.approx(0.0)
+    assert threshold != 5.0
+    assert threshold != 50.0
 
 
 def test_val_with_hours_ignores_monitor_and_test():
@@ -358,8 +369,6 @@ def test_val_with_hours_ignores_monitor_and_test():
         val_end=duration,
         fallback_start=20_000,
         fallback_end=20_100,
-        fallback_interictal_logits=[99.0],
-        fallback_stride_seconds=10,
         lookback=5,
         need=4,
         silent=2100,

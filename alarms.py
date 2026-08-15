@@ -355,67 +355,6 @@ def pick_threshold(
     }
 
 
-def pick_window_threshold(
-    interictal_logits,
-    stride_seconds,
-    fp_max_per_hour=FP_MAX_PER_HOUR,
-):
-    if stride_seconds < 1:
-        raise ValueError(f"stride has to be at least 1 sec, we got {stride_seconds}")
-    if len(interictal_logits) == 0:
-        return math.inf, {
-            "val_cap_met": False,
-            "threshold_rule": "highest, monitor has no interictal windows",
-            "val_false_alarms_per_hour": None,
-            "val_scorable_interictal_hours": 0.0,
-            "threshold_set": "monitor windows",
-        }
-    hours = len(interictal_logits) * stride_seconds / SECONDS_PER_HOUR
-    unique = []
-    seen = {}
-    index = 0
-    while index < len(interictal_logits):
-        value = float(interictal_logits[index])
-        if value not in seen:
-            unique.append(value)
-            seen[value] = True
-        index += 1
-    unique = sorted(unique, reverse=True)
-    chosen = math.inf
-    chosen_fpr = 0.0
-    index = 0
-    while index < len(unique):
-        threshold = unique[index]
-        n_false = 0
-        logit_index = 0
-        while logit_index < len(interictal_logits):
-            if float(interictal_logits[logit_index]) > threshold:
-                n_false += 1
-            logit_index += 1
-        fpr = n_false / hours
-        if fpr <= fp_max_per_hour:
-            chosen = threshold
-            chosen_fpr = fpr
-        else:
-            break
-        index += 1
-    if math.isinf(chosen):
-        rule = "highest, no monitor interictal window sits above any finite threshold"
-        cap_met = True
-    else:
-        rule = (
-            "lowest monitor window threshold with false alarms per hour at most 0.15"
-        )
-        cap_met = True
-    return chosen, {
-        "val_cap_met": cap_met,
-        "threshold_rule": rule,
-        "val_false_alarms_per_hour": chosen_fpr,
-        "val_scorable_interictal_hours": hours,
-        "threshold_set": "monitor windows",
-    }
-
-
 def choose_operating_threshold(
     score_at,
     seizures,
@@ -424,8 +363,6 @@ def choose_operating_threshold(
     val_end,
     fallback_start=None,
     fallback_end=None,
-    fallback_interictal_logits=None,
-    fallback_stride_seconds=None,
     lookback=None,
     need=None,
     silent=None,
@@ -465,40 +402,20 @@ def choose_operating_threshold(
         sop_seconds=sop_seconds,
         fp_max_per_hour=fp_max_per_hour,
     )
-    if mon_info["val_scorable_interictal_hours"] > 0:
-        rule = mon_info["threshold_rule"]
-        if rule == "lowest threshold with val false alarms per hour at most 0.15":
-            rule = (
-                "lowest threshold with monitor false alarms per hour at most 0.15"
-            )
-        elif rule == "highest, val scorable interictal hours are 0":
-            rule = "highest, monitor scorable interictal hours are 0"
-        elif rule == "highest, no scored window sits above any finite threshold":
-            rule = (
-                "highest, no monitor scored window sits above any finite threshold"
-            )
-        return threshold, {
-            "val_cap_met": mon_info["val_cap_met"],
-            "threshold_rule": rule,
-            "val_false_alarms_per_hour": mon_info["val_false_alarms_per_hour"],
-            "val_scorable_interictal_hours": mon_info[
-                "val_scorable_interictal_hours"
-            ],
-            "threshold_set": "monitor",
-        }
-    if fallback_interictal_logits is None:
-        raise ValueError(
-            "val and monitor event hours are 0 and monitor interictal logits are missing"
-        )
-    if fallback_stride_seconds is None:
-        raise ValueError(
-            "val and monitor event hours are 0 and monitor stride is missing"
-        )
-    return pick_window_threshold(
-        fallback_interictal_logits,
-        fallback_stride_seconds,
-        fp_max_per_hour=fp_max_per_hour,
-    )
+    rule = mon_info["threshold_rule"]
+    if rule == "lowest threshold with val false alarms per hour at most 0.15":
+        rule = "lowest threshold with monitor false alarms per hour at most 0.15"
+    elif rule == "highest, val scorable interictal hours are 0":
+        rule = "highest, monitor scorable interictal hours are 0"
+    elif rule == "highest, no scored window sits above any finite threshold":
+        rule = "highest, no monitor scored window sits above any finite threshold"
+    return threshold, {
+        "val_cap_met": mon_info["val_cap_met"],
+        "threshold_rule": rule,
+        "val_false_alarms_per_hour": mon_info["val_false_alarms_per_hour"],
+        "val_scorable_interictal_hours": mon_info["val_scorable_interictal_hours"],
+        "threshold_set": "monitor",
+    }
 
 
 def test_leads_from_seizures(seizures):
