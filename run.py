@@ -8,7 +8,14 @@ from alarms import save_window_scores
 from config import LOCKED, read_config, start_run
 from edf import edf_gap_spans, load_run
 from events import impd_spans, load_event_rows, seizure_spans
-from glue import build_windows, cut_monitoring_slice, keep_labelled_windows, split_labelled_windows
+from glue import (
+    build_windows,
+    cut_monitoring_slice,
+    cut_monitoring_slice_at_clock,
+    keep_labelled_windows,
+    monitor_clock_from_train_hop10,
+    split_labelled_windows,
+)
 from labels import LABEL_INTERICTAL, LABEL_SOP, seizures_with_full_sop, split_cut_times
 from metrics import merge_metrics, read_metrics, replace_metrics_keys, write_metrics
 from normalize import apply_node_zscore, node_mean_and_std
@@ -27,6 +34,8 @@ def labelled_windows_from_files(
     stride_seconds=TRAIN_STRIDE_SECONDS,
     t1=None,
     train_stride_seconds=None,
+    keep_end_min=None,
+    keep_end_max=None,
 ):
     electrical, movement, _picked, electrical_rails = load_run(
         eeg_path, ecg_path, emg_path, mov_path
@@ -52,6 +61,8 @@ def labelled_windows_from_files(
         seizures=seizures,
         t1=t1,
         train_stride_seconds=train_stride_seconds,
+        keep_end_min=keep_end_min,
+        keep_end_max=keep_end_max,
     )
     kept = keep_labelled_windows(
         features, graphs, ends, seizures
@@ -95,8 +106,114 @@ def write_split_run(
         counts[key] = drop_counts[key]
     counts["train_stride_seconds"] = TRAIN_STRIDE_SECONDS
     counts["eval_stride_seconds"] = EVAL_STRIDE_SECONDS
+    counts["monitor_stride_seconds"] = EVAL_STRIDE_SECONDS
     counts["scored_at_train_stride"] = False
     return folder, counts
+
+
+def rewrite_monitor_eval(
+    folder,
+    eeg_path,
+    ecg_path,
+    emg_path,
+    mov_path,
+    events_path,
+):
+    if not os.path.isdir(folder):
+        raise ValueError(f"run folder is missing: {folder}")
+    metrics = read_metrics(folder)
+    t1 = float(metrics["t1"])
+    train_f, _train_g, _train_y, train_ends = _load_split_file(folder, "train.npz")
+    _mon_f, _mon_g, _mon_y, old_monitor_ends = _load_split_file(folder, "monitor.npz")
+    if train_ends is None:
+        raise ValueError("train pack has no stored ends")
+    if old_monitor_ends is None or len(old_monitor_ends) < 1:
+        raise ValueError("monitor pack has no stored ends")
+    monitor_clock = int(min(old_monitor_ends))
+    features, graphs, ends, labels, _drop_counts = labelled_windows_from_files(
+        eeg_path,
+        ecg_path,
+        emg_path,
+        mov_path,
+        events_path,
+        stride_seconds=EVAL_STRIDE_SECONDS,
+        t1=t1,
+        train_stride_seconds=TRAIN_STRIDE_SECONDS,
+        keep_end_max=t1,
+    )
+    train_i = []
+    monitor_i = []
+    index = 0
+    while index < len(ends):
+        if ends[index] < monitor_clock:
+            train_i.append(index)
+        else:
+            monitor_i.append(index)
+        index += 1
+    if len(train_i) == 0:
+        raise ValueError("didnt rebuild any train windows for the z score")
+    if len(monitor_i) == 0:
+        raise ValueError("didnt rebuild any hop 1 monitor windows")
+    rebuilt_train_ends = []
+    pos = 0
+    while pos < len(train_i):
+        rebuilt_train_ends.append(int(ends[train_i[pos]]))
+        pos += 1
+    stored_train_ends = []
+    pos = 0
+    while pos < len(train_ends):
+        stored_train_ends.append(int(train_ends[pos]))
+        pos += 1
+    if rebuilt_train_ends != stored_train_ends:
+        raise ValueError(
+            "rebuilt train ends do not match the stored train pack, "
+            f"we got {rebuilt_train_ends[:5]} vs {stored_train_ends[:5]}"
+        )
+    train_raw = features[train_i]
+    monitor_raw = features[monitor_i]
+    monitor_graphs = graphs[monitor_i]
+    monitor_ends = []
+    monitor_labels = []
+    pos = 0
+    while pos < len(monitor_i):
+        i = monitor_i[pos]
+        monitor_ends.append(ends[i])
+        monitor_labels.append(labels[i])
+        pos += 1
+    means, stds = node_mean_and_std(train_raw)
+    train_scaled = apply_node_zscore(train_raw, means, stds)
+    if train_scaled.shape != train_f.shape:
+        raise ValueError(
+            "rebuilt train shape does not match the stored train pack, "
+            f"we got {train_scaled.shape} vs {train_f.shape}"
+        )
+    monitor_scaled = apply_node_zscore(monitor_raw, means, stds)
+    save_named_labels(
+        os.path.join(folder, "monitor.npz"),
+        monitor_scaled,
+        monitor_graphs,
+        monitor_labels,
+        ends=monitor_ends,
+    )
+    scores_path = os.path.join(folder, "monitor_scores.npz")
+    if os.path.isfile(scores_path):
+        os.remove(scores_path)
+    n_positive_monitor, n_negative_monitor = _count_named_classes(
+        monitor_labels, "monitor"
+    )
+    extra = {
+        "n_monitor_windows": int(monitor_scaled.shape[0]),
+        "n_positive_monitor": int(n_positive_monitor),
+        "n_negative_monitor": int(n_negative_monitor),
+        "n_monitor_ends": int(len(monitor_ends)),
+        "monitor_stride_seconds": EVAL_STRIDE_SECONDS,
+        "monitor_clock": int(monitor_clock),
+        "n_monitor_windows_with_scores": 0,
+        "monitor_logits_loaded": False,
+    }
+    replace_metrics_keys(folder, extra)
+    del train_scaled
+    return extra
 
 
 def write_scaled_splits_from_seizures(folder, features, graphs, ends, labels, seizures):
@@ -116,9 +233,17 @@ def write_scaled_splits(folder, features, graphs, ends, labels, t1, t2):
     if os.path.exists(train_path):
         raise ValueError(f"split files already exist, we wont write over them: {train_path}")
     train, val, test = split_labelled_windows(features, graphs, ends, labels, t1, t2)
-    train, monitor, _monitor_start, n_positive_monitor, n_negative_monitor = (
-        cut_monitoring_slice(train[0], train[1], train[2], train[3])
-    )
+    monitor_clock = monitor_clock_from_train_hop10(train[2])
+    if monitor_clock is None:
+        train, monitor, _monitor_start, n_positive_monitor, n_negative_monitor = (
+            cut_monitoring_slice(train[0], train[1], train[2], train[3])
+        )
+    else:
+        train, monitor, _monitor_start, n_positive_monitor, n_negative_monitor = (
+            cut_monitoring_slice_at_clock(
+                train[0], train[1], train[2], train[3], monitor_clock
+            )
+        )
     n_positive_train, n_negative_train = _count_named_classes(
         train[3], "gradient train"
     )
@@ -163,6 +288,9 @@ def write_scaled_splits(folder, features, graphs, ends, labels, t1, t2):
         "n_negative_val": int(n_negative_val),
         "n_positive_test": int(n_positive_test),
         "n_negative_test": int(n_negative_test),
+        "monitor_stride_seconds": (
+            EVAL_STRIDE_SECONDS if monitor_clock is not None else TRAIN_STRIDE_SECONDS
+        ),
         "means": means,
         "stds": stds,
     }
@@ -254,6 +382,7 @@ def timed_patient_run(
     packed_extra["scored_at_train_stride"] = False
     packed_extra["train_stride_seconds"] = TRAIN_STRIDE_SECONDS
     packed_extra["eval_stride_seconds"] = EVAL_STRIDE_SECONDS
+    packed_extra["monitor_stride_seconds"] = EVAL_STRIDE_SECONDS
     packed_extra["patient_id"] = patient_id
     if extra is not None:
         for key in extra:

@@ -151,6 +151,41 @@ def test_write_scaled_splits_zscore_from_train_only():
         shutil.rmtree(folder)
 
 
+def test_write_scaled_splits_packs_hop_one_monitor():
+    ends = [59, 69, 79, 89, 90, 91, 92, 100, 101, 110, 111]
+    n_windows = len(ends)
+    features = np.zeros((n_windows, 1, 8, 1))
+    graphs = np.zeros((n_windows, 1, 8, 8))
+    index = 0
+    while index < 3:
+        features[index, 0, :, 0] = 0.0 if index % 2 == 0 else 2.0
+        index += 1
+    features[3:, 0, :, 0] = 100.0
+    labels = (
+        [LABEL_SOP, LABEL_INTERICTAL, LABEL_SOP]
+        + [LABEL_SOP, LABEL_SOP, LABEL_INTERICTAL, LABEL_INTERICTAL]
+        + [LABEL_SOP, LABEL_SOP]
+        + [LABEL_SOP, LABEL_INTERICTAL]
+    )
+    folder = tempfile.mkdtemp()
+    try:
+        counts = write_scaled_splits(
+            folder, features, graphs, ends, labels, t1=100, t2=110
+        )
+        assert counts["n_train_windows"] == 3
+        assert counts["n_monitor_windows"] == 4
+        assert counts["monitor_stride_seconds"] == 1
+        _tf, _g, _y, train_ends = load_split(os.path.join(folder, "train.npz"))
+        _mf, _mg, _my, mon_ends = load_split(os.path.join(folder, "monitor.npz"))
+        packed = np.load(os.path.join(folder, "monitor.npz"))
+        np.testing.assert_array_equal(packed["ends"], np.array([89, 90, 91, 92]))
+        np.testing.assert_array_equal(train_ends, np.array([59, 69, 79]))
+        assert 90 in list(mon_ends)
+        assert 91 in list(mon_ends)
+    finally:
+        shutil.rmtree(folder)
+
+
 def test_write_scaled_splits_fails_when_train_has_no_sop():
     n_windows = 20
     features = np.zeros((n_windows, 1, 8, 1))

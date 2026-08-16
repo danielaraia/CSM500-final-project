@@ -7,7 +7,9 @@ from glue import (
     build_one_window,
     build_windows,
     cut_monitoring_slice,
+    cut_monitoring_slice_at_clock,
     keep_labelled_windows,
+    monitor_clock_from_train_hop10,
     split_labelled_windows,
 )
 from labels import LABEL_INTERICTAL, LABEL_SOP, LABEL_UNUSED, label_second
@@ -225,6 +227,62 @@ def test_pack_keeps_train_hop_ten_and_eval_hop_one():
     assert val[2][-1] == 149
     assert test[2][0] == 150
     assert test[2][-1] == 179
+
+
+def test_pack_keeps_hop_one_inside_monitor_span():
+    electrical, movement = _fake_run(250)
+    seizures = [(100000, 100100)]
+    features, graphs, ends, drop_counts = build_windows(
+        electrical,
+        movement,
+        stride_seconds=EVAL_STRIDE_SECONDS,
+        electrical_rails=WIDE_RAILS,
+        seizures=seizures,
+        t1=200,
+        train_stride_seconds=TRAIN_STRIDE_SECONDS,
+    )
+    assert drop_counts["n_steps_dropped_qc"] == 0
+    # hop 10 train before the last quarter: 69 through 169
+    assert 169 in ends
+    assert 170 not in ends
+    assert 178 not in ends
+    # last 25 percent of hop 10 train starts at 179, packed at hop 1
+    assert 179 in ends
+    assert 180 in ends
+    assert 181 in ends
+    assert 199 in ends
+    train, val, test = split_labelled_windows(
+        features,
+        graphs,
+        ends,
+        [LABEL_INTERICTAL] * len(ends),
+        t1=200,
+        t2=220,
+    )
+    assert 170 not in train[2]
+    assert 179 in train[2]
+    assert 180 in train[2]
+    assert 199 in train[2]
+    assert val[2][0] == 200
+    assert test[2][0] == 220
+
+
+def test_monitor_clock_cut_uses_hop_ten_quarter():
+    ends = [59, 69, 79, 89, 90, 91, 92]
+    n_windows = len(ends)
+    features = np.zeros((n_windows, WINDOW_SECONDS, N_NODES, N_FFT_BINS))
+    graphs = np.zeros((n_windows, WINDOW_SECONDS, N_NODES, N_NODES))
+    labels = [LABEL_INTERICTAL] * 3 + [LABEL_SOP] * 2 + [LABEL_INTERICTAL] * 2
+    clock = monitor_clock_from_train_hop10(ends)
+    assert clock == 89
+    train, monitor, start, n_positive, n_negative = cut_monitoring_slice_at_clock(
+        features, graphs, ends, labels, clock
+    )
+    assert start == 89
+    assert train[2] == [59, 69, 79]
+    assert monitor[2] == [89, 90, 91, 92]
+    assert n_positive == 2
+    assert n_negative == 2
 
 
 def test_t1_without_train_stride_fails():
