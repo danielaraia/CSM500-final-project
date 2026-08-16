@@ -186,9 +186,11 @@ def score_at_threshold(
     n_false = 0
     n_hit_alarms = 0
     caught = []
+    evaluable = []
     lead_index = 0
     while lead_index < len(lead_onsets):
         caught.append(False)
+        evaluable.append(False)
         lead_index += 1
     n_scores_in_lookback = 0
     t = 0
@@ -198,6 +200,15 @@ def score_at_threshold(
             n_scores_in_lookback -= 1
         if t in score_at:
             n_scores_in_lookback += 1
+        if n_scores_in_lookback >= need:
+            lead_index = 0
+            while lead_index < len(lead_onsets):
+                start, end = hit_interval(
+                    lead_onsets[lead_index], sph_seconds, sop_seconds
+                )
+                if start <= t < end:
+                    evaluable[lead_index] = True
+                lead_index += 1
         in_part = part_start <= t < part_end
         if in_part and label_second(t, seizures) == LABEL_INTERICTAL:
             raw_seconds += 1
@@ -233,17 +244,21 @@ def score_at_threshold(
                     warn_t += 1
         alarm_index += 1
     n_caught = 0
+    n_evaluable = 0
     lead_index = 0
     while lead_index < len(caught):
-        if caught[lead_index]:
-            n_caught += 1
+        if evaluable[lead_index]:
+            n_evaluable += 1
+            if caught[lead_index]:
+                n_caught += 1
         lead_index += 1
     n_leads = len(lead_onsets)
-    n_missed = n_leads - n_caught
-    if n_leads == 0:
+    n_unevaluable = n_leads - n_evaluable
+    n_missed = n_evaluable - n_caught
+    if n_evaluable == 0:
         sensitivity = None
     else:
-        sensitivity = n_caught / float(n_leads)
+        sensitivity = n_caught / float(n_evaluable)
     hours = scorable_seconds / SECONDS_PER_HOUR
     if hours <= 0:
         fa_per_hour = None
@@ -257,6 +272,8 @@ def score_at_threshold(
         "n_hit_alarms": n_hit_alarms,
         "n_false_alarms": n_false,
         "n_seizures": n_leads,
+        "n_seizures_evaluable": n_evaluable,
+        "n_seizures_unevaluable": n_unevaluable,
         "n_seizures_caught": n_caught,
         "n_seizures_missed": n_missed,
         "event_sensitivity": sensitivity,

@@ -169,9 +169,11 @@ def test_caught_and_missed_seizures():
     )
     assert caught["n_seizures_caught"] == 1
     assert caught["n_seizures_missed"] == 0
+    assert caught["n_seizures_evaluable"] == 1
+    assert caught["n_seizures_unevaluable"] == 0
     assert caught["event_sensitivity"] == pytest.approx(1.0)
 
-    missed = score_at_threshold(
+    empty = score_at_threshold(
         {},
         0.5,
         seizures,
@@ -183,9 +185,64 @@ def test_caught_and_missed_seizures():
         need=4,
         silent=2100,
     )
-    assert missed["n_seizures_caught"] == 0
-    assert missed["n_seizures_missed"] == 1
-    assert missed["event_sensitivity"] == pytest.approx(0.0)
+    assert empty["n_seizures_caught"] == 0
+    assert empty["n_seizures_missed"] == 0
+    assert empty["n_seizures_evaluable"] == 0
+    assert empty["n_seizures_unevaluable"] == 1
+    assert empty["event_sensitivity"] is None
+
+
+def test_gappy_hit_interval_is_unevaluable_not_a_miss():
+    onset = 10_000.0
+    seizures = [(onset, onset + 40.0)]
+    start, _end = hit_interval(onset)
+    scores = {int(start): 1.0, int(start) + 50: 1.0}
+    scored = score_at_threshold(
+        scores,
+        0.5,
+        seizures,
+        lead_onsets=[onset],
+        duration_seconds=12_000,
+        part_start=0,
+        part_end=12_000,
+        lookback=300,
+        need=240,
+        silent=2100,
+    )
+    assert scored["n_seizures_unevaluable"] == 1
+    assert scored["n_seizures_evaluable"] == 0
+    assert scored["n_seizures_missed"] == 0
+    assert scored["n_seizures_caught"] == 0
+    assert scored["event_sensitivity"] is None
+
+
+def test_dense_lookback_below_threshold_is_a_miss():
+    onset = 10_000.0
+    seizures = [(onset, onset + 40.0)]
+    start, _end = hit_interval(onset)
+    scores = {}
+    t = int(start)
+    last = t + 10
+    while t <= last:
+        scores[t] = 0.0
+        t += 1
+    scored = score_at_threshold(
+        scores,
+        0.5,
+        seizures,
+        lead_onsets=[onset],
+        duration_seconds=12_000,
+        part_start=0,
+        part_end=12_000,
+        lookback=5,
+        need=4,
+        silent=2100,
+    )
+    assert scored["n_seizures_evaluable"] == 1
+    assert scored["n_seizures_unevaluable"] == 0
+    assert scored["n_seizures_caught"] == 0
+    assert scored["n_seizures_missed"] == 1
+    assert scored["event_sensitivity"] == pytest.approx(0.0)
 
 
 def test_empty_val_hours_freeze_highest_threshold():
@@ -381,6 +438,39 @@ def test_val_with_hours_ignores_monitor_and_test():
     assert threshold != 99.0
 
 
+def test_operating_threshold_does_not_use_test_logits():
+    seizures = [(80_000.0, 80_040.0)]
+    duration = 8 * 3600
+    scores = {}
+    t = 0
+    while t < 400:
+        scores[t] = 0.1
+        t += 1
+    # test logits that would catch if we cheated and lowered the threshold
+    t = 20_000
+    while t < 20_400:
+        scores[t] = 99.0
+        t += 1
+    threshold, info = choose_operating_threshold(
+        scores,
+        seizures,
+        duration_seconds=duration,
+        val_start=0,
+        val_end=400,
+        fallback_start=20_000,
+        fallback_end=20_500,
+        lookback=5,
+        need=4,
+        silent=2100,
+        sph_seconds=SPH_SECONDS,
+        sop_seconds=SOP_SECONDS,
+        fp_max_per_hour=FP_MAX_PER_HOUR,
+    )
+    assert info["threshold_set"] == "val"
+    assert threshold != 99.0
+    assert threshold < math.inf
+
+
 def test_threshold_is_the_lowest_that_stays_under_the_cap():
     seizures = [(80_000.0, 80_040.0)]
     duration = 8 * 3600
@@ -445,6 +535,7 @@ def test_study_criterion_needs_half_the_seizures_and_the_cap():
     assert study_criterion_met(1.0, 0.2, 2, True) is False
     assert study_criterion_met(1.0, 0.4, 0, False) is True
     assert study_criterion_met(1.0, 0.4, 1, False) is False
+    assert study_criterion_met(None, 0.0, 0, False) is False
 
 
 def test_save_and_load_window_scores():

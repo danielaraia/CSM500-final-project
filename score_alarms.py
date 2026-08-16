@@ -96,27 +96,25 @@ def alarm_metrics_from_folder(folder, events_path):
             "n_test_seizures in metrics does not match the events file, "
             f"metrics {metrics['n_test_seizures']} events {n_test}"
         )
+    monitor_pack_path = os.path.join(folder, "monitor.npz")
     monitor_path = os.path.join(folder, "monitor_scores.npz")
     fallback_start = None
     fallback_end = None
     n_monitor_windows_with_scores = 0
-    if os.path.isfile(monitor_path):
-        monitor_ends, monitor_logits = load_window_scores(monitor_path)
-        n_monitor_windows_with_scores = int(len(monitor_ends))
-        monitor_map = score_map(monitor_ends, monitor_logits)
-        for second in monitor_map:
-            if second in score_at:
-                raise ValueError(f"monitor and val or test both scored second {second}")
-            score_at[second] = monitor_map[second]
-        if len(monitor_ends) > 0:
-            fallback_start = int(min(monitor_ends))
-            fallback_end = int(max(monitor_ends)) + 1
+    monitor_logits_loaded = False
+    pack_ends = None
+    if os.path.isfile(monitor_pack_path):
         pack_features, pack_graphs, pack_labels, pack_ends = load_split(
-            os.path.join(folder, "monitor.npz")
+            monitor_pack_path
         )
         del pack_features, pack_graphs, pack_labels
         if pack_ends is None:
             raise ValueError("monitor pack has no stored ends")
+        if len(pack_ends) > 0:
+            fallback_start = int(min(pack_ends))
+            fallback_end = int(max(pack_ends)) + 1
+    if os.path.isfile(monitor_path) and pack_ends is not None:
+        monitor_ends, monitor_logits = load_window_scores(monitor_path)
         if len(pack_ends) != len(monitor_ends):
             raise ValueError(
                 "monitor scores and monitor pack need the same number of windows, "
@@ -130,6 +128,22 @@ def alarm_metrics_from_folder(folder, events_path):
                     f"pack {int(pack_ends[index])} scores {int(monitor_ends[index])}"
                 )
             index += 1
+        monitor_map = score_map(monitor_ends, monitor_logits)
+        for second in monitor_map:
+            if second in score_at:
+                raise ValueError(f"monitor and val or test both scored second {second}")
+            score_at[second] = monitor_map[second]
+        n_monitor_windows_with_scores = int(len(monitor_ends))
+        monitor_logits_loaded = True
+    elif pack_ends is not None and len(pack_ends) > 0:
+        index = 0
+        while index < len(pack_ends):
+            second = int(pack_ends[index])
+            if second in score_at:
+                raise ValueError(f"monitor and val or test both scored second {second}")
+            # 0 is only a placeholder so scorable hours can be counted from ends
+            score_at[second] = 0.0
+            index += 1
     threshold, val_info = choose_operating_threshold(
         score_at,
         seizures,
@@ -139,6 +153,15 @@ def alarm_metrics_from_folder(folder, events_path):
         fallback_start=fallback_start,
         fallback_end=fallback_end,
     )
+    if (
+        (not monitor_logits_loaded)
+        and val_info["threshold_set"] == "monitor"
+        and val_info["val_scorable_interictal_hours"] is not None
+        and val_info["val_scorable_interictal_hours"] > 0
+    ):
+        raise ValueError(
+            "monitor has scorable hours but window scores are missing, cannot pick a threshold"
+        )
     test_scored = score_at_threshold(
         score_at,
         threshold,
@@ -156,6 +179,8 @@ def alarm_metrics_from_folder(folder, events_path):
         "event_sensitivity": test_scored["event_sensitivity"],
         "n_seizures_caught": test_scored["n_seizures_caught"],
         "n_seizures_missed": test_scored["n_seizures_missed"],
+        "n_seizures_evaluable": test_scored["n_seizures_evaluable"],
+        "n_seizures_unevaluable": test_scored["n_seizures_unevaluable"],
         "n_test_lead_seizures": test_scored["n_seizures"],
         "n_seizures_merged": n_merged,
         "n_false_alarms": test_scored["n_false_alarms"],
@@ -188,6 +213,7 @@ def alarm_metrics_from_folder(folder, events_path):
         "n_test_windows_with_scores": int(len(test_ends)),
         "n_val_windows_with_scores": int(len(val_ends)),
         "n_monitor_windows_with_scores": n_monitor_windows_with_scores,
+        "monitor_logits_loaded": monitor_logits_loaded,
     }
     return extra
 
@@ -209,6 +235,8 @@ def main():
             "patient_id": patient_id,
             "n_seizures_caught": extra["n_seizures_caught"],
             "n_seizures_missed": extra["n_seizures_missed"],
+            "n_seizures_evaluable": extra["n_seizures_evaluable"],
+            "n_seizures_unevaluable": extra["n_seizures_unevaluable"],
             "event_sensitivity": extra["event_sensitivity"],
             "n_false_alarms": extra["n_false_alarms"],
             "false_alarms_per_hour": extra["false_alarms_per_hour"],
