@@ -7,9 +7,7 @@ from glue import (
     build_one_window,
     build_windows,
     cut_monitoring_slice,
-    cut_monitoring_slice_at_clock,
     keep_labelled_windows,
-    monitor_clock_from_train_hop10,
     split_labelled_windows,
 )
 from labels import LABEL_INTERICTAL, LABEL_SOP, LABEL_UNUSED, label_second
@@ -265,24 +263,6 @@ def test_pack_keeps_hop_one_inside_monitor_span():
     assert 199 in train[2]
     assert val[2][0] == 200
     assert test[2][0] == 220
-
-
-def test_monitor_clock_cut_uses_hop_ten_quarter():
-    ends = [59, 69, 79, 89, 90, 91, 92]
-    n_windows = len(ends)
-    features = np.zeros((n_windows, WINDOW_SECONDS, N_NODES, N_FFT_BINS))
-    graphs = np.zeros((n_windows, WINDOW_SECONDS, N_NODES, N_NODES))
-    labels = [LABEL_INTERICTAL] * 3 + [LABEL_SOP] * 2 + [LABEL_INTERICTAL] * 2
-    clock = monitor_clock_from_train_hop10(ends)
-    assert clock == 89
-    train, monitor, start, n_positive, n_negative = cut_monitoring_slice_at_clock(
-        features, graphs, ends, labels, clock
-    )
-    assert start == 89
-    assert train[2] == [59, 69, 79]
-    assert monitor[2] == [89, 90, 91, 92]
-    assert n_positive == 2
-    assert n_negative == 2
 
 
 def test_t1_without_train_stride_fails():

@@ -2,7 +2,7 @@ import numpy as np
 
 from features import log_amplitude_fft
 from filters import filter_ecg, filter_eeg, filter_emg, filter_movement_axis
-from labels import LABEL_INTERICTAL, LABEL_SOP, LABEL_UNUSED, label_second, monitoring_indices
+from labels import LABEL_UNUSED, label_second, monitoring_indices
 from movement import axis_magnitude, upsample_movement_to_256
 from pearson import (
     ELECTRICAL_SAMPLES_1S,
@@ -54,8 +54,6 @@ def build_windows(
     seizures=None,
     t1=None,
     train_stride_seconds=None,
-    keep_end_min=None,
-    keep_end_max=None,
 ):
     if (t1 is None) != (train_stride_seconds is None):
         raise ValueError("t1 and train stride have to be set together, or neither")
@@ -79,14 +77,7 @@ def build_windows(
     )
     graph_ok = _graph_ok_seconds(quality_ok)
     ends = window_end_times(graph_ok, WINDOW_SECONDS, stride_seconds)
-    ends = _keep_pack_ends(
-        ends,
-        seizures,
-        t1,
-        train_stride_seconds,
-        keep_end_min=keep_end_min,
-        keep_end_max=keep_end_max,
-    )
+    ends = _keep_pack_ends(ends, seizures, t1, train_stride_seconds)
 
     n_windows = len(ends)
     features = np.zeros((n_windows, WINDOW_SECONDS, N_NODES, 128), dtype=np.float64)
@@ -211,75 +202,7 @@ def cut_monitoring_slice(features, adjacency, ends, labels):
     return train, monitor, monitor_start, n_positive, n_negative
 
 
-def monitor_clock_from_train_hop10(ends):
-    hop10_i = []
-    index = 0
-    while index < len(ends):
-        if end_is_on_stride(int(ends[index]), TRAIN_STRIDE_SECONDS):
-            hop10_i.append(index)
-        index += 1
-    if len(hop10_i) == 0 or len(hop10_i) == len(ends):
-        return None
-    n_hop10 = len(hop10_i)
-    n_monitor = n_hop10 // 4
-    if n_monitor == 0:
-        return None
-    return ends[hop10_i[n_hop10 - n_monitor]]
-
-
-def cut_monitoring_slice_at_clock(features, adjacency, ends, labels, monitor_clock):
-    features = np.asarray(features)
-    adjacency = np.asarray(adjacency)
-    train_i = []
-    monitor_i = []
-    index = 0
-    while index < len(ends):
-        if ends[index] < monitor_clock:
-            train_i.append(index)
-        else:
-            monitor_i.append(index)
-        index += 1
-    if len(train_i) == 0:
-        raise ValueError("didnt leave any train windows after the monitoring cut")
-    if len(monitor_i) == 0:
-        raise ValueError("monitoring slice is empty after the clock cut")
-    train = _gather_windows(train_i, features, adjacency, ends, labels)
-    monitor = _gather_windows(monitor_i, features, adjacency, ends, labels)
-    n_positive, n_negative = _count_named_monitor_classes(monitor[3])
-    return train, monitor, monitor_clock, n_positive, n_negative
-
-
-def _count_named_monitor_classes(labels):
-    n_positive = 0
-    n_negative = 0
-    index = 0
-    while index < len(labels):
-        lab = labels[index]
-        if lab == LABEL_SOP:
-            n_positive += 1
-        elif lab == LABEL_INTERICTAL:
-            n_negative += 1
-        else:
-            raise ValueError(
-                f"monitoring slice has unused label {lab}, that shouldnt be in here"
-            )
-        index += 1
-    if n_positive == 0 or n_negative == 0:
-        raise ValueError(
-            "monitoring slice is missing a class, "
-            f"we got n_positive={n_positive} n_negative={n_negative}"
-        )
-    return n_positive, n_negative
-
-
-def _keep_pack_ends(
-    ends,
-    seizures,
-    t1,
-    train_stride_seconds,
-    keep_end_min=None,
-    keep_end_max=None,
-):
+def _keep_pack_ends(ends, seizures, t1, train_stride_seconds):
     labelled = []
     index = 0
     while index < len(ends):
@@ -307,10 +230,6 @@ def _keep_pack_ends(
     while index < len(labelled):
         end_time = labelled[index]
         index += 1
-        if keep_end_min is not None and end_time < keep_end_min:
-            continue
-        if keep_end_max is not None and end_time >= keep_end_max:
-            continue
         if t1 is not None and end_time < t1:
             if monitor_clock is None:
                 if not end_is_on_stride(end_time, train_stride_seconds):
