@@ -3,6 +3,13 @@ import os
 
 import numpy as np
 
+from alarm_leads import (
+    blank_lead_flags,
+    hit_interval,
+    lead_event_counts,
+    mark_caught_leads,
+    mark_evaluable_at_second,
+)
 from labels import (
     LABEL_INTERICTAL,
     SOP_SECONDS,
@@ -134,10 +141,6 @@ def raise_alarms(
     return alarms
 
 
-def hit_interval(onset, sph_seconds=SPH_SECONDS, sop_seconds=SOP_SECONDS):
-    return onset - sph_seconds - sop_seconds, onset - sph_seconds
-
-
 def alarm_hits_a_seizure(alarm_time, lead_onsets, sph_seconds=SPH_SECONDS, sop_seconds=SOP_SECONDS):
     index = 0
     while index < len(lead_onsets):
@@ -185,13 +188,7 @@ def score_at_threshold(
     warning_seconds = 0
     n_false = 0
     n_hit_alarms = 0
-    caught = []
-    evaluable = []
-    lead_index = 0
-    while lead_index < len(lead_onsets):
-        caught.append(False)
-        evaluable.append(False)
-        lead_index += 1
+    caught, evaluable = blank_lead_flags(len(lead_onsets))
     n_scores_in_lookback = 0
     t = 0
     while t < duration_seconds:
@@ -201,14 +198,9 @@ def score_at_threshold(
         if t in score_at:
             n_scores_in_lookback += 1
         if n_scores_in_lookback >= need:
-            lead_index = 0
-            while lead_index < len(lead_onsets):
-                start, end = hit_interval(
-                    lead_onsets[lead_index], sph_seconds, sop_seconds
-                )
-                if start <= t < end:
-                    evaluable[lead_index] = True
-                lead_index += 1
+            mark_evaluable_at_second(
+                evaluable, lead_onsets, t, sph_seconds, sop_seconds
+            )
         in_part = part_start <= t < part_end
         if in_part and label_second(t, seizures) == LABEL_INTERICTAL:
             raw_seconds += 1
@@ -223,14 +215,9 @@ def score_at_threshold(
         )
         if is_hit:
             n_hit_alarms += 1
-            lead_index = 0
-            while lead_index < len(lead_onsets):
-                start, end = hit_interval(
-                    lead_onsets[lead_index], sph_seconds, sop_seconds
-                )
-                if start <= alarm_time < end:
-                    caught[lead_index] = True
-                lead_index += 1
+            mark_caught_leads(
+                caught, lead_onsets, alarm_time, sph_seconds, sop_seconds
+            )
         elif part_start <= alarm_time < part_end:
             if label_second(alarm_time, seizures) == LABEL_INTERICTAL:
                 n_false += 1
@@ -243,22 +230,7 @@ def score_at_threshold(
                         warning_seconds += 1
                     warn_t += 1
         alarm_index += 1
-    n_caught = 0
-    n_evaluable = 0
-    lead_index = 0
-    while lead_index < len(caught):
-        if evaluable[lead_index]:
-            n_evaluable += 1
-            if caught[lead_index]:
-                n_caught += 1
-        lead_index += 1
-    n_leads = len(lead_onsets)
-    n_unevaluable = n_leads - n_evaluable
-    n_missed = n_evaluable - n_caught
-    if n_evaluable == 0:
-        sensitivity = None
-    else:
-        sensitivity = n_caught / float(n_evaluable)
+    leads = lead_event_counts(caught, evaluable)
     hours = scorable_seconds / SECONDS_PER_HOUR
     if hours <= 0:
         fa_per_hour = None
@@ -271,12 +243,12 @@ def score_at_threshold(
         "n_alarms": len(alarms),
         "n_hit_alarms": n_hit_alarms,
         "n_false_alarms": n_false,
-        "n_seizures": n_leads,
-        "n_seizures_evaluable": n_evaluable,
-        "n_seizures_unevaluable": n_unevaluable,
-        "n_seizures_caught": n_caught,
-        "n_seizures_missed": n_missed,
-        "event_sensitivity": sensitivity,
+        "n_seizures": leads["n_seizures"],
+        "n_seizures_evaluable": leads["n_seizures_evaluable"],
+        "n_seizures_unevaluable": leads["n_seizures_unevaluable"],
+        "n_seizures_caught": leads["n_seizures_caught"],
+        "n_seizures_missed": leads["n_seizures_missed"],
+        "event_sensitivity": leads["event_sensitivity"],
         "raw_interictal_hours": raw_seconds / SECONDS_PER_HOUR,
         "scorable_interictal_hours": hours,
         "interictal_hours_dropped": (raw_seconds - scorable_seconds) / SECONDS_PER_HOUR,
