@@ -1,6 +1,6 @@
 {
   "patient_id": "sub-051",
-  "command": "python train_eval1.py",
+  "command": "python honest_retrain.py",
   "pack_scope": "seizure bearing run only",
   "pack_seconds": 373.2498301670421,
   "negative_control": "none",
@@ -33,22 +33,22 @@
   "scored_at_train_stride": false,
   "pack_command": "python pack_eval.py",
   "best_epoch": 1,
-  "best_monitor_bce": 12.903230298321773,
+  "best_monitor_bce": 12.278453997780566,
   "pos_weight": 32.13333333333333,
   "parameter_count": 283846,
   "early_stopping_metric": "class_weighted_bce",
   "preprocess_seconds": 0.0,
-  "train_seconds": 12.97043326124549,
-  "score_seconds": 15.615828663110733,
-  "end_to_end_wall_clock": 67.67824714351445,
-  "patient_wall_clock_seconds": 67.67824714351445,
+  "train_seconds": 37.67084907600656,
+  "score_seconds": 18.234242626000196,
+  "end_to_end_wall_clock": 136.4666120079346,
+  "patient_wall_clock_seconds": 136.4666120079346,
   "n_seconds_scored": 13479,
   "n_validation_windows_scored": 5871,
   "n_test_windows_scored": 7608,
   "graph_strategy": "pearson",
   "sop_minutes": 30,
   "sph_minutes": 5,
-  "compile_seconds": 2.367169698700309,
+  "compile_seconds": 2.164432518882677,
   "used_stored_ends": true,
   "n_train_ends": 994,
   "n_monitor_ends": 3304,
@@ -61,7 +61,7 @@
   "dataset_accession": "ds005873",
   "dataset_version": "1.1.0",
   "gpu_name": "NVIDIA GeForce RTX 4090",
-  "gpu_memory_bytes": 25280839680,
+  "gpu_memory_bytes": 25261047808,
   "cuda_version": "12.8",
   "mamba_ssm_version": "2.2.4",
   "train_batch_size": 32,
@@ -77,9 +77,9 @@
   "raw_interictal_hours": 1.6308333333333334,
   "scorable_interictal_hours": 1.563611111111111,
   "interictal_hours_dropped": 0.06722222222222222,
-  "time_in_warning_interictal_hours": 0.7877777777777778,
-  "alarm_threshold": -0.07710173726081848,
-  "alarm_threshold_probability": 0.4807341088657358,
+  "time_in_warning_interictal_hours": 0.8208333333333333,
+  "alarm_threshold": 0.02131146565079689,
+  "alarm_threshold_probability": 0.505327664771629,
   "threshold_rule": "lowest threshold with val false alarms per hour at most 0.15",
   "val_cap_met": true,
   "val_false_alarms_per_hour": 0.0,
@@ -93,10 +93,106 @@
   "n_test_windows_with_scores": 7608,
   "n_val_windows_with_scores": 5871,
   "threshold_set": "val",
-  "n_monitor_windows_with_scores": 0,
+  "n_monitor_windows_with_scores": 3304,
   "monitor_stride_seconds": 1,
   "monitor_clock": 22699,
-  "monitor_logits_loaded": false,
+  "monitor_logits_loaded": true,
   "n_seizures_evaluable": 1,
-  "n_seizures_unevaluable": 0
+  "n_seizures_unevaluable": 0,
+  "n_epochs_run": 6,
+  "scored_from_best_checkpoint": true,
+  "n_monitor_windows_scored": 3304,
+  "logit_zero_monitor_bce": 12.449796090541584,
+  "epoch_log": [
+    {
+      "epoch": 1,
+      "train_bce": 1.34346953292248,
+      "monitor_bce": 12.278453997780566,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 1
+    },
+    {
+      "epoch": 2,
+      "train_bce": 1.3429775563044328,
+      "monitor_bce": 12.753222555571549,
+      "improved": false,
+      "wait": 1,
+      "best_epoch": 1
+    },
+    {
+      "epoch": 3,
+      "train_bce": 1.3438520770917237,
+      "monitor_bce": 13.689648722909553,
+      "improved": false,
+      "wait": 2,
+      "best_epoch": 1
+    },
+    {
+      "epoch": 4,
+      "train_bce": 1.3887508870130574,
+      "monitor_bce": 18.081411966688698,
+      "improved": false,
+      "wait": 3,
+      "best_epoch": 1
+    },
+    {
+      "epoch": 5,
+      "train_bce": 2.2838990882908554,
+      "monitor_bce": 42.10095732494936,
+      "improved": false,
+      "wait": 4,
+      "best_epoch": 1
+    },
+    {
+      "epoch": 6,
+      "train_bce": 3.0649050352588985,
+      "monitor_bce": 56.9512103466953,
+      "improved": false,
+      "wait": 5,
+      "best_epoch": 1
+    }
+  ],
+  "n_epochs_logged": 6,
+  "logit_overlap": {
+    "train": {
+      "n_sop": 30,
+      "sop_median": 0.023851795122027397,
+      "sop_max": 0.03564894571900368,
+      "n_interictal": 964,
+      "interictal_median": 0.022383971139788628,
+      "interictal_max": 0.05534251406788826,
+      "frac_sop_at_or_under_interictal_max": 1.0
+    },
+    "monitor": {
+      "n_sop": 1800,
+      "sop_median": 0.019445616751909256,
+      "sop_max": 0.04765712097287178,
+      "n_interictal": 1504,
+      "interictal_median": 0.019686652347445488,
+      "interictal_max": 0.04555751755833626,
+      "frac_sop_at_or_under_interictal_max": 0.9988888888888889
+    },
+    "val": {
+      "n_sop": 0,
+      "sop_median": null,
+      "sop_max": null,
+      "n_interictal": 5871,
+      "interictal_median": 0.022587211802601814,
+      "interictal_max": 0.05421018972992897,
+      "frac_sop_at_or_under_interictal_max": null
+    },
+    "test": {
+      "n_sop": 1800,
+      "sop_median": 0.02321992628276348,
+      "sop_max": 0.0525873601436615,
+      "n_interictal": 5808,
+      "interictal_median": 0.024693486280739307,
+      "interictal_max": 0.055534474551677704,
+      "frac_sop_at_or_under_interictal_max": 1.0
+    }
+  },
+  "test_still_overlap": true,
+  "train_still_overlap": true,
+  "monitor_still_overlap": false
 }

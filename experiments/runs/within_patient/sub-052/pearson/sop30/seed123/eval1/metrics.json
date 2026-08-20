@@ -1,6 +1,6 @@
 {
   "patient_id": "sub-052",
-  "command": "python train_eval1.py",
+  "command": "python honest_retrain.py",
   "pack_scope": "seizure bearing run only",
   "pack_seconds": 98.29429029091261,
   "negative_control": "none",
@@ -32,26 +32,26 @@
   "eval_stride_seconds": 1,
   "scored_at_train_stride": false,
   "pack_command": "python pack_eval.py",
-  "best_epoch": 2,
-  "n_epochs_run": 7,
+  "best_epoch": 1,
+  "n_epochs_run": 6,
   "scored_from_best_checkpoint": true,
-  "best_monitor_bce": 3.8397693634033203,
+  "best_monitor_bce": 3.8189417676940263,
   "pos_weight": 5.862068965517241,
   "parameter_count": 283846,
   "early_stopping_metric": "class_weighted_bce",
   "preprocess_seconds": 0.0,
-  "train_seconds": 2.137063901987858,
-  "score_seconds": 3.1760253090178594,
-  "end_to_end_wall_clock": 19.62890616094228,
-  "patient_wall_clock_seconds": 19.62890616094228,
+  "train_seconds": 7.664613657165319,
+  "score_seconds": 5.131663738051429,
+  "end_to_end_wall_clock": 25.071482521947473,
+  "patient_wall_clock_seconds": 25.071482521947473,
   "n_seconds_scored": 3966,
   "n_validation_windows_scored": 20,
   "n_test_windows_scored": 3946,
-  "n_monitor_windows_scored": 66,
+  "n_monitor_windows_scored": 653,
   "graph_strategy": "pearson",
   "sop_minutes": 30,
   "sph_minutes": 5,
-  "compile_seconds": 2.466781200026162,
+  "compile_seconds": 2.164432518882677,
   "used_stored_ends": true,
   "n_train_ends": 199,
   "n_monitor_ends": 653,
@@ -64,7 +64,7 @@
   "dataset_accession": "ds005873",
   "dataset_version": "1.1.0",
   "gpu_name": "NVIDIA GeForce RTX 4090",
-  "gpu_memory_bytes": 25250627584,
+  "gpu_memory_bytes": 25261047808,
   "cuda_version": "12.8",
   "mamba_ssm_version": "2.2.4",
   "train_batch_size": 32,
@@ -96,10 +96,103 @@
   "alarm_silent_seconds": 2100,
   "n_test_windows_with_scores": 3946,
   "n_val_windows_with_scores": 20,
-  "n_monitor_windows_with_scores": 0,
+  "n_monitor_windows_with_scores": 653,
   "monitor_stride_seconds": 1,
   "monitor_clock": 14139,
-  "monitor_logits_loaded": false,
+  "monitor_logits_loaded": true,
   "n_seizures_evaluable": 1,
-  "n_seizures_unevaluable": 0
+  "n_seizures_unevaluable": 0,
+  "logit_zero_monitor_bce": 3.8258708296376254,
+  "epoch_log": [
+    {
+      "epoch": 1,
+      "train_bce": 1.183517336845398,
+      "monitor_bce": 3.8189417676940263,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 1
+    },
+    {
+      "epoch": 2,
+      "train_bce": 1.1840523481369019,
+      "monitor_bce": 3.821734951977343,
+      "improved": false,
+      "wait": 1,
+      "best_epoch": 1
+    },
+    {
+      "epoch": 3,
+      "train_bce": 1.184504508972168,
+      "monitor_bce": 3.8265919188810527,
+      "improved": false,
+      "wait": 2,
+      "best_epoch": 1
+    },
+    {
+      "epoch": 4,
+      "train_bce": 1.1843993663787842,
+      "monitor_bce": 3.8298853900494656,
+      "improved": false,
+      "wait": 3,
+      "best_epoch": 1
+    },
+    {
+      "epoch": 5,
+      "train_bce": 1.1830278635025024,
+      "monitor_bce": 3.832218634589343,
+      "improved": false,
+      "wait": 4,
+      "best_epoch": 1
+    },
+    {
+      "epoch": 6,
+      "train_bce": 1.1846442222595215,
+      "monitor_bce": 3.835680857916886,
+      "improved": false,
+      "wait": 5,
+      "best_epoch": 1
+    }
+  ],
+  "n_epochs_logged": 6,
+  "logit_overlap": {
+    "train": {
+      "n_sop": 29,
+      "sop_median": -0.0014148205518722534,
+      "sop_max": 0.01958281546831131,
+      "n_interictal": 170,
+      "interictal_median": -0.0011934861540794373,
+      "interictal_max": 0.016677789390087128,
+      "frac_sop_at_or_under_interictal_max": 0.9655172413793104
+    },
+    "monitor": {
+      "n_sop": 607,
+      "sop_median": 0.0011041201651096344,
+      "sop_max": 0.030761726200580597,
+      "n_interictal": 46,
+      "interictal_median": -0.0023472364991903305,
+      "interictal_max": 0.01249275729060173,
+      "frac_sop_at_or_under_interictal_max": 0.899505766062603
+    },
+    "val": {
+      "n_sop": 0,
+      "sop_median": null,
+      "sop_max": null,
+      "n_interictal": 20,
+      "interictal_median": 0.002474980428814888,
+      "interictal_max": 0.014470234513282776,
+      "frac_sop_at_or_under_interictal_max": null
+    },
+    "test": {
+      "n_sop": 642,
+      "sop_median": 0.00043266452848911285,
+      "sop_max": 0.0330410897731781,
+      "n_interictal": 3304,
+      "interictal_median": 0.0007751602679491043,
+      "interictal_max": 0.04036702960729599,
+      "frac_sop_at_or_under_interictal_max": 1.0
+    }
+  },
+  "test_still_overlap": true,
+  "train_still_overlap": false,
+  "monitor_still_overlap": false
 }

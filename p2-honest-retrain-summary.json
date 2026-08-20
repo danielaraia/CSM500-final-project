@@ -1,0 +1,121 @@
+{
+  "command": "python report_retrain.py",
+  "patients": [
+    {
+      "patient_id": "sub-051",
+      "best_epoch": 1,
+      "n_epochs_run": 6,
+      "n_epochs_logged": 6,
+      "best_monitor_bce": 12.278453997780566,
+      "logit_zero_monitor_bce": 12.449796090541584,
+      "n_seizures_caught": 1,
+      "n_seizures_missed": 0,
+      "n_seizures_evaluable": 1,
+      "n_seizures_unevaluable": 0,
+      "event_sensitivity": 1.0,
+      "n_false_alarms": 2,
+      "false_alarms_per_hour": 1.2790904245869603,
+      "threshold_set": "val",
+      "alarm_threshold": 0.02131146565079689,
+      "test_still_overlap": true,
+      "train_still_overlap": true,
+      "monitor_still_overlap": false,
+      "logit_overlap": {
+        "train": {
+          "n_sop": 30,
+          "sop_median": 0.023851795122027397,
+          "sop_max": 0.03564894571900368,
+          "n_interictal": 964,
+          "interictal_median": 0.022383971139788628,
+          "interictal_max": 0.05534251406788826,
+          "frac_sop_at_or_under_interictal_max": 1.0
+        },
+        "monitor": {
+          "n_sop": 1800,
+          "sop_median": 0.019445616751909256,
+          "sop_max": 0.04765712097287178,
+          "n_interictal": 1504,
+          "interictal_median": 0.019686652347445488,
+          "interictal_max": 0.04555751755833626,
+          "frac_sop_at_or_under_interictal_max": 0.9988888888888889
+        },
+        "val": {
+          "n_sop": 0,
+          "sop_median": null,
+          "sop_max": null,
+          "n_interictal": 5871,
+          "interictal_median": 0.022587211802601814,
+          "interictal_max": 0.05421018972992897,
+          "frac_sop_at_or_under_interictal_max": null
+        },
+        "test": {
+          "n_sop": 1800,
+          "sop_median": 0.02321992628276348,
+          "sop_max": 0.0525873601436615,
+          "n_interictal": 5808,
+          "interictal_median": 0.024693486280739307,
+          "interictal_max": 0.055534474551677704,
+          "frac_sop_at_or_under_interictal_max": 1.0
+        }
+      }
+    },
+    {
+      "patient_id": "sub-052",
+      "best_epoch": 1,
+      "n_epochs_run": 6,
+      "n_epochs_logged": 6,
+      "best_monitor_bce": 3.8189417676940263,
+      "logit_zero_monitor_bce": 3.8258708296376254,
+      "n_seizures_caught": 0,
+      "n_seizures_missed": 1,
+      "n_seizures_evaluable": 1,
+      "n_seizures_unevaluable": 0,
+      "event_sensitivity": 0.0,
+      "n_false_alarms": 0,
+      "false_alarms_per_hour": 0.0,
+      "threshold_set": "monitor",
+      "alarm_threshold": null,
+      "test_still_overlap": true,
+      "train_still_overlap": false,
+      "monitor_still_overlap": false,
+      "logit_overlap": {
+        "train": {
+          "n_sop": 29,
+          "sop_median": -0.0014148205518722534,
+          "sop_max": 0.01958281546831131,
+          "n_interictal": 170,
+          "interictal_median": -0.0011934861540794373,
+          "interictal_max": 0.016677789390087128,
+          "frac_sop_at_or_under_interictal_max": 0.9655172413793104
+        },
+        "monitor": {
+          "n_sop": 607,
+          "sop_median": 0.0011041201651096344,
+          "sop_max": 0.030761726200580597,
+          "n_interictal": 46,
+          "interictal_median": -0.0023472364991903305,
+          "interictal_max": 0.01249275729060173,
+          "frac_sop_at_or_under_interictal_max": 0.899505766062603
+        },
+        "val": {
+          "n_sop": 0,
+          "sop_median": null,
+          "sop_max": null,
+          "n_interictal": 20,
+          "interictal_median": 0.002474980428814888,
+          "interictal_max": 0.014470234513282776,
+          "frac_sop_at_or_under_interictal_max": null
+        },
+        "test": {
+          "n_sop": 642,
+          "sop_median": 0.00043266452848911285,
+          "sop_max": 0.0330410897731781,
+          "n_interictal": 3304,
+          "interictal_median": 0.0007751602679491043,
+          "interictal_max": 0.04036702960729599,
+          "frac_sop_at_or_under_interictal_max": 1.0
+        }
+      }
+    }
+  ]
+}
