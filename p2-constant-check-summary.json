@@ -1,0 +1,239 @@
+{
+  "command": "python report_constant.py",
+  "patients": [
+    {
+      "patient_id": "sub-051",
+      "splits": {
+        "train": {
+          "n_windows": 994,
+          "n_sop": 30,
+          "n_interictal": 964,
+          "mixed": true,
+          "ends_time_ordered": true,
+          "n_clock_mismatch": 0,
+          "n_score_end_mismatch": 0,
+          "after_prev_split": true,
+          "n_hop10": 994,
+          "graph": {
+            "n_compared": 64,
+            "max_mean_abs_diff": 0.1562052115286037,
+            "median_mean_abs_diff": 0.1380542404120352,
+            "n_identical_to_first": 1,
+            "off_diag_std": 0.16186404256320885,
+            "dead": false
+          },
+          "logit_mean": 0.023422708734869957,
+          "logit_std": 0.009130515158176422
+        },
+        "monitor": {
+          "n_windows": 3304,
+          "n_sop": 1800,
+          "n_interictal": 1504,
+          "mixed": true,
+          "ends_time_ordered": true,
+          "n_clock_mismatch": 0,
+          "n_score_end_mismatch": 0,
+          "after_prev_split": true,
+          "n_hop10": 331,
+          "graph": {
+            "n_compared": 64,
+            "max_mean_abs_diff": 0.13591438851520213,
+            "median_mean_abs_diff": 0.11701342297611442,
+            "n_identical_to_first": 1,
+            "off_diag_std": 0.1577377295702142,
+            "dead": false
+          },
+          "logit_mean": 0.01998707838356495,
+          "logit_std": 0.008445451967418194
+        },
+        "val": {
+          "n_windows": 5871,
+          "n_sop": 0,
+          "n_interictal": 5871,
+          "mixed": false,
+          "ends_time_ordered": true,
+          "n_clock_mismatch": 0,
+          "n_score_end_mismatch": 0,
+          "after_prev_split": true,
+          "n_hop10": 587,
+          "graph": {
+            "n_compared": 64,
+            "max_mean_abs_diff": 0.15010364065319384,
+            "median_mean_abs_diff": 0.12155092040682028,
+            "n_identical_to_first": 1,
+            "off_diag_std": 0.15309447529568102,
+            "dead": false
+          },
+          "logit_mean": 0.02369517646729946,
+          "logit_std": 0.009641929529607296
+        },
+        "test": {
+          "n_windows": 7608,
+          "n_sop": 1800,
+          "n_interictal": 5808,
+          "mixed": true,
+          "ends_time_ordered": true,
+          "n_clock_mismatch": 0,
+          "n_score_end_mismatch": 0,
+          "after_prev_split": true,
+          "n_hop10": 762,
+          "graph": {
+            "n_compared": 64,
+            "max_mean_abs_diff": 0.14821031800214357,
+            "median_mean_abs_diff": 0.12252520757632185,
+            "n_identical_to_first": 1,
+            "off_diag_std": 0.14176410684144614,
+            "dead": false
+          },
+          "logit_mean": 0.025129953399300575,
+          "logit_std": 0.009961639530956745
+        }
+      },
+      "tiny_batch": {
+        "n_steps": 5,
+        "losses": [
+          11.280792236328125,
+          11.280013084411621,
+          11.279233932495117,
+          11.27845573425293,
+          11.277676582336426
+        ],
+        "weight_moved": true,
+        "weight_delta": 0.0004999339580535889,
+        "grad_abs_sum": 0.1314728558063507,
+        "grad_nonzero": true
+      },
+      "checkpoint": {
+        "epoch": 1,
+        "n_tensors": 32,
+        "n_params": 283846,
+        "n_nan_tensors": 0,
+        "n_all_zero_tensors": 0,
+        "n_zero_std_tensors": 0,
+        "optimizer_max_exp_avg": 0.4275645315647125,
+        "finite": true
+      },
+      "pos_weight": 32.13333333333333
+    },
+    {
+      "patient_id": "sub-052",
+      "splits": {
+        "train": {
+          "n_windows": 199,
+          "n_sop": 29,
+          "n_interictal": 170,
+          "mixed": true,
+          "ends_time_ordered": true,
+          "n_clock_mismatch": 0,
+          "n_score_end_mismatch": 0,
+          "after_prev_split": true,
+          "n_hop10": 199,
+          "graph": {
+            "n_compared": 64,
+            "max_mean_abs_diff": 0.16534980330370505,
+            "median_mean_abs_diff": 0.14630647035926547,
+            "n_identical_to_first": 1,
+            "off_diag_std": 0.1959666397277804,
+            "dead": false
+          },
+          "logit_mean": -0.00160887255333364,
+          "logit_std": 0.00735600758343935
+        },
+        "monitor": {
+          "n_windows": 653,
+          "n_sop": 607,
+          "n_interictal": 46,
+          "mixed": true,
+          "ends_time_ordered": true,
+          "n_clock_mismatch": 0,
+          "n_score_end_mismatch": 0,
+          "after_prev_split": true,
+          "n_hop10": 66,
+          "graph": {
+            "n_compared": 64,
+            "max_mean_abs_diff": 0.1723430840407584,
+            "median_mean_abs_diff": 0.15191142240030647,
+            "n_identical_to_first": 1,
+            "off_diag_std": 0.18927637153364177,
+            "dead": false
+          },
+          "logit_mean": 0.0015873649390414357,
+          "logit_std": 0.008255498483777046
+        },
+        "val": {
+          "n_windows": 20,
+          "n_sop": 0,
+          "n_interictal": 20,
+          "mixed": false,
+          "ends_time_ordered": true,
+          "n_clock_mismatch": 0,
+          "n_score_end_mismatch": 0,
+          "after_prev_split": true,
+          "n_hop10": 2,
+          "graph": {
+            "n_compared": 20,
+            "max_mean_abs_diff": 0.12989093340079969,
+            "median_mean_abs_diff": 0.1237169069025271,
+            "n_identical_to_first": 1,
+            "off_diag_std": 0.16461593410144068,
+            "dead": false
+          },
+          "logit_mean": 0.0014991179341450334,
+          "logit_std": 0.007452667690813541
+        },
+        "test": {
+          "n_windows": 3946,
+          "n_sop": 642,
+          "n_interictal": 3304,
+          "mixed": true,
+          "ends_time_ordered": true,
+          "n_clock_mismatch": 0,
+          "n_score_end_mismatch": 0,
+          "after_prev_split": true,
+          "n_hop10": 395,
+          "graph": {
+            "n_compared": 64,
+            "max_mean_abs_diff": 0.17052651780120678,
+            "median_mean_abs_diff": 0.15146028849480392,
+            "n_identical_to_first": 1,
+            "off_diag_std": 0.17111668583408648,
+            "dead": false
+          },
+          "logit_mean": 0.001732423435896635,
+          "logit_std": 0.009067164734005928
+        }
+      },
+      "tiny_batch": {
+        "n_steps": 5,
+        "losses": [
+          2.386458158493042,
+          2.3863258361816406,
+          2.3861937522888184,
+          2.386061429977417,
+          2.385929584503174
+        ],
+        "weight_moved": true,
+        "weight_delta": 0.0004999339580535889,
+        "grad_abs_sum": 0.11864079535007477,
+        "grad_nonzero": true
+      },
+      "checkpoint": {
+        "epoch": 1,
+        "n_tensors": 32,
+        "n_params": 283846,
+        "n_nan_tensors": 0,
+        "n_all_zero_tensors": 0,
+        "n_zero_std_tensors": 0,
+        "optimizer_max_exp_avg": 0.07329117506742477,
+        "finite": true
+      },
+      "pos_weight": 5.862068965517241
+    }
+  ],
+  "checkpoint_diff": {
+    "n_equal_tensors": 0,
+    "n_tensors": 32,
+    "max_abs_diff": 4.5102362632751465
+  },
+  "verdict": "honest constant classifier"
+}
