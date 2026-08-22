@@ -1,7 +1,9 @@
 import json
 import os
+import sys
 import time
 
+from catch_coverage import catch_coverage_from_folder
 from metrics import write_metrics
 from run import write_split_run
 
@@ -23,17 +25,24 @@ def seizeit2_run_paths(patient_id, run_id):
 
 
 def main():
-    paths = seizeit2_run_paths(PATIENT_ID, RUN_ID)
+    patient_id = PATIENT_ID
+    run_id = RUN_ID
+    if len(sys.argv) >= 3:
+        patient_id = sys.argv[1]
+        run_id = sys.argv[2]
+    elif len(sys.argv) != 1:
+        raise ValueError("usage: python pack_eval.py [patient_id run_id]")
+    paths = seizeit2_run_paths(patient_id, run_id)
     extra = {
         "command": "python pack_eval.py",
         "pack_scope": "seizure bearing run only",
         "negative_control": "none",
-        "packed_run": RUN_ID,
+        "packed_run": run_id,
     }
     clock = time.perf_counter()
     folder, counts = write_split_run(
         ".",
-        PATIENT_ID,
+        patient_id,
         paths["eeg"],
         paths["ecg"],
         paths["emg"],
@@ -43,17 +52,20 @@ def main():
         leaf=LEAF,
     )
     metrics = {
-        "patient_id": PATIENT_ID,
+        "patient_id": patient_id,
         "command": "python pack_eval.py",
         "pack_scope": "seizure bearing run only",
         "pack_seconds": float(time.perf_counter() - clock),
         "negative_control": "none",
-        "packed_run": RUN_ID,
+        "packed_run": run_id,
     }
     for key in counts:
         if key == "means" or key == "stds":
             continue
         metrics[key] = counts[key]
+    coverage = catch_coverage_from_folder(folder, paths["events"])
+    for key in coverage:
+        metrics[key] = coverage[key]
     write_metrics(folder, metrics)
     print("folder", folder)
     print(json.dumps(metrics, indent=2))
