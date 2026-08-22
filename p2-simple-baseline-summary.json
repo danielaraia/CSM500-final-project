@@ -1,0 +1,237 @@
+{
+  "command": "python report_baseline.py",
+  "gpu": false,
+  "patients": [
+    {
+      "patient_id": "sub-051",
+      "n_seizures_merged": 0,
+      "baseline": {
+        "event_sensitivity": 0.0,
+        "n_seizures_caught": 0,
+        "n_seizures_missed": 1,
+        "n_seizures_evaluable": 1,
+        "n_seizures_unevaluable": 0,
+        "n_false_alarms": 0,
+        "false_alarms_per_hour": 0.0,
+        "scorable_interictal_hours": 1.563611111111111,
+        "alarm_threshold": -6.3815123764875565,
+        "alarm_threshold_probability": 0.0016897013072326912,
+        "threshold_rule": "lowest threshold with val false alarms per hour at most 0.15",
+        "threshold_set": "val",
+        "val_cap_met": true,
+        "study_criterion_met": false,
+        "fp_max_per_hour": 0.15,
+        "alarm_vote_need": 240,
+        "pos_weight": 32.13333333333333,
+        "logit_overlap": {
+          "train": {
+            "n_sop": 30,
+            "sop_median": 2.762806696647819,
+            "sop_max": 5.321458694758898,
+            "n_interictal": 964,
+            "interictal_median": -7.0886531033804765,
+            "interictal_max": 12.605810999640306,
+            "frac_sop_at_or_under_interictal_max": 1.0
+          },
+          "monitor": {
+            "n_sop": 1800,
+            "sop_median": -8.06243669955439,
+            "sop_max": 2.9946820758026735,
+            "n_interictal": 1504,
+            "interictal_median": -10.63858469551063,
+            "interictal_max": 1.8072612713500753,
+            "frac_sop_at_or_under_interictal_max": 0.9922222222222222
+          },
+          "val": {
+            "n_sop": 0,
+            "sop_median": null,
+            "sop_max": null,
+            "n_interictal": 5871,
+            "interictal_median": -16.327617972812334,
+            "interictal_max": 4.196235344715251,
+            "frac_sop_at_or_under_interictal_max": null
+          },
+          "test": {
+            "n_sop": 1800,
+            "sop_median": -17.510124427620752,
+            "sop_max": 19.993691656270116,
+            "n_interictal": 5808,
+            "interictal_median": -57.53052259990426,
+            "interictal_max": 4.465161983581181,
+            "frac_sop_at_or_under_interictal_max": 0.9883333333333333
+          }
+        },
+        "test_still_overlap": false,
+        "train_still_overlap": true,
+        "monitor_still_overlap": false
+      },
+      "evobrain": {
+        "event_sensitivity": 1.0,
+        "n_seizures_caught": 1,
+        "n_seizures_missed": 0,
+        "n_seizures_evaluable": 1,
+        "n_seizures_unevaluable": 0,
+        "n_false_alarms": 2,
+        "false_alarms_per_hour": 1.2790904245869603,
+        "threshold_set": "val",
+        "test_still_overlap": true,
+        "train_still_overlap": true,
+        "study_criterion_met": false,
+        "logit_overlap": {
+          "train": {
+            "n_sop": 30,
+            "sop_median": 0.023851795122027397,
+            "sop_max": 0.03564894571900368,
+            "n_interictal": 964,
+            "interictal_median": 0.022383971139788628,
+            "interictal_max": 0.05534251406788826,
+            "frac_sop_at_or_under_interictal_max": 1.0
+          },
+          "monitor": {
+            "n_sop": 1800,
+            "sop_median": 0.019445616751909256,
+            "sop_max": 0.04765712097287178,
+            "n_interictal": 1504,
+            "interictal_median": 0.019686652347445488,
+            "interictal_max": 0.04555751755833626,
+            "frac_sop_at_or_under_interictal_max": 0.9988888888888889
+          },
+          "val": {
+            "n_sop": 0,
+            "sop_median": null,
+            "sop_max": null,
+            "n_interictal": 5871,
+            "interictal_median": 0.022587211802601814,
+            "interictal_max": 0.05421018972992897,
+            "frac_sop_at_or_under_interictal_max": null
+          },
+          "test": {
+            "n_sop": 1800,
+            "sop_median": 0.02321992628276348,
+            "sop_max": 0.0525873601436615,
+            "n_interictal": 5808,
+            "interictal_median": 0.024693486280739307,
+            "interictal_max": 0.055534474551677704,
+            "frac_sop_at_or_under_interictal_max": 1.0
+          }
+        }
+      }
+    },
+    {
+      "patient_id": "sub-052",
+      "n_seizures_merged": 0,
+      "baseline": {
+        "event_sensitivity": 0.0,
+        "n_seizures_caught": 0,
+        "n_seizures_missed": 1,
+        "n_seizures_evaluable": 1,
+        "n_seizures_unevaluable": 0,
+        "n_false_alarms": 0,
+        "false_alarms_per_hour": 0.0,
+        "scorable_interictal_hours": 0.5177777777777778,
+        "alarm_threshold": null,
+        "alarm_threshold_probability": null,
+        "threshold_rule": "highest, monitor scorable interictal hours are 0",
+        "threshold_set": "monitor",
+        "val_cap_met": false,
+        "study_criterion_met": false,
+        "fp_max_per_hour": 0.15,
+        "alarm_vote_need": 240,
+        "pos_weight": 5.862068965517241,
+        "logit_overlap": {
+          "train": {
+            "n_sop": 29,
+            "sop_median": 14.631513184850334,
+            "sop_max": 60.03529202347417,
+            "n_interictal": 170,
+            "interictal_median": -34.20507807485234,
+            "interictal_max": 6.906158401222674,
+            "frac_sop_at_or_under_interictal_max": 0.27586206896551724
+          },
+          "monitor": {
+            "n_sop": 607,
+            "sop_median": -58.926633282160566,
+            "sop_max": -15.622158011230463,
+            "n_interictal": 46,
+            "interictal_median": -34.12917091411638,
+            "interictal_max": -28.437804044490623,
+            "frac_sop_at_or_under_interictal_max": 0.9703459637561779
+          },
+          "val": {
+            "n_sop": 0,
+            "sop_median": null,
+            "sop_max": null,
+            "n_interictal": 20,
+            "interictal_median": -85.25062608161716,
+            "interictal_max": -78.45303176533976,
+            "frac_sop_at_or_under_interictal_max": null
+          },
+          "test": {
+            "n_sop": 642,
+            "sop_median": -53.82073861307032,
+            "sop_max": -7.299833392729319,
+            "n_interictal": 3304,
+            "interictal_median": -99.76136022735885,
+            "interictal_max": 20.38486238271482,
+            "frac_sop_at_or_under_interictal_max": 1.0
+          }
+        },
+        "test_still_overlap": true,
+        "train_still_overlap": false,
+        "monitor_still_overlap": false
+      },
+      "evobrain": {
+        "event_sensitivity": 0.0,
+        "n_seizures_caught": 0,
+        "n_seizures_missed": 1,
+        "n_seizures_evaluable": 1,
+        "n_seizures_unevaluable": 0,
+        "n_false_alarms": 0,
+        "false_alarms_per_hour": 0.0,
+        "threshold_set": "monitor",
+        "test_still_overlap": true,
+        "train_still_overlap": false,
+        "study_criterion_met": false,
+        "logit_overlap": {
+          "train": {
+            "n_sop": 29,
+            "sop_median": -0.0014148205518722534,
+            "sop_max": 0.01958281546831131,
+            "n_interictal": 170,
+            "interictal_median": -0.0011934861540794373,
+            "interictal_max": 0.016677789390087128,
+            "frac_sop_at_or_under_interictal_max": 0.9655172413793104
+          },
+          "monitor": {
+            "n_sop": 607,
+            "sop_median": 0.0011041201651096344,
+            "sop_max": 0.030761726200580597,
+            "n_interictal": 46,
+            "interictal_median": -0.0023472364991903305,
+            "interictal_max": 0.01249275729060173,
+            "frac_sop_at_or_under_interictal_max": 0.899505766062603
+          },
+          "val": {
+            "n_sop": 0,
+            "sop_median": null,
+            "sop_max": null,
+            "n_interictal": 20,
+            "interictal_median": 0.002474980428814888,
+            "interictal_max": 0.014470234513282776,
+            "frac_sop_at_or_under_interictal_max": null
+          },
+          "test": {
+            "n_sop": 642,
+            "sop_median": 0.00043266452848911285,
+            "sop_max": 0.0330410897731781,
+            "n_interictal": 3304,
+            "interictal_median": 0.0007751602679491043,
+            "interictal_max": 0.04036702960729599,
+            "frac_sop_at_or_under_interictal_max": 1.0
+          }
+        }
+      }
+    }
+  ],
+  "verdict": "task hard"
+}
