@@ -42,6 +42,17 @@ def test_empty_sop_does_not_invent_an_overlap_verdict():
         still_overlap(row)
 
 
+def test_sop_only_split_does_not_invent_an_overlap_verdict():
+    labels = np.asarray([1, 1, 1])
+    logits = np.asarray([0.1, 0.2, 0.0])
+    row = overlap_row(labels, logits)
+    assert row["n_sop"] == 3
+    assert row["n_interictal"] == 0
+    assert row["frac_sop_at_or_under_interictal_max"] is None
+    with pytest.raises(ValueError, match="cannot judge overlap"):
+        still_overlap(row)
+
+
 def test_overlap_from_pack_checks_ends_match():
     folder = tempfile.mkdtemp()
     try:
