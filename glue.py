@@ -54,9 +54,12 @@ def build_windows(
     seizures=None,
     t1=None,
     train_stride_seconds=None,
+    graph_builder=None,
 ):
     if (t1 is None) != (train_stride_seconds is None):
         raise ValueError("t1 and train stride have to be set together, or neither")
+    if graph_builder is None:
+        graph_builder = build_pearson_graph
     need_four_rails(electrical_rails)
     electrical = np.asarray(electrical, dtype=np.float64)
     movement_axes = np.asarray(movement_axes, dtype=np.float64)
@@ -101,8 +104,8 @@ def build_windows(
                     electrical_seconds[index],
                     movement_seconds[index],
                 )
-                graph_by_second[index] = _pearson_for_second(
-                    electrical_seconds, movement_seconds, index
+                graph_by_second[index] = _graph_for_second(
+                    electrical_seconds, movement_seconds, index, graph_builder
                 )
             features[window_index, step] = feat_by_second[index]
             adjacency[window_index, step] = graph_by_second[index]
@@ -444,7 +447,7 @@ def _features_for_second(electrical_1s, movement_1s):
     return feats
 
 
-def _pearson_for_second(electrical_seconds, movement_seconds, second_index):
+def _graph_for_second(electrical_seconds, movement_seconds, second_index, graph_builder):
     electrical_1s = electrical_seconds[second_index]
     electrical_chunks = []
     movement_chunks = []
@@ -460,4 +463,4 @@ def _pearson_for_second(electrical_seconds, movement_seconds, second_index):
         raise ValueError(
             f"4 sec movement should be {MOVEMENT_SAMPLES_4S} samples, we got {movement_4s.shape[1]}"
         )
-    return build_pearson_graph(electrical_1s, electrical_4s, movement_4s)
+    return graph_builder(electrical_1s, electrical_4s, movement_4s)

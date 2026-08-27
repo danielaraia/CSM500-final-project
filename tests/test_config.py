@@ -70,3 +70,31 @@ def test_start_run_leaf_eval1_is_a_new_folder():
         assert loaded["eval_stride_seconds"] == 1
     finally:
         shutil.rmtree(root)
+
+
+def test_mi_run_folder_is_not_pearson():
+    root = tempfile.mkdtemp()
+    try:
+        pearson_path = start_run(root, "sub-051", leaf="eval1")
+        mi_path = start_run(
+            root, "sub-051", extra={"graph_strategy": "mi"}, leaf="eval1"
+        )
+        assert pearson_path != mi_path
+        assert mi_path == run_folder_path(
+            root, "sub-051", "eval1", graph_strategy="mi"
+        )
+        loaded = read_config(os.path.join(mi_path, "config.json"))
+        assert loaded["graph_strategy"] == "mi"
+        assert loaded["run_leaf"] == "eval1"
+    finally:
+        shutil.rmtree(root)
+
+
+def test_write_config_rejects_unknown_graph_strategy():
+    handle = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False)
+    handle.close()
+    try:
+        with pytest.raises(ValueError, match="pearson or mi"):
+            write_config(handle.name, {"graph_strategy": "attention"})
+    finally:
+        os.remove(handle.name)

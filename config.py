@@ -1,6 +1,9 @@
 import json
 import os
 
+# pearson is the default. mi is the other fixed graph this slice can pack.
+ALLOWED_GRAPH_STRATEGIES = ("pearson", "mi")
+
 # these beat the evobrain args.py defaults
 LOCKED = {
     "dataset_accession": "ds005873",
@@ -46,6 +49,10 @@ LOCKED = {
 def write_config(path, extra):
     config = dict(LOCKED)
     for key in extra:
+        if key == "graph_strategy":
+            _require_graph_strategy(extra[key])
+            config[key] = extra[key]
+            continue
         if key in LOCKED and extra[key] != LOCKED[key]:
             raise ValueError(
                 f"locked config key {key} is {LOCKED[key]!r}, extra tried {extra[key]!r}"
@@ -61,16 +68,19 @@ def read_config(path):
         return json.load(handle)
 
 
-def run_folder_path(root, patient_id, leaf="none"):
+def run_folder_path(root, patient_id, leaf="none", graph_strategy=None):
     if leaf is None or leaf == "":
         raise ValueError("need a run leaf folder name")
+    if graph_strategy is None:
+        graph_strategy = LOCKED["graph_strategy"]
+    _require_graph_strategy(graph_strategy)
     return os.path.join(
         root,
         "experiments",
         "runs",
         "within_patient",
         patient_id,
-        "pearson",
+        graph_strategy,
         "sop30",
         "seed123",
         leaf,
@@ -80,12 +90,21 @@ def run_folder_path(root, patient_id, leaf="none"):
 def start_run(root, patient_id, extra=None, leaf="none"):
     if patient_id is None or patient_id == "":
         raise ValueError("need a patient id")
-    path = run_folder_path(root, patient_id, leaf)
+    extra = dict(extra or {})
+    graph_strategy = extra.get("graph_strategy", LOCKED["graph_strategy"])
+    path = run_folder_path(root, patient_id, leaf, graph_strategy=graph_strategy)
     if os.path.exists(path):
         raise ValueError(f"run folder already exists, we wont write over it: {path}")
     os.makedirs(path)
-    extra = dict(extra or {})
     extra["patient_id"] = patient_id
     extra["run_leaf"] = leaf
     write_config(os.path.join(path, "config.json"), extra)
     return path
+
+
+def _require_graph_strategy(graph_strategy):
+    if graph_strategy not in ALLOWED_GRAPH_STRATEGIES:
+        raise ValueError(
+            "graph_strategy has to be pearson or mi, "
+            f"we got {graph_strategy!r}"
+        )

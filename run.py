@@ -33,6 +33,7 @@ def labelled_windows_from_files(
     stride_seconds=TRAIN_STRIDE_SECONDS,
     t1=None,
     train_stride_seconds=None,
+    graph_builder=None,
 ):
     electrical, movement, _picked, electrical_rails = load_run(
         eeg_path, ecg_path, emg_path, mov_path
@@ -58,6 +59,7 @@ def labelled_windows_from_files(
         seizures=seizures,
         t1=t1,
         train_stride_seconds=train_stride_seconds,
+        graph_builder=graph_builder,
     )
     kept = keep_labelled_windows(
         features, graphs, ends, seizures
@@ -75,6 +77,7 @@ def write_split_run(
     events_path,
     extra=None,
     leaf="none",
+    graph_builder=None,
 ):
     rows = load_event_rows(events_path)
     seizures = seizures_with_full_sop(seizure_spans(rows))
@@ -88,6 +91,7 @@ def write_split_run(
         stride_seconds=EVAL_STRIDE_SECONDS,
         t1=t1,
         train_stride_seconds=TRAIN_STRIDE_SECONDS,
+        graph_builder=graph_builder,
     )
     folder = start_run(root, patient_id, extra, leaf=leaf)
     try:
