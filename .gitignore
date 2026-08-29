@@ -8,6 +8,8 @@ data/
 *.pth
 *.ckpt
 .git-credentials-local
+.r2-credentials
+.r2-credentials.*
 experiments/runs/**
 !experiments/runs/**/
 !experiments/runs/**/config.json
