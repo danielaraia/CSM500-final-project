@@ -1,8 +1,8 @@
 import json
 import os
 
-# pearson is the default. mi is the other fixed graph this slice can pack.
-ALLOWED_GRAPH_STRATEGIES = ("pearson", "mi")
+# pearson is the default. mi is the other fixed graph. attention is learned.
+ALLOWED_GRAPH_STRATEGIES = ("pearson", "mi", "attention")
 
 # these beat the evobrain args.py defaults
 LOCKED = {
@@ -105,6 +105,6 @@ def start_run(root, patient_id, extra=None, leaf="none"):
 def _require_graph_strategy(graph_strategy):
     if graph_strategy not in ALLOWED_GRAPH_STRATEGIES:
         raise ValueError(
-            "graph_strategy has to be pearson or mi, "
+            "graph_strategy has to be pearson, mi, or attention, "
             f"we got {graph_strategy!r}"
         )

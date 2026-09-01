@@ -4,7 +4,7 @@ import sys
 import time
 
 from catch_coverage import catch_coverage_from_folder
-from config import ALLOWED_GRAPH_STRATEGIES, LOCKED
+from config import LOCKED
 from metrics import write_metrics
 from mi import build_mi_graph
 from run import write_split_run
@@ -45,7 +45,11 @@ def main():
         graph_strategy = sys.argv[3]
     else:
         raise ValueError("usage: python pack_eval.py [patient_id run_id [graph_strategy]]")
-    if graph_strategy not in ALLOWED_GRAPH_STRATEGIES:
+    if graph_strategy == "attention":
+        raise ValueError(
+            "attention is learned at train time, do not pack it from edf"
+        )
+    if graph_strategy not in GRAPH_BUILDERS:
         raise ValueError(
             "graph_strategy has to be pearson or mi, "
             f"we got {graph_strategy!r}"

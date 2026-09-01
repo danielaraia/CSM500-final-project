@@ -90,11 +90,25 @@ def test_mi_run_folder_is_not_pearson():
         shutil.rmtree(root)
 
 
+def test_attention_run_folder_is_not_pearson():
+    root = tempfile.mkdtemp()
+    try:
+        pearson_path = start_run(root, "sub-051", leaf="eval1")
+        attention_path = start_run(
+            root, "sub-051", extra={"graph_strategy": "attention"}, leaf="eval1"
+        )
+        assert pearson_path != attention_path
+        loaded = read_config(os.path.join(attention_path, "config.json"))
+        assert loaded["graph_strategy"] == "attention"
+    finally:
+        shutil.rmtree(root)
+
+
 def test_write_config_rejects_unknown_graph_strategy():
     handle = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False)
     handle.close()
     try:
-        with pytest.raises(ValueError, match="pearson or mi"):
-            write_config(handle.name, {"graph_strategy": "attention"})
+        with pytest.raises(ValueError, match="pearson, mi, or attention"):
+            write_config(handle.name, {"graph_strategy": "cosine"})
     finally:
         os.remove(handle.name)
