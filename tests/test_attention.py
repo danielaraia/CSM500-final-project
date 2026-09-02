@@ -117,6 +117,23 @@ def test_prepare_attention_folder_links_the_pearson_splits():
         ends = np.array([70, 80], dtype=np.int64)
         for name in ("train", "monitor", "val", "test"):
             save_split(os.path.join(pearson, name + ".npz"), features, graphs, labels, ends)
+        from metrics import write_metrics
+        write_metrics(
+            pearson,
+            {
+                "patient_id": "sub-052",
+                "t1": 17929.0,
+                "t2": 23108.0,
+                "n_train_seizures": 1,
+                "n_test_seizures": 1,
+                "n_train_windows": 2,
+                "n_monitor_windows": 2,
+                "n_validation_windows": 2,
+                "n_test_windows": 2,
+                "packed_run": "07",
+                "pack_scope": "seizure bearing run only",
+            },
+        )
         folder = prepare_attention_folder(root, "sub-052", pearson)
         assert folder == run_folder_path(
             root, "sub-052", "eval1", graph_strategy="attention"
@@ -124,6 +141,11 @@ def test_prepare_attention_folder_links_the_pearson_splits():
         loaded = read_config(os.path.join(folder, "config.json"))
         assert loaded["graph_strategy"] == "attention"
         assert loaded["attention_hidden"] == 32
+        from metrics import read_metrics
+        att_metrics = read_metrics(folder)
+        assert att_metrics["t1"] == 17929.0
+        assert att_metrics["t2"] == 23108.0
+        assert att_metrics["n_test_seizures"] == 1
         train_src = np.load(os.path.join(pearson, "train.npz"))
         train_dst = np.load(os.path.join(folder, "train.npz"))
         np.testing.assert_array_equal(train_src["ends"], train_dst["ends"])

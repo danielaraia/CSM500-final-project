@@ -7,7 +7,7 @@ import torch.nn as nn
 
 from config import LOCKED, start_run
 from evobrain_load import evobrain_clone_path, load_evobrain
-from metrics import write_metrics
+from metrics import read_metrics, write_metrics
 
 # GraphLearner is from the EvoBrain clone, MIT licence,
 # itself adapted from IDGL, https://github.com/hugochan/IDGL
@@ -15,6 +15,18 @@ ATTENTION_HIDDEN = 32
 ATTENTION_METRIC = "self_attention"
 ATTENTION_ADDED_PARAMETERS = 2 * LOCKED["input_dim"] * ATTENTION_HIDDEN
 SPLIT_NAMES = ("train", "monitor", "val", "test")
+PACK_KEYS_FROM_PEARSON = (
+    "t1",
+    "t2",
+    "n_train_seizures",
+    "n_test_seizures",
+    "n_train_windows",
+    "n_monitor_windows",
+    "n_validation_windows",
+    "n_test_windows",
+    "packed_run",
+    "pack_scope",
+)
 
 
 def make_graph_learner():
@@ -80,17 +92,20 @@ def prepare_attention_folder(root, patient_id, pearson_folder):
             if not os.path.isfile(src):
                 raise ValueError(f"pearson split is missing: {src}")
             _link_or_copy(src, dst)
-        write_metrics(
-            folder,
-            {
-                "patient_id": patient_id,
-                "command": "python train_attention.py",
-                "graph_strategy": "attention",
-                "packed_adjacency": "unused, graph learner replaces it",
-                "feature_pack_source": pearson_folder,
-                "run_leaf": "eval1",
-            },
-        )
+        pack_metrics = {
+            "patient_id": patient_id,
+            "command": "python train_attention.py",
+            "graph_strategy": "attention",
+            "packed_adjacency": "unused, graph learner replaces it",
+            "feature_pack_source": pearson_folder,
+            "run_leaf": "eval1",
+        }
+        pearson_metrics = read_metrics(pearson_folder)
+        for key in PACK_KEYS_FROM_PEARSON:
+            if key not in pearson_metrics:
+                raise ValueError(f"pearson metrics missing {key}: {pearson_folder}")
+            pack_metrics[key] = pearson_metrics[key]
+        write_metrics(folder, pack_metrics)
     except Exception:
         shutil.rmtree(folder)
         raise
