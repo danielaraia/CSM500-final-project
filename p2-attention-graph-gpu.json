@@ -1,0 +1,43 @@
+{
+  "command": "python train_attention.py",
+  "compile_seconds": 1.4664911404252052,
+  "gpu_name": "NVIDIA GeForce RTX 4090",
+  "gpu_memory_bytes": 25250627584,
+  "cuda_version": "12.8",
+  "torch_version": "2.8.0.dev20250319+cu128",
+  "mamba_ssm_version": "2.2.4",
+  "parameter_count": 292038,
+  "patients": [
+    {
+      "patient_id": "sub-051",
+      "best_epoch": 1,
+      "n_epochs_run": 6,
+      "best_monitor_bce": 12.417281919761084,
+      "logit_zero_monitor_bce": 12.449796090541584,
+      "train_seconds": 25.45810031145811,
+      "score_seconds": 12.442749168723822,
+      "n_monitor_windows_scored": 3304,
+      "n_test_windows_scored": 7608,
+      "n_validation_windows_scored": 5871,
+      "pos_weight": 32.13333333333333,
+      "graph_strategy": "attention",
+      "parameter_count": 292038
+    },
+    {
+      "patient_id": "sub-052",
+      "best_epoch": 1,
+      "n_epochs_run": 6,
+      "best_monitor_bce": 3.823577431040555,
+      "logit_zero_monitor_bce": 3.8258708296376254,
+      "train_seconds": 5.092098752036691,
+      "score_seconds": 3.4358636401593685,
+      "n_monitor_windows_scored": 653,
+      "n_test_windows_scored": 3946,
+      "n_validation_windows_scored": 20,
+      "pos_weight": 5.862068965517241,
+      "graph_strategy": "attention",
+      "parameter_count": 292038
+    }
+  ],
+  "wall_seconds": 168.05812617763877
+}

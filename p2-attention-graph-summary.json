@@ -1,0 +1,443 @@
+{
+  "command": "python report_attention.py",
+  "attention": [
+    {
+      "patient_id": "sub-051",
+      "graph_strategy": "attention",
+      "best_epoch": 1,
+      "n_epochs_run": 6,
+      "n_epochs_logged": 6,
+      "best_monitor_bce": 12.417281919761084,
+      "logit_zero_monitor_bce": 12.449796090541584,
+      "n_seizures_caught": 0,
+      "n_seizures_missed": 1,
+      "n_seizures_evaluable": 1,
+      "n_seizures_unevaluable": 0,
+      "event_sensitivity": 0.0,
+      "n_false_alarms": 2,
+      "false_alarms_per_hour": 1.2790904245869603,
+      "false_alarms_unresolvable": false,
+      "threshold_set": "val",
+      "alarm_threshold": 0.009942805394530296,
+      "test_still_overlap": true,
+      "train_still_overlap": true,
+      "monitor_still_overlap": true,
+      "logit_overlap": {
+        "train": {
+          "n_sop": 30,
+          "sop_median": 0.0065123026724904776,
+          "sop_max": 0.027201009914278984,
+          "n_interictal": 964,
+          "interictal_median": 0.006341719534248114,
+          "interictal_max": 0.04133979603648186,
+          "frac_sop_at_or_under_interictal_max": 1.0
+        },
+        "monitor": {
+          "n_sop": 1800,
+          "sop_median": 0.003031587228178978,
+          "sop_max": 0.05044007673859596,
+          "n_interictal": 1504,
+          "interictal_median": 0.003450075164437294,
+          "interictal_max": 0.05325845628976822,
+          "frac_sop_at_or_under_interictal_max": 1.0
+        },
+        "val": {
+          "n_sop": 0,
+          "sop_median": null,
+          "sop_max": null,
+          "n_interictal": 5871,
+          "interictal_median": 0.008690251037478447,
+          "interictal_max": 0.06497913599014282,
+          "frac_sop_at_or_under_interictal_max": null
+        },
+        "test": {
+          "n_sop": 1800,
+          "sop_median": 0.00787214795127511,
+          "sop_max": 0.05384320393204689,
+          "n_interictal": 5808,
+          "interictal_median": 0.011506927199661732,
+          "interictal_max": 0.07217796891927719,
+          "frac_sop_at_or_under_interictal_max": 1.0
+        }
+      }
+    },
+    {
+      "patient_id": "sub-052",
+      "graph_strategy": "attention",
+      "best_epoch": 1,
+      "n_epochs_run": 6,
+      "n_epochs_logged": 6,
+      "best_monitor_bce": 3.823577431040555,
+      "logit_zero_monitor_bce": 3.8258708296376254,
+      "n_seizures_caught": 0,
+      "n_seizures_missed": 1,
+      "n_seizures_evaluable": 1,
+      "n_seizures_unevaluable": 0,
+      "event_sensitivity": 0.0,
+      "n_false_alarms": 0,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_unresolvable": false,
+      "threshold_set": "monitor",
+      "alarm_threshold": null,
+      "test_still_overlap": true,
+      "train_still_overlap": true,
+      "monitor_still_overlap": false,
+      "logit_overlap": {
+        "train": {
+          "n_sop": 29,
+          "sop_median": -0.0019261166453361511,
+          "sop_max": 0.012349855154752731,
+          "n_interictal": 170,
+          "interictal_median": -0.0012591425329446793,
+          "interictal_max": 0.021694332361221313,
+          "frac_sop_at_or_under_interictal_max": 1.0
+        },
+        "monitor": {
+          "n_sop": 607,
+          "sop_median": 0.0006142035126686096,
+          "sop_max": 0.036034028977155685,
+          "n_interictal": 46,
+          "interictal_median": -0.0012038201093673706,
+          "interictal_max": 0.021862559020519257,
+          "frac_sop_at_or_under_interictal_max": 0.985172981878089
+        },
+        "val": {
+          "n_sop": 0,
+          "sop_median": null,
+          "sop_max": null,
+          "n_interictal": 20,
+          "interictal_median": -0.005958788096904755,
+          "interictal_max": 0.04176129773259163,
+          "frac_sop_at_or_under_interictal_max": null
+        },
+        "test": {
+          "n_sop": 642,
+          "sop_median": 0.00014063343405723572,
+          "sop_max": 0.03550152853131294,
+          "n_interictal": 3304,
+          "interictal_median": 0.0007291566580533981,
+          "interictal_max": 0.0664205551147461,
+          "frac_sop_at_or_under_interictal_max": 1.0
+        }
+      }
+    }
+  ],
+  "mi": [
+    {
+      "patient_id": "sub-051",
+      "graph_strategy": "mi",
+      "best_epoch": 1,
+      "n_epochs_run": 6,
+      "n_epochs_logged": 6,
+      "best_monitor_bce": 13.566004201228624,
+      "logit_zero_monitor_bce": 12.449796090541584,
+      "n_seizures_caught": 1,
+      "n_seizures_missed": 0,
+      "n_seizures_evaluable": 1,
+      "n_seizures_unevaluable": 0,
+      "event_sensitivity": 1.0,
+      "n_false_alarms": 1,
+      "false_alarms_per_hour": 0.6395452122934802,
+      "false_alarms_unresolvable": false,
+      "threshold_set": "val",
+      "alarm_threshold": -0.12597104907035828,
+      "test_still_overlap": true,
+      "train_still_overlap": true,
+      "monitor_still_overlap": true,
+      "logit_overlap": {
+        "train": {
+          "n_sop": 30,
+          "sop_median": -0.12671125680208206,
+          "sop_max": -0.08474177122116089,
+          "n_interictal": 964,
+          "interictal_median": -0.12744984775781631,
+          "interictal_max": -0.06503377854824066,
+          "frac_sop_at_or_under_interictal_max": 1.0
+        },
+        "monitor": {
+          "n_sop": 1800,
+          "sop_median": -0.1294894888997078,
+          "sop_max": -0.07443611323833466,
+          "n_interictal": 1504,
+          "interictal_median": -0.12838924676179886,
+          "interictal_max": -0.07243455946445465,
+          "frac_sop_at_or_under_interictal_max": 1.0
+        },
+        "val": {
+          "n_sop": 0,
+          "sop_median": null,
+          "sop_max": null,
+          "n_interictal": 5871,
+          "interictal_median": -0.12530584633350372,
+          "interictal_max": -0.06577430665493011,
+          "frac_sop_at_or_under_interictal_max": null
+        },
+        "test": {
+          "n_sop": 1800,
+          "sop_median": -0.12509740144014359,
+          "sop_max": -0.06801944971084595,
+          "n_interictal": 5808,
+          "interictal_median": -0.12112552672624588,
+          "interictal_max": -0.06455056369304657,
+          "frac_sop_at_or_under_interictal_max": 1.0
+        }
+      }
+    },
+    {
+      "patient_id": "sub-052",
+      "graph_strategy": "mi",
+      "best_epoch": 1,
+      "n_epochs_run": 6,
+      "n_epochs_logged": 6,
+      "best_monitor_bce": 3.8802381481912565,
+      "logit_zero_monitor_bce": 3.8258708296376254,
+      "n_seizures_caught": 0,
+      "n_seizures_missed": 1,
+      "n_seizures_evaluable": 1,
+      "n_seizures_unevaluable": 0,
+      "event_sensitivity": 0.0,
+      "n_false_alarms": 0,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_unresolvable": false,
+      "threshold_set": "monitor",
+      "alarm_threshold": null,
+      "test_still_overlap": true,
+      "train_still_overlap": true,
+      "monitor_still_overlap": false,
+      "logit_overlap": {
+        "train": {
+          "n_sop": 29,
+          "sop_median": -0.01651841402053833,
+          "sop_max": 0.0009447336196899414,
+          "n_interictal": 170,
+          "interictal_median": -0.019922422245144844,
+          "interictal_max": 0.008827626705169678,
+          "frac_sop_at_or_under_interictal_max": 1.0
+        },
+        "monitor": {
+          "n_sop": 607,
+          "sop_median": -0.020307399332523346,
+          "sop_max": 0.008024565875530243,
+          "n_interictal": 46,
+          "interictal_median": -0.021964745596051216,
+          "interictal_max": 0.002263396978378296,
+          "frac_sop_at_or_under_interictal_max": 0.9917627677100495
+        },
+        "val": {
+          "n_sop": 0,
+          "sop_median": null,
+          "sop_max": null,
+          "n_interictal": 20,
+          "interictal_median": -0.017275599762797356,
+          "interictal_max": -0.00957949087023735,
+          "frac_sop_at_or_under_interictal_max": null
+        },
+        "test": {
+          "n_sop": 642,
+          "sop_median": -0.02115633152425289,
+          "sop_max": 0.008065685629844666,
+          "n_interictal": 3304,
+          "interictal_median": -0.02103082276880741,
+          "interictal_max": 0.011761143803596497,
+          "frac_sop_at_or_under_interictal_max": 1.0
+        }
+      }
+    }
+  ],
+  "pearson": [
+    {
+      "patient_id": "sub-051",
+      "graph_strategy": "pearson",
+      "best_epoch": 1,
+      "n_epochs_run": 6,
+      "n_epochs_logged": 6,
+      "best_monitor_bce": 12.278453997780566,
+      "logit_zero_monitor_bce": 12.449796090541584,
+      "n_seizures_caught": 1,
+      "n_seizures_missed": 0,
+      "n_seizures_evaluable": 1,
+      "n_seizures_unevaluable": 0,
+      "event_sensitivity": 1.0,
+      "n_false_alarms": 2,
+      "false_alarms_per_hour": 1.2790904245869603,
+      "false_alarms_unresolvable": null,
+      "threshold_set": "val",
+      "alarm_threshold": 0.02131146565079689,
+      "test_still_overlap": true,
+      "train_still_overlap": true,
+      "monitor_still_overlap": false,
+      "logit_overlap": {
+        "train": {
+          "n_sop": 30,
+          "sop_median": 0.023851795122027397,
+          "sop_max": 0.03564894571900368,
+          "n_interictal": 964,
+          "interictal_median": 0.022383971139788628,
+          "interictal_max": 0.05534251406788826,
+          "frac_sop_at_or_under_interictal_max": 1.0
+        },
+        "monitor": {
+          "n_sop": 1800,
+          "sop_median": 0.019445616751909256,
+          "sop_max": 0.04765712097287178,
+          "n_interictal": 1504,
+          "interictal_median": 0.019686652347445488,
+          "interictal_max": 0.04555751755833626,
+          "frac_sop_at_or_under_interictal_max": 0.9988888888888889
+        },
+        "val": {
+          "n_sop": 0,
+          "sop_median": null,
+          "sop_max": null,
+          "n_interictal": 5871,
+          "interictal_median": 0.022587211802601814,
+          "interictal_max": 0.05421018972992897,
+          "frac_sop_at_or_under_interictal_max": null
+        },
+        "test": {
+          "n_sop": 1800,
+          "sop_median": 0.02321992628276348,
+          "sop_max": 0.0525873601436615,
+          "n_interictal": 5808,
+          "interictal_median": 0.024693486280739307,
+          "interictal_max": 0.055534474551677704,
+          "frac_sop_at_or_under_interictal_max": 1.0
+        }
+      }
+    },
+    {
+      "patient_id": "sub-052",
+      "graph_strategy": "pearson",
+      "best_epoch": 1,
+      "n_epochs_run": 6,
+      "n_epochs_logged": 6,
+      "best_monitor_bce": 3.8189417676940263,
+      "logit_zero_monitor_bce": 3.8258708296376254,
+      "n_seizures_caught": 0,
+      "n_seizures_missed": 1,
+      "n_seizures_evaluable": 1,
+      "n_seizures_unevaluable": 0,
+      "event_sensitivity": 0.0,
+      "n_false_alarms": 0,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_unresolvable": null,
+      "threshold_set": "monitor",
+      "alarm_threshold": null,
+      "test_still_overlap": true,
+      "train_still_overlap": false,
+      "monitor_still_overlap": false,
+      "logit_overlap": {
+        "train": {
+          "n_sop": 29,
+          "sop_median": -0.0014148205518722534,
+          "sop_max": 0.01958281546831131,
+          "n_interictal": 170,
+          "interictal_median": -0.0011934861540794373,
+          "interictal_max": 0.016677789390087128,
+          "frac_sop_at_or_under_interictal_max": 0.9655172413793104
+        },
+        "monitor": {
+          "n_sop": 607,
+          "sop_median": 0.0011041201651096344,
+          "sop_max": 0.030761726200580597,
+          "n_interictal": 46,
+          "interictal_median": -0.0023472364991903305,
+          "interictal_max": 0.01249275729060173,
+          "frac_sop_at_or_under_interictal_max": 0.899505766062603
+        },
+        "val": {
+          "n_sop": 0,
+          "sop_median": null,
+          "sop_max": null,
+          "n_interictal": 20,
+          "interictal_median": 0.002474980428814888,
+          "interictal_max": 0.014470234513282776,
+          "frac_sop_at_or_under_interictal_max": null
+        },
+        "test": {
+          "n_sop": 642,
+          "sop_median": 0.00043266452848911285,
+          "sop_max": 0.0330410897731781,
+          "n_interictal": 3304,
+          "interictal_median": 0.0007751602679491043,
+          "interictal_max": 0.04036702960729599,
+          "frac_sop_at_or_under_interictal_max": 1.0
+        }
+      }
+    }
+  ],
+  "table": [
+    {
+      "patient_id": "sub-051",
+      "pearson": {
+        "sens": 1.0,
+        "false_alarms_per_hour": 1.2790904245869603,
+        "caught": 1,
+        "missed": 0,
+        "evaluable": 1,
+        "unevaluable": 0,
+        "test_still_overlap": true,
+        "test_overlap_frac": 1.0,
+        "threshold_set": "val"
+      },
+      "mi": {
+        "sens": 1.0,
+        "false_alarms_per_hour": 0.6395452122934802,
+        "caught": 1,
+        "missed": 0,
+        "evaluable": 1,
+        "unevaluable": 0,
+        "test_still_overlap": true,
+        "test_overlap_frac": 1.0,
+        "threshold_set": "val"
+      },
+      "attention": {
+        "sens": 0.0,
+        "false_alarms_per_hour": 1.2790904245869603,
+        "caught": 0,
+        "missed": 1,
+        "evaluable": 1,
+        "unevaluable": 0,
+        "test_still_overlap": true,
+        "test_overlap_frac": 1.0,
+        "threshold_set": "val"
+      }
+    },
+    {
+      "patient_id": "sub-052",
+      "pearson": {
+        "sens": 0.0,
+        "false_alarms_per_hour": 0.0,
+        "caught": 0,
+        "missed": 1,
+        "evaluable": 1,
+        "unevaluable": 0,
+        "test_still_overlap": true,
+        "test_overlap_frac": 1.0,
+        "threshold_set": "monitor"
+      },
+      "mi": {
+        "sens": 0.0,
+        "false_alarms_per_hour": 0.0,
+        "caught": 0,
+        "missed": 1,
+        "evaluable": 1,
+        "unevaluable": 0,
+        "test_still_overlap": true,
+        "test_overlap_frac": 1.0,
+        "threshold_set": "monitor"
+      },
+      "attention": {
+        "sens": 0.0,
+        "false_alarms_per_hour": 0.0,
+        "caught": 0,
+        "missed": 1,
+        "evaluable": 1,
+        "unevaluable": 0,
+        "test_still_overlap": true,
+        "test_overlap_frac": 1.0,
+        "threshold_set": "monitor"
+      }
+    }
+  ]
+}
