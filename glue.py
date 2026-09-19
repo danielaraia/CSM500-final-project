@@ -2,7 +2,7 @@ import numpy as np
 
 from features import log_amplitude_fft
 from filters import filter_ecg, filter_eeg, filter_emg, filter_movement_axis
-from labels import LABEL_UNUSED, label_second, monitoring_indices
+from labels import LABEL_UNUSED, SOP_SECONDS, label_second, monitoring_indices
 from movement import axis_magnitude, upsample_movement_to_256
 from pearson import (
     ELECTRICAL_SAMPLES_1S,
@@ -55,6 +55,7 @@ def build_windows(
     t1=None,
     train_stride_seconds=None,
     graph_builder=None,
+    sop_seconds=SOP_SECONDS,
 ):
     if (t1 is None) != (train_stride_seconds is None):
         raise ValueError("t1 and train stride have to be set together, or neither")
@@ -80,7 +81,7 @@ def build_windows(
     )
     graph_ok = _graph_ok_seconds(quality_ok)
     ends = window_end_times(graph_ok, WINDOW_SECONDS, stride_seconds)
-    ends = _keep_pack_ends(ends, seizures, t1, train_stride_seconds)
+    ends = _keep_pack_ends(ends, seizures, t1, train_stride_seconds, sop_seconds)
 
     n_windows = len(ends)
     features = np.zeros((n_windows, WINDOW_SECONDS, N_NODES, 128), dtype=np.float64)
@@ -114,7 +115,7 @@ def build_windows(
     return features, adjacency, ends, drop_counts
 
 
-def keep_labelled_windows(features, adjacency, ends, seizures):
+def keep_labelled_windows(features, adjacency, ends, seizures, sop_seconds=SOP_SECONDS):
     features = np.asarray(features)
     adjacency = np.asarray(adjacency)
     if features.shape[0] != adjacency.shape[0] or features.shape[0] != len(ends):
@@ -129,7 +130,7 @@ def keep_labelled_windows(features, adjacency, ends, seizures):
     index = 0
     while index < len(ends):
         # label sits on the last second of the window, not the whole 60
-        lab = label_second(ends[index], seizures)
+        lab = label_second(ends[index], seizures, sop_seconds)
         if lab != LABEL_UNUSED:
             kept_features.append(features[index])
             kept_graphs.append(adjacency[index])
@@ -205,14 +206,14 @@ def cut_monitoring_slice(features, adjacency, ends, labels):
     return train, monitor, monitor_start, n_positive, n_negative
 
 
-def _keep_pack_ends(ends, seizures, t1, train_stride_seconds):
+def _keep_pack_ends(ends, seizures, t1, train_stride_seconds, sop_seconds=SOP_SECONDS):
     labelled = []
     index = 0
     while index < len(ends):
         end_time = ends[index]
         index += 1
         if seizures is not None:
-            if label_second(end_time, seizures) == LABEL_UNUSED:
+            if label_second(end_time, seizures, sop_seconds) == LABEL_UNUSED:
                 continue
         labelled.append(end_time)
     monitor_clock = None

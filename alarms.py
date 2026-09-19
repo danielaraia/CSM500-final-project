@@ -202,7 +202,7 @@ def score_at_threshold(
                 evaluable, lead_onsets, t, sph_seconds, sop_seconds
             )
         in_part = part_start <= t < part_end
-        if in_part and label_second(t, seizures) == LABEL_INTERICTAL:
+        if in_part and label_second(t, seizures, sop_seconds) == LABEL_INTERICTAL:
             raw_seconds += 1
             if n_scores_in_lookback >= need:
                 scorable_seconds += 1
@@ -219,14 +219,14 @@ def score_at_threshold(
                 caught, lead_onsets, alarm_time, sph_seconds, sop_seconds
             )
         elif part_start <= alarm_time < part_end:
-            if label_second(alarm_time, seizures) == LABEL_INTERICTAL:
+            if label_second(alarm_time, seizures, sop_seconds) == LABEL_INTERICTAL:
                 n_false += 1
                 warn_t = alarm_time
                 warn_end = alarm_time + sop_seconds
                 if warn_end > part_end:
                     warn_end = part_end
                 while warn_t < warn_end:
-                    if label_second(warn_t, seizures) == LABEL_INTERICTAL:
+                    if label_second(warn_t, seizures, sop_seconds) == LABEL_INTERICTAL:
                         warning_seconds += 1
                     warn_t += 1
         alarm_index += 1
@@ -407,15 +407,15 @@ def choose_operating_threshold(
     }
 
 
-def test_leads_from_seizures(seizures):
-    usable = seizures_with_full_sop(seizures)
-    t1, t2, n_train, n_test = split_cut_times(usable)
+def test_leads_from_seizures(seizures, sop_seconds=SOP_SECONDS):
+    usable = seizures_with_full_sop(seizures, sop_seconds)
+    t1, t2, n_train, n_test = split_cut_times(usable, sop_seconds)
     onsets = []
     index = 0
     while index < len(usable):
         onsets.append(usable[index][0])
         index += 1
-    leads, n_merged = merge_lead_onsets(onsets, silent_seconds())
+    leads, n_merged = merge_lead_onsets(onsets, silent_seconds(SPH_SECONDS, sop_seconds))
     test_leads = []
     lead_index = 0
     while lead_index < len(leads):

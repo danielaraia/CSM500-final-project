@@ -73,17 +73,21 @@ def load_attention_evobrain(device="cpu"):
     return AttentionBackbone(backbone)
 
 
-def prepare_attention_folder(root, patient_id, pearson_folder):
+def prepare_attention_folder(
+    root, patient_id, pearson_folder, sop_minutes=None, command="python train_attention.py"
+):
     if not os.path.isdir(pearson_folder):
         raise ValueError(f"pearson pack folder is missing: {pearson_folder}")
     extra = {
-        "command": "python train_attention.py",
+        "command": command,
         "graph_strategy": "attention",
         "packed_adjacency": "unused, graph learner replaces it",
         "feature_pack_source": pearson_folder,
         "attention_hidden": ATTENTION_HIDDEN,
         "attention_metric": ATTENTION_METRIC,
     }
+    if sop_minutes is not None:
+        extra["sop_minutes"] = sop_minutes
     folder = start_run(root, patient_id, extra=extra, leaf="eval1")
     try:
         for name in SPLIT_NAMES:
@@ -94,12 +98,14 @@ def prepare_attention_folder(root, patient_id, pearson_folder):
             _link_or_copy(src, dst)
         pack_metrics = {
             "patient_id": patient_id,
-            "command": "python train_attention.py",
+            "command": command,
             "graph_strategy": "attention",
             "packed_adjacency": "unused, graph learner replaces it",
             "feature_pack_source": pearson_folder,
             "run_leaf": "eval1",
         }
+        if sop_minutes is not None:
+            pack_metrics["sop_minutes"] = sop_minutes
         pearson_metrics = read_metrics(pearson_folder)
         for key in PACK_KEYS_FROM_PEARSON:
             if key not in pearson_metrics:

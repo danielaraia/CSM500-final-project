@@ -7,12 +7,16 @@ from alarms import (
     choose_operating_threshold,
     load_window_scores,
     logit_to_probability,
+    lookback_seconds,
     score_at_threshold,
     score_map,
+    silent_seconds,
     study_criterion_met,
     test_leads_from_seizures,
+    vote_need,
 )
 from events import load_event_rows, seizure_spans
+from labels import SOP_SECONDS, SPH_SECONDS
 from metrics import merge_alarm_metrics, read_metrics
 from pack import load_split
 
@@ -72,7 +76,7 @@ def recording_duration_seconds(rows):
     return int(math.ceil(duration))
 
 
-def alarm_metrics_from_folder(folder, events_path):
+def alarm_metrics_from_folder(folder, events_path, sop_seconds=SOP_SECONDS):
     metrics = read_metrics(folder)
     val_ends, val_logits = load_window_scores(os.path.join(folder, "val_scores.npz"))
     test_ends, test_logits = load_window_scores(os.path.join(folder, "test_scores.npz"))
@@ -85,7 +89,9 @@ def alarm_metrics_from_folder(folder, events_path):
     rows = load_event_rows(events_path)
     seizures = seizure_spans(rows)
     duration_seconds = recording_duration_seconds(rows)
-    t1, t2, test_leads, n_merged, n_test = test_leads_from_seizures(seizures)
+    t1, t2, test_leads, n_merged, n_test = test_leads_from_seizures(
+        seizures, sop_seconds
+    )
     if abs(float(metrics["t1"]) - t1) > 1e-6 or abs(float(metrics["t2"]) - t2) > 1e-6:
         raise ValueError(
             "cut times in metrics do not match the events file, "
@@ -152,6 +158,7 @@ def alarm_metrics_from_folder(folder, events_path):
         t2,
         fallback_start=fallback_start,
         fallback_end=fallback_end,
+        sop_seconds=sop_seconds,
     )
     if (
         (not monitor_logits_loaded)
@@ -170,6 +177,7 @@ def alarm_metrics_from_folder(folder, events_path):
         duration_seconds,
         t2,
         duration_seconds,
+        sop_seconds=sop_seconds,
     )
     if math.isinf(threshold):
         threshold_probability = None
@@ -207,9 +215,10 @@ def alarm_metrics_from_folder(folder, events_path):
             test_scored["resolves_0_15_per_hour"],
         ),
         "fp_max_per_hour": FP_MAX_PER_HOUR,
-        "alarm_lookback_seconds": 300,
-        "alarm_vote_need": 240,
-        "alarm_silent_seconds": 2100,
+        "alarm_lookback_seconds": lookback_seconds(sop_seconds),
+        "alarm_vote_need": vote_need(lookback_seconds(sop_seconds)),
+        "alarm_silent_seconds": silent_seconds(SPH_SECONDS, sop_seconds),
+        "sop_seconds": int(sop_seconds),
         "n_test_windows_with_scores": int(len(test_ends)),
         "n_val_windows_with_scores": int(len(val_ends)),
         "n_monitor_windows_with_scores": n_monitor_windows_with_scores,

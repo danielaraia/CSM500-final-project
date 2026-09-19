@@ -14,8 +14,8 @@ from labels import SOP_SECONDS, SPH_SECONDS
 from score_alarms import recording_duration_seconds
 
 
-def catch_coverage_from_ends(ends, lead_onsets, duration_seconds):
-    lookback = lookback_seconds()
+def catch_coverage_from_ends(ends, lead_onsets, duration_seconds, sop_seconds=SOP_SECONDS):
+    lookback = lookback_seconds(sop_seconds)
     need = vote_need(lookback)
     if duration_seconds < 1:
         raise ValueError(
@@ -37,12 +37,12 @@ def catch_coverage_from_ends(ends, lead_onsets, duration_seconds):
             n_scores_in_lookback -= 1
         if t in score_at:
             n_scores_in_lookback += 1
-        in_hit = _second_in_any_hit(lead_onsets, t)
+        in_hit = _second_in_any_hit(lead_onsets, t, sop_seconds)
         if in_hit and n_scores_in_lookback > max_in_hit:
             max_in_hit = n_scores_in_lookback
         if n_scores_in_lookback >= need:
             mark_evaluable_at_second(
-                evaluable, lead_onsets, t, SPH_SECONDS, SOP_SECONDS
+                evaluable, lead_onsets, t, SPH_SECONDS, sop_seconds
             )
             if in_hit:
                 n_scorable_hit += 1
@@ -60,7 +60,7 @@ def catch_coverage_from_ends(ends, lead_onsets, duration_seconds):
     }
 
 
-def catch_coverage_from_folder(folder, events_path):
+def catch_coverage_from_folder(folder, events_path, sop_seconds=SOP_SECONDS):
     val_ends = _load_ends(folder, "val.npz")
     test_ends = _load_ends(folder, "test.npz")
     scored = []
@@ -69,8 +69,10 @@ def catch_coverage_from_folder(folder, events_path):
     rows = load_event_rows(events_path)
     duration_seconds = recording_duration_seconds(rows)
     seizures = seizure_spans(rows)
-    _t1, _t2, test_leads, _n_merged, _n_test = test_leads_from_seizures(seizures)
-    return catch_coverage_from_ends(scored, test_leads, duration_seconds)
+    _t1, _t2, test_leads, _n_merged, _n_test = test_leads_from_seizures(
+        seizures, sop_seconds
+    )
+    return catch_coverage_from_ends(scored, test_leads, duration_seconds, sop_seconds)
 
 
 def _load_ends(folder, name):
@@ -92,10 +94,10 @@ def _extend_ints(out, ends):
         index += 1
 
 
-def _second_in_any_hit(lead_onsets, t):
+def _second_in_any_hit(lead_onsets, t, sop_seconds=SOP_SECONDS):
     index = 0
     while index < len(lead_onsets):
-        start, end = hit_interval(lead_onsets[index])
+        start, end = hit_interval(lead_onsets[index], SPH_SECONDS, sop_seconds)
         if start <= t < end:
             return True
         index += 1

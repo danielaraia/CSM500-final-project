@@ -4,6 +4,9 @@ import os
 # pearson is the default. mi is the other fixed graph. attention is learned.
 ALLOWED_GRAPH_STRATEGIES = ("pearson", "mi", "attention")
 
+# 30 minutes is the main pre seizure window. 15 and 5 are the shorter ones.
+ALLOWED_SOP_MINUTES = (30, 15, 5)
+
 # these beat the evobrain args.py defaults
 LOCKED = {
     "dataset_accession": "ds005873",
@@ -53,6 +56,10 @@ def write_config(path, extra):
             _require_graph_strategy(extra[key])
             config[key] = extra[key]
             continue
+        if key == "sop_minutes":
+            _require_sop_minutes(extra[key])
+            config[key] = extra[key]
+            continue
         if key in LOCKED and extra[key] != LOCKED[key]:
             raise ValueError(
                 f"locked config key {key} is {LOCKED[key]!r}, extra tried {extra[key]!r}"
@@ -68,12 +75,15 @@ def read_config(path):
         return json.load(handle)
 
 
-def run_folder_path(root, patient_id, leaf="none", graph_strategy=None):
+def run_folder_path(root, patient_id, leaf="none", graph_strategy=None, sop_minutes=None):
     if leaf is None or leaf == "":
         raise ValueError("need a run leaf folder name")
     if graph_strategy is None:
         graph_strategy = LOCKED["graph_strategy"]
     _require_graph_strategy(graph_strategy)
+    if sop_minutes is None:
+        sop_minutes = LOCKED["sop_minutes"]
+    _require_sop_minutes(sop_minutes)
     return os.path.join(
         root,
         "experiments",
@@ -81,7 +91,7 @@ def run_folder_path(root, patient_id, leaf="none", graph_strategy=None):
         "within_patient",
         patient_id,
         graph_strategy,
-        "sop30",
+        f"sop{sop_minutes}",
         "seed123",
         leaf,
     )
@@ -92,7 +102,10 @@ def start_run(root, patient_id, extra=None, leaf="none"):
         raise ValueError("need a patient id")
     extra = dict(extra or {})
     graph_strategy = extra.get("graph_strategy", LOCKED["graph_strategy"])
-    path = run_folder_path(root, patient_id, leaf, graph_strategy=graph_strategy)
+    sop_minutes = extra.get("sop_minutes", LOCKED["sop_minutes"])
+    path = run_folder_path(
+        root, patient_id, leaf, graph_strategy=graph_strategy, sop_minutes=sop_minutes
+    )
     if os.path.exists(path):
         raise ValueError(f"run folder already exists, we wont write over it: {path}")
     os.makedirs(path)
@@ -107,4 +120,12 @@ def _require_graph_strategy(graph_strategy):
         raise ValueError(
             "graph_strategy has to be pearson, mi, or attention, "
             f"we got {graph_strategy!r}"
+        )
+
+
+def _require_sop_minutes(sop_minutes):
+    if sop_minutes not in ALLOWED_SOP_MINUTES:
+        raise ValueError(
+            "sop_minutes has to be 30, 15, or 5, "
+            f"we got {sop_minutes!r}"
         )

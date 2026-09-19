@@ -15,7 +15,13 @@ from glue import (
     split_labelled_windows,
 )
 from pack_monitor import cut_monitoring_slice_at_clock, monitor_clock_from_train_hop10
-from labels import LABEL_INTERICTAL, LABEL_SOP, seizures_with_full_sop, split_cut_times
+from labels import (
+    LABEL_INTERICTAL,
+    LABEL_SOP,
+    SOP_SECONDS,
+    seizures_with_full_sop,
+    split_cut_times,
+)
 from metrics import merge_metrics, read_metrics, replace_metrics_keys, write_metrics
 from normalize import apply_node_zscore, node_mean_and_std
 from pack import load_split, save_named_labels
@@ -34,6 +40,7 @@ def labelled_windows_from_files(
     t1=None,
     train_stride_seconds=None,
     graph_builder=None,
+    sop_seconds=SOP_SECONDS,
 ):
     electrical, movement, _picked, electrical_rails = load_run(
         eeg_path, ecg_path, emg_path, mov_path
@@ -60,9 +67,10 @@ def labelled_windows_from_files(
         t1=t1,
         train_stride_seconds=train_stride_seconds,
         graph_builder=graph_builder,
+        sop_seconds=sop_seconds,
     )
     kept = keep_labelled_windows(
-        features, graphs, ends, seizures
+        features, graphs, ends, seizures, sop_seconds
     )
     return kept[0], kept[1], kept[2], kept[3], drop_counts
 
@@ -78,10 +86,11 @@ def write_split_run(
     extra=None,
     leaf="none",
     graph_builder=None,
+    sop_seconds=SOP_SECONDS,
 ):
     rows = load_event_rows(events_path)
-    seizures = seizures_with_full_sop(seizure_spans(rows))
-    t1 = split_cut_times(seizures)[0]
+    seizures = seizures_with_full_sop(seizure_spans(rows), sop_seconds)
+    t1 = split_cut_times(seizures, sop_seconds)[0]
     features, graphs, ends, labels, drop_counts = labelled_windows_from_files(
         eeg_path,
         ecg_path,
@@ -92,11 +101,12 @@ def write_split_run(
         t1=t1,
         train_stride_seconds=TRAIN_STRIDE_SECONDS,
         graph_builder=graph_builder,
+        sop_seconds=sop_seconds,
     )
     folder = start_run(root, patient_id, extra, leaf=leaf)
     try:
         counts = write_scaled_splits_from_seizures(
-            folder, features, graphs, ends, labels, seizures
+            folder, features, graphs, ends, labels, seizures, sop_seconds
         )
     except Exception:
         shutil.rmtree(folder)
@@ -110,8 +120,10 @@ def write_split_run(
     return folder, counts
 
 
-def write_scaled_splits_from_seizures(folder, features, graphs, ends, labels, seizures):
-    t1, t2, n_train_seizures, n_test = split_cut_times(seizures)
+def write_scaled_splits_from_seizures(
+    folder, features, graphs, ends, labels, seizures, sop_seconds=SOP_SECONDS
+):
+    t1, t2, n_train_seizures, n_test = split_cut_times(seizures, sop_seconds)
     counts = write_scaled_splits(folder, features, graphs, ends, labels, t1, t2)
     counts["t1"] = t1
     counts["t2"] = t2

@@ -11,7 +11,7 @@ LABEL_INTERICTAL = "interictal"
 LABEL_UNUSED = "unused"
 
 
-def label_second(time_seconds, seizures):
+def label_second(time_seconds, seizures, sop_seconds=SOP_SECONDS):
     if time_seconds < 0:
         raise ValueError("time cant be negative")
     _check_seizures(seizures)
@@ -27,7 +27,7 @@ def label_second(time_seconds, seizures):
             return LABEL_UNUSED
 
     for onset, offset in seizures:
-        sop_start = onset - SPH_SECONDS - SOP_SECONDS
+        sop_start = onset - SPH_SECONDS - sop_seconds
         sop_end = onset - SPH_SECONDS
         if sop_start <= time_seconds < sop_end:
             return LABEL_SOP
@@ -45,7 +45,7 @@ def label_second(time_seconds, seizures):
 def n_test_seizures(n_usable):
     if n_usable < 2:
         raise ValueError(
-            f"need at least two usable seizures at SOP 30, we got {n_usable}"
+            f"need at least two usable seizures, we got {n_usable}"
         )
     n_test = (n_usable + 2) // 3
     n_max_test = n_usable - 1
@@ -54,18 +54,18 @@ def n_test_seizures(n_usable):
     return n_test
 
 
-def seizures_with_full_sop(seizures):
+def seizures_with_full_sop(seizures, sop_seconds=SOP_SECONDS):
     kept = []
     index = 0
     while index < len(seizures):
         onset, offset = seizures[index]
-        if onset >= SPH_SECONDS + SOP_SECONDS:
+        if onset >= SPH_SECONDS + sop_seconds:
             kept.append((onset, offset))
         index += 1
     return kept
 
 
-def split_cut_times(seizures):
+def split_cut_times(seizures, sop_seconds=SOP_SECONDS):
     n_usable = len(seizures)
     n_test = n_test_seizures(n_usable)
     n_train_seizures = n_usable - n_test
@@ -76,7 +76,7 @@ def split_cut_times(seizures):
     if first_test_onset < last_train_offset:
         raise ValueError("the test one starts before teh last training seizure even ended")
     t2 = (last_train_offset + first_test_onset) / 2.0
-    t1 = _grow_validation_start(seizures, t2, last_train_offset, n_train_seizures)
+    t1 = _grow_validation_start(seizures, t2, last_train_offset, n_train_seizures, sop_seconds)
     return t1, t2, n_train_seizures, n_test
 
 
@@ -107,8 +107,10 @@ def monitoring_indices(train_labels):
     return monitor_start, n_positive, n_negative
 
 
-def _grow_validation_start(seizures, t2, last_train_offset, n_train_seizures):
-    required_train_interictal = n_train_seizures * SOP_SECONDS
+def _grow_validation_start(
+    seizures, t2, last_train_offset, n_train_seizures, sop_seconds=SOP_SECONDS
+):
+    required_train_interictal = n_train_seizures * sop_seconds
     prefix = _interictal_prefix(seizures, t2)
     t1 = t2
     earliest = last_train_offset
