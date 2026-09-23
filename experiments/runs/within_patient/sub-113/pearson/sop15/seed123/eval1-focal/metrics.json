@@ -1,0 +1,401 @@
+{
+  "patient_id": "sub-113",
+  "command": "python train_variant.py sub-113 pearson 15 --loss focal --augment none --pretrain none",
+  "graph_strategy": "pearson",
+  "sop_minutes": 15,
+  "variant_of": "/workspace/seizure-tgnn/experiments/runs/within_patient/sub-113/pearson/sop15/seed123/eval1",
+  "run_leaf": "eval1-focal",
+  "loss": "focal",
+  "augmentation": "none",
+  "pretrain": "none",
+  "recipe": "focal+none+none",
+  "t1": 56771.5,
+  "t2": 59994.5,
+  "n_train_seizures": 2,
+  "n_test_seizures": 2,
+  "n_train_windows": 97,
+  "n_monitor_windows": 306,
+  "n_validation_windows": 0,
+  "n_test_windows": 1228,
+  "n_positive_train": 14,
+  "n_negative_train": 83,
+  "n_positive_monitor": 19,
+  "n_negative_monitor": 287,
+  "n_positive_val": 0,
+  "n_negative_val": 0,
+  "n_positive_test": 188,
+  "n_negative_test": 1040,
+  "packed_run": "04",
+  "pack_scope": "seizure bearing run only",
+  "train_stride_seconds": 10,
+  "eval_stride_seconds": 1,
+  "monitor_stride_seconds": 1,
+  "scored_at_train_stride": false,
+  "best_epoch": 32,
+  "n_epochs_run": 37,
+  "scored_from_best_checkpoint": true,
+  "best_monitor_bce": 0.8771616165934045,
+  "pos_weight": 5.928571428571429,
+  "parameter_count": 283846,
+  "negative_control": "none",
+  "early_stopping_metric": "class_weighted_bce",
+  "preprocess_seconds": 0.0,
+  "train_seconds": 14.545212730765343,
+  "score_seconds": 1.0989819206297398,
+  "end_to_end_wall_clock": 17.731685809791088,
+  "patient_wall_clock_seconds": 17.731685809791088,
+  "n_seconds_scored": 1228,
+  "n_validation_windows_scored": 0,
+  "n_test_windows_scored": 1228,
+  "n_monitor_windows_scored": 306,
+  "sph_minutes": 5,
+  "compile_seconds": 1.2191232070326805,
+  "used_stored_ends": true,
+  "n_train_ends": 97,
+  "n_monitor_ends": 306,
+  "n_validation_ends": 0,
+  "n_test_ends": 1228,
+  "train_model": "evobrain",
+  "train_torch_version": "2.8.0.dev20250319+cu128",
+  "seed": 123,
+  "dataset_accession": "ds005873",
+  "dataset_version": "1.1.0",
+  "gpu_name": "NVIDIA GeForce RTX 4090",
+  "gpu_memory_bytes": 25261047808,
+  "cuda_version": "12.8",
+  "mamba_ssm_version": "2.2.4",
+  "train_batch_size": 32,
+  "eval_batch_size": 256,
+  "logit_zero_monitor_bce": 0.905265750521217,
+  "epoch_log": [
+    {
+      "epoch": 1,
+      "train_bce": 1.1884832382202148,
+      "monitor_bce": 0.9252636931300943,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 1
+    },
+    {
+      "epoch": 2,
+      "train_bce": 1.187436580657959,
+      "monitor_bce": 0.9241133990630604,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 2
+    },
+    {
+      "epoch": 3,
+      "train_bce": 1.184146761894226,
+      "monitor_bce": 0.9237949918298161,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 3
+    },
+    {
+      "epoch": 4,
+      "train_bce": 1.1821027994155884,
+      "monitor_bce": 0.9225455725115109,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 4
+    },
+    {
+      "epoch": 5,
+      "train_bce": 1.1843500137329102,
+      "monitor_bce": 0.9217776901581708,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 5
+    },
+    {
+      "epoch": 6,
+      "train_bce": 1.1826525926589966,
+      "monitor_bce": 0.9199317717084697,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 6
+    },
+    {
+      "epoch": 7,
+      "train_bce": 1.1827079057693481,
+      "monitor_bce": 0.9200641158359503,
+      "improved": false,
+      "wait": 1,
+      "best_epoch": 6
+    },
+    {
+      "epoch": 8,
+      "train_bce": 1.1821773052215576,
+      "monitor_bce": 0.9190623417399288,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 8
+    },
+    {
+      "epoch": 9,
+      "train_bce": 1.184666633605957,
+      "monitor_bce": 0.9179118435367261,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 9
+    },
+    {
+      "epoch": 10,
+      "train_bce": 1.1798113584518433,
+      "monitor_bce": 0.9182019592110627,
+      "improved": false,
+      "wait": 1,
+      "best_epoch": 9
+    },
+    {
+      "epoch": 11,
+      "train_bce": 1.1808476448059082,
+      "monitor_bce": 0.916838652168224,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 11
+    },
+    {
+      "epoch": 12,
+      "train_bce": 1.1768397092819214,
+      "monitor_bce": 0.9166432642469219,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 12
+    },
+    {
+      "epoch": 13,
+      "train_bce": 1.1749281883239746,
+      "monitor_bce": 0.9154156204921747,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 13
+    },
+    {
+      "epoch": 14,
+      "train_bce": 1.1735596656799316,
+      "monitor_bce": 0.9146390163820554,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 14
+    },
+    {
+      "epoch": 15,
+      "train_bce": 1.1709544658660889,
+      "monitor_bce": 0.9141302576252058,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 15
+    },
+    {
+      "epoch": 16,
+      "train_bce": 1.1693665981292725,
+      "monitor_bce": 0.912692663716335,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 16
+    },
+    {
+      "epoch": 17,
+      "train_bce": 1.1640878915786743,
+      "monitor_bce": 0.9123223762886197,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 17
+    },
+    {
+      "epoch": 18,
+      "train_bce": 1.1602301597595215,
+      "monitor_bce": 0.9113436337389977,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 18
+    },
+    {
+      "epoch": 19,
+      "train_bce": 1.1595988273620605,
+      "monitor_bce": 0.9109454614664215,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 19
+    },
+    {
+      "epoch": 20,
+      "train_bce": 1.1528822183609009,
+      "monitor_bce": 0.9077614576987971,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 20
+    },
+    {
+      "epoch": 21,
+      "train_bce": 1.1454740762710571,
+      "monitor_bce": 0.9073366495518903,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 21
+    },
+    {
+      "epoch": 22,
+      "train_bce": 1.1376187801361084,
+      "monitor_bce": 0.9041054763045966,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 22
+    },
+    {
+      "epoch": 23,
+      "train_bce": 1.1313257217407227,
+      "monitor_bce": 0.9032692317090003,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 23
+    },
+    {
+      "epoch": 24,
+      "train_bce": 1.121311902999878,
+      "monitor_bce": 0.9000673839469361,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 24
+    },
+    {
+      "epoch": 25,
+      "train_bce": 1.109320044517517,
+      "monitor_bce": 0.8969407860749687,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 25
+    },
+    {
+      "epoch": 26,
+      "train_bce": 1.0955201387405396,
+      "monitor_bce": 0.8934362370983447,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 26
+    },
+    {
+      "epoch": 27,
+      "train_bce": 1.0847669839859009,
+      "monitor_bce": 0.8899373088786805,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 27
+    },
+    {
+      "epoch": 28,
+      "train_bce": 1.0637465715408325,
+      "monitor_bce": 0.8857917286991294,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 28
+    },
+    {
+      "epoch": 29,
+      "train_bce": 1.0455358028411865,
+      "monitor_bce": 0.8817553348790587,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 29
+    },
+    {
+      "epoch": 30,
+      "train_bce": 1.0212701559066772,
+      "monitor_bce": 0.8788276451085907,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 30
+    },
+    {
+      "epoch": 31,
+      "train_bce": 0.9975919127464294,
+      "monitor_bce": 0.8781830906088836,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 31
+    },
+    {
+      "epoch": 32,
+      "train_bce": 0.9691709876060486,
+      "monitor_bce": 0.8771616165934045,
+      "improved": true,
+      "wait": 0,
+      "best_epoch": 32
+    },
+    {
+      "epoch": 33,
+      "train_bce": 0.9447254538536072,
+      "monitor_bce": 0.8778746689067167,
+      "improved": false,
+      "wait": 1,
+      "best_epoch": 32
+    },
+    {
+      "epoch": 34,
+      "train_bce": 0.915739119052887,
+      "monitor_bce": 0.8811255451900507,
+      "improved": false,
+      "wait": 2,
+      "best_epoch": 32
+    },
+    {
+      "epoch": 35,
+      "train_bce": 0.8909894824028015,
+      "monitor_bce": 0.8852536117329317,
+      "improved": false,
+      "wait": 3,
+      "best_epoch": 32
+    },
+    {
+      "epoch": 36,
+      "train_bce": 0.8632524609565735,
+      "monitor_bce": 0.8929359055812063,
+      "improved": false,
+      "wait": 4,
+      "best_epoch": 32
+    },
+    {
+      "epoch": 37,
+      "train_bce": 0.8368218541145325,
+      "monitor_bce": 0.9005536160437889,
+      "improved": false,
+      "wait": 5,
+      "best_epoch": 32
+    }
+  ],
+  "n_epochs_logged": 37,
+  "event_sensitivity": 1.0,
+  "n_seizures_caught": 1,
+  "n_seizures_missed": 0,
+  "n_seizures_evaluable": 1,
+  "n_seizures_unevaluable": 0,
+  "n_test_lead_seizures": 1,
+  "n_seizures_merged": 1,
+  "n_false_alarms": 1,
+  "false_alarms_per_hour": 8.716707021791768,
+  "false_alarms_per_day": 209.20096852300242,
+  "raw_interictal_hours": 1.551388888888889,
+  "scorable_interictal_hours": 0.11472222222222223,
+  "interictal_hours_dropped": 1.4366666666666668,
+  "time_in_warning_interictal_hours": 0.24888888888888888,
+  "alarm_threshold": -0.38994407653808594,
+  "alarm_threshold_probability": 0.4037307632106527,
+  "threshold_rule": "lowest threshold with monitor false alarms per hour at most 0.15",
+  "threshold_set": "monitor",
+  "val_cap_met": true,
+  "val_false_alarms_per_hour": 0.0,
+  "val_scorable_interictal_hours": 0.026111111111111113,
+  "resolves_0_15_per_hour": false,
+  "study_criterion_met": false,
+  "fp_max_per_hour": 0.15,
+  "alarm_lookback_seconds": 150,
+  "alarm_vote_need": 120,
+  "alarm_silent_seconds": 1200,
+  "sop_seconds": 900,
+  "n_test_windows_with_scores": 1228,
+  "n_val_windows_with_scores": 0,
+  "n_monitor_windows_with_scores": 306,
+  "monitor_logits_loaded": true
+}
