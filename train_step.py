@@ -16,7 +16,9 @@ def make_optimizer(model):
     )
 
 
-def one_train_step(model, optimizer, input_seq, seq_lengths, adj, labels, pos_weight):
+def one_train_step(
+    model, optimizer, input_seq, seq_lengths, adj, labels, pos_weight, loss_fn=None
+):
     if pos_weight <= 0:
         raise ValueError(f"pos_weight has to be > 0, we got {pos_weight}")
     model.train()
@@ -27,8 +29,11 @@ def one_train_step(model, optimizer, input_seq, seq_lengths, adj, labels, pos_we
         raise ValueError(
             f"logits and labels need the same batch, we got {logits.shape[0]} and {labels.shape[0]}"
         )
-    weight = torch.as_tensor(pos_weight, dtype=logits.dtype, device=logits.device)
-    loss = BCEWithLogitsLoss(pos_weight=weight)(logits, labels)
+    if loss_fn is None:
+        weight = torch.as_tensor(pos_weight, dtype=logits.dtype, device=logits.device)
+        loss = BCEWithLogitsLoss(pos_weight=weight)(logits, labels)
+    else:
+        loss = loss_fn(logits, labels, pos_weight)
     loss.backward()
     torch.nn.utils.clip_grad_norm_(model.parameters(), MAX_GRAD_NORM)
     optimizer.step()

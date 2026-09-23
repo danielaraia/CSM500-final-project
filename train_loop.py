@@ -96,6 +96,8 @@ def train_until_stop(
     train_batch_size=None,
     checkpoint_dir=None,
     device=None,
+    loss_fn=None,
+    augment_fn=None,
 ):
     if max_epochs is None:
         max_epochs = LOCKED["max_epochs"]
@@ -126,6 +128,8 @@ def train_until_stop(
             train_labels,
             pos_weight,
             train_batch_size,
+            loss_fn=loss_fn,
+            augment_fn=augment_fn,
         )
         scheduler.step()
         this_loss = monitor_bce(
@@ -224,7 +228,15 @@ def train_and_write_metrics(
 
 
 def _run_train_epoch(
-    model, optimizer, features, adjacency, labels, pos_weight, batch_size
+    model,
+    optimizer,
+    features,
+    adjacency,
+    labels,
+    pos_weight,
+    batch_size,
+    loss_fn=None,
+    augment_fn=None,
 ):
     start = 0
     n_windows = features.shape[0]
@@ -234,14 +246,19 @@ def _run_train_epoch(
         end = start + batch_size
         if end > n_windows:
             end = n_windows
+        batch_features = features[start:end]
+        if augment_fn is not None:
+            # train slice only, and a fresh copy so the pack tensors never change
+            batch_features = augment_fn(batch_features)
         one_train_step(
             model,
             optimizer,
-            features[start:end],
+            batch_features,
             _seq_lengths(end - start, features.device),
             adjacency[start:end],
             labels[start:end],
             pos_weight,
+            loss_fn=loss_fn,
         )
         start = end
 

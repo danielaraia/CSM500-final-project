@@ -55,6 +55,8 @@ def train_until_stop_logged(
     train_batch_size=None,
     checkpoint_dir=None,
     device=None,
+    loss_fn=None,
+    augment_fn=None,
 ):
     if max_epochs is None:
         max_epochs = LOCKED["max_epochs"]
@@ -90,6 +92,8 @@ def train_until_stop_logged(
             train_labels,
             pos_weight,
             train_batch_size,
+            loss_fn=loss_fn,
+            augment_fn=augment_fn,
         )
         scheduler.step()
         train_loss = monitor_bce(
