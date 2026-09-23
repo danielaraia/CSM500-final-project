@@ -319,12 +319,16 @@ def train_packed_eval_run(
     train_batch_size=None,
     compile_seconds=None,
     replace_existing_train=False,
+    loss_fn=None,
+    augment_fn=None,
 ):
     config_path = os.path.join(folder, "config.json")
     if not os.path.isfile(config_path):
         raise ValueError(f"config is missing: {config_path}")
     cfg = read_config(config_path)
-    if cfg.get("run_leaf") != "eval1":
+    run_leaf = cfg.get("run_leaf")
+    is_variant_leaf = isinstance(run_leaf, str) and run_leaf.startswith("eval1-")
+    if run_leaf != "eval1" and not is_variant_leaf:
         raise ValueError(
             "this trainer only loads eval1 packs, "
             f"we got run_leaf={cfg.get('run_leaf')!r} in {config_path}"
@@ -354,7 +358,7 @@ def train_packed_eval_run(
         "n_validation_ends": int(len(val_ends)),
         "n_test_ends": int(len(test_ends)),
         "patient_id": cfg.get("patient_id"),
-        "run_leaf": "eval1",
+        "run_leaf": run_leaf,
     }
     if extra is not None:
         for key in extra:
@@ -377,6 +381,8 @@ def train_packed_eval_run(
         compile_seconds=compile_seconds,
         merge_existing=True,
         replace_existing_train=replace_existing_train,
+        loss_fn=loss_fn,
+        augment_fn=augment_fn,
     )
 
 
@@ -394,6 +400,8 @@ def train_score_and_write_metrics(
     compile_seconds=None,
     merge_existing=False,
     replace_existing_train=False,
+    loss_fn=None,
+    augment_fn=None,
 ):
     train_f, train_g, train_y, _train_ends = _load_split_file(folder, "train.npz")
     monitor_f, monitor_g, monitor_y, monitor_ends = _load_split_file(
@@ -420,6 +428,8 @@ def train_score_and_write_metrics(
         train_batch_size=train_batch_size,
         checkpoint_dir=os.path.join(folder, "checkpoints"),
         device=device,
+        loss_fn=loss_fn,
+        augment_fn=augment_fn,
     )
     train_seconds = time.perf_counter() - train_start
     score_start = time.perf_counter()
