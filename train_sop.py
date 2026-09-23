@@ -39,7 +39,7 @@ def parse_args(argv):
             raise ValueError(f"sop_minutes has to be a whole number, we got {argv[3]!r}")
         if sop_minutes not in ALLOWED_SOP_MINUTES:
             raise ValueError(
-                "sop_minutes has to be 30, 15, or 5, "
+                "sop_minutes has to be 30, 15, 10, or 5, "
                 f"we got {sop_minutes!r}"
             )
         return [(argv[1], argv[2], sop_minutes)]
