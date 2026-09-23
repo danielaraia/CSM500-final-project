@@ -1,0 +1,1462 @@
+[
+  {
+    "patient_id": "sub-004",
+    "sop_minutes": 30,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "local-fallback",
+    "n_seizures_total": 4,
+    "n_seizures_usable": 3,
+    "seizure_spans": [
+      [
+        1359.0,
+        1401.0
+      ],
+      [
+        8300.0,
+        8381.0
+      ],
+      [
+        19956.0,
+        20062.0
+      ],
+      [
+        26559.0,
+        26644.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 20061.5,
+      "t2": 23310.5,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1
+    },
+    "packed": {
+      "t1": 20061.5,
+      "t2": 23310.5,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1,
+      "n_positive_train": 18,
+      "n_negative_train": 66,
+      "n_positive_val": null,
+      "n_positive_test": null,
+      "n_negative_test": null
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 4659,
+        "packed_positive_windows": 18,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 0,
+        "packed_positive_windows": null,
+        "verdict": "metrics_key_absent"
+      },
+      "test": {
+        "recomputed_sop_seconds": 1800,
+        "packed_positive_windows": null,
+        "verdict": "metrics_key_absent"
+      }
+    },
+    "all_checks_pass": true
+  },
+  {
+    "patient_id": "sub-015",
+    "sop_minutes": 30,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "04",
+    "n_seizures_total": 3,
+    "n_seizures_usable": 3,
+    "seizure_spans": [
+      [
+        13311.0,
+        13330.0
+      ],
+      [
+        23038.0,
+        23081.0
+      ],
+      [
+        52473.0,
+        52503.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 23081.0,
+      "t2": 37777.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1
+    },
+    "packed": {
+      "t1": 23081.0,
+      "t2": 37777.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1,
+      "n_positive_train": 126,
+      "n_negative_train": 880,
+      "n_positive_val": 0,
+      "n_positive_test": 513,
+      "n_negative_test": 17821
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 3600,
+        "packed_positive_windows": 126,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 0,
+        "packed_positive_windows": 0,
+        "verdict": "structural_no_sop_seconds"
+      },
+      "test": {
+        "recomputed_sop_seconds": 1800,
+        "packed_positive_windows": 513,
+        "verdict": "positives_present"
+      }
+    },
+    "all_checks_pass": true
+  },
+  {
+    "patient_id": "sub-015",
+    "sop_minutes": 15,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "04",
+    "n_seizures_total": 3,
+    "n_seizures_usable": 3,
+    "seizure_spans": [
+      [
+        13311.0,
+        13330.0
+      ],
+      [
+        23038.0,
+        23081.0
+      ],
+      [
+        52473.0,
+        52503.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 23081.0,
+      "t2": 37777.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1
+    },
+    "packed": {
+      "t1": 23081.0,
+      "t2": 37777.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1,
+      "n_positive_train": 42,
+      "n_negative_train": 871,
+      "n_positive_val": 0,
+      "n_positive_test": 41,
+      "n_negative_test": 17821
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 1800,
+        "packed_positive_windows": 42,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 0,
+        "packed_positive_windows": 0,
+        "verdict": "structural_no_sop_seconds"
+      },
+      "test": {
+        "recomputed_sop_seconds": 900,
+        "packed_positive_windows": 41,
+        "verdict": "positives_present"
+      }
+    },
+    "all_checks_pass": true
+  },
+  {
+    "patient_id": "sub-039",
+    "sop_minutes": 30,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "06",
+    "n_seizures_total": 17,
+    "n_seizures_usable": 16,
+    "seizure_spans": [
+      [
+        551.0,
+        561.0
+      ],
+      [
+        7857.0,
+        7870.0
+      ],
+      [
+        15660.0,
+        15672.0
+      ],
+      [
+        19330.0,
+        19343.0
+      ],
+      [
+        22393.0,
+        22406.0
+      ],
+      [
+        26606.0,
+        26619.0
+      ],
+      [
+        31747.0,
+        31760.0
+      ],
+      [
+        47474.0,
+        47485.0
+      ],
+      [
+        47825.0,
+        47832.0
+      ],
+      [
+        48152.0,
+        48158.0
+      ],
+      [
+        48544.0,
+        48552.0
+      ],
+      [
+        54875.0,
+        54889.0
+      ],
+      [
+        62041.0,
+        62051.0
+      ],
+      [
+        65191.0,
+        65203.0
+      ],
+      [
+        66305.0,
+        66319.0
+      ],
+      [
+        68378.0,
+        68389.0
+      ],
+      [
+        78789.0,
+        78802.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 51713.5,
+      "t2": 51713.5,
+      "n_train_seizures": 10,
+      "n_test_seizures": 6
+    },
+    "packed": {
+      "t1": 51713.5,
+      "t2": 51713.5,
+      "n_train_seizures": 10,
+      "n_test_seizures": 6,
+      "n_positive_train": 745,
+      "n_negative_train": 257,
+      "n_positive_val": 0,
+      "n_positive_test": 1092,
+      "n_negative_test": 888
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 12997,
+        "packed_positive_windows": 745,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 0,
+        "packed_positive_windows": 0,
+        "verdict": "structural_no_sop_seconds"
+      },
+      "test": {
+        "recomputed_sop_seconds": 9761,
+        "packed_positive_windows": 1092,
+        "verdict": "positives_present"
+      }
+    },
+    "all_checks_pass": true
+  },
+  {
+    "patient_id": "sub-039",
+    "sop_minutes": 15,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "06",
+    "n_seizures_total": 17,
+    "n_seizures_usable": 16,
+    "seizure_spans": [
+      [
+        551.0,
+        561.0
+      ],
+      [
+        7857.0,
+        7870.0
+      ],
+      [
+        15660.0,
+        15672.0
+      ],
+      [
+        19330.0,
+        19343.0
+      ],
+      [
+        22393.0,
+        22406.0
+      ],
+      [
+        26606.0,
+        26619.0
+      ],
+      [
+        31747.0,
+        31760.0
+      ],
+      [
+        47474.0,
+        47485.0
+      ],
+      [
+        47825.0,
+        47832.0
+      ],
+      [
+        48152.0,
+        48158.0
+      ],
+      [
+        48544.0,
+        48552.0
+      ],
+      [
+        54875.0,
+        54889.0
+      ],
+      [
+        62041.0,
+        62051.0
+      ],
+      [
+        65191.0,
+        65203.0
+      ],
+      [
+        66305.0,
+        66319.0
+      ],
+      [
+        68378.0,
+        68389.0
+      ],
+      [
+        78789.0,
+        78802.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 48551.5,
+      "t2": 51713.5,
+      "n_train_seizures": 10,
+      "n_test_seizures": 6
+    },
+    "packed": {
+      "t1": 48551.5,
+      "t2": 51713.5,
+      "n_train_seizures": 10,
+      "n_test_seizures": 6,
+      "n_positive_train": 352,
+      "n_negative_train": 337,
+      "n_positive_val": 0,
+      "n_positive_test": 26,
+      "n_negative_test": 888
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 6697,
+        "packed_positive_windows": 352,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 0,
+        "packed_positive_windows": 0,
+        "verdict": "structural_no_sop_seconds"
+      },
+      "test": {
+        "recomputed_sop_seconds": 5302,
+        "packed_positive_windows": 26,
+        "verdict": "positives_present"
+      }
+    },
+    "all_checks_pass": true
+  },
+  {
+    "patient_id": "sub-039",
+    "sop_minutes": 10,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "06",
+    "n_seizures_total": 17,
+    "n_seizures_usable": 16,
+    "seizure_spans": [
+      [
+        551.0,
+        561.0
+      ],
+      [
+        7857.0,
+        7870.0
+      ],
+      [
+        15660.0,
+        15672.0
+      ],
+      [
+        19330.0,
+        19343.0
+      ],
+      [
+        22393.0,
+        22406.0
+      ],
+      [
+        26606.0,
+        26619.0
+      ],
+      [
+        31747.0,
+        31760.0
+      ],
+      [
+        47474.0,
+        47485.0
+      ],
+      [
+        47825.0,
+        47832.0
+      ],
+      [
+        48152.0,
+        48158.0
+      ],
+      [
+        48544.0,
+        48552.0
+      ],
+      [
+        54875.0,
+        54889.0
+      ],
+      [
+        62041.0,
+        62051.0
+      ],
+      [
+        65191.0,
+        65203.0
+      ],
+      [
+        66305.0,
+        66319.0
+      ],
+      [
+        68378.0,
+        68389.0
+      ],
+      [
+        78789.0,
+        78802.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 48551.5,
+      "t2": 51713.5,
+      "n_train_seizures": 10,
+      "n_test_seizures": 6
+    },
+    "packed": {
+      "t1": 48551.5,
+      "t2": 51713.5,
+      "n_train_seizures": 10,
+      "n_test_seizures": 6,
+      "n_positive_train": 235,
+      "n_negative_train": 350,
+      "n_positive_val": 0,
+      "n_positive_test": 0,
+      "n_negative_test": 888
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 4597,
+        "packed_positive_windows": 235,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 0,
+        "packed_positive_windows": 0,
+        "verdict": "structural_no_sop_seconds"
+      },
+      "test": {
+        "recomputed_sop_seconds": 3600,
+        "packed_positive_windows": 0,
+        "verdict": "qc_removed_all_positives"
+      }
+    },
+    "all_checks_pass": true
+  },
+  {
+    "patient_id": "sub-039",
+    "sop_minutes": 5,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "06",
+    "n_seizures_total": 17,
+    "n_seizures_usable": 16,
+    "seizure_spans": [
+      [
+        551.0,
+        561.0
+      ],
+      [
+        7857.0,
+        7870.0
+      ],
+      [
+        15660.0,
+        15672.0
+      ],
+      [
+        19330.0,
+        19343.0
+      ],
+      [
+        22393.0,
+        22406.0
+      ],
+      [
+        26606.0,
+        26619.0
+      ],
+      [
+        31747.0,
+        31760.0
+      ],
+      [
+        47474.0,
+        47485.0
+      ],
+      [
+        47825.0,
+        47832.0
+      ],
+      [
+        48152.0,
+        48158.0
+      ],
+      [
+        48544.0,
+        48552.0
+      ],
+      [
+        54875.0,
+        54889.0
+      ],
+      [
+        62041.0,
+        62051.0
+      ],
+      [
+        65191.0,
+        65203.0
+      ],
+      [
+        66305.0,
+        66319.0
+      ],
+      [
+        68378.0,
+        68389.0
+      ],
+      [
+        78789.0,
+        78802.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 48551.5,
+      "t2": 51713.5,
+      "n_train_seizures": 10,
+      "n_test_seizures": 6
+    },
+    "packed": {
+      "t1": 48551.5,
+      "t2": 51713.5,
+      "n_train_seizures": 10,
+      "n_test_seizures": 6,
+      "n_positive_train": 130,
+      "n_negative_train": 368,
+      "n_positive_val": 0,
+      "n_positive_test": 0,
+      "n_negative_test": 888
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 2497,
+        "packed_positive_windows": 130,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 0,
+        "packed_positive_windows": 0,
+        "verdict": "structural_no_sop_seconds"
+      },
+      "test": {
+        "recomputed_sop_seconds": 1800,
+        "packed_positive_windows": 0,
+        "verdict": "qc_removed_all_positives"
+      }
+    },
+    "all_checks_pass": true
+  },
+  {
+    "patient_id": "sub-051",
+    "sop_minutes": 30,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "01",
+    "n_seizures_total": 3,
+    "n_seizures_usable": 3,
+    "seizure_spans": [
+      [
+        12608.0,
+        12630.0
+      ],
+      [
+        27803.0,
+        27828.0
+      ],
+      [
+        46770.0,
+        46783.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 27828.0,
+      "t2": 37299.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1
+    },
+    "packed": {
+      "t1": 27828.0,
+      "t2": 37299.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1,
+      "n_positive_train": 30,
+      "n_negative_train": 964,
+      "n_positive_val": 0,
+      "n_positive_test": 1800,
+      "n_negative_test": 5808
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 3600,
+        "packed_positive_windows": 30,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 0,
+        "packed_positive_windows": 0,
+        "verdict": "structural_no_sop_seconds"
+      },
+      "test": {
+        "recomputed_sop_seconds": 1800,
+        "packed_positive_windows": 1800,
+        "verdict": "positives_present"
+      }
+    },
+    "all_checks_pass": true
+  },
+  {
+    "patient_id": "sub-051",
+    "sop_minutes": 15,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "01",
+    "n_seizures_total": 3,
+    "n_seizures_usable": 3,
+    "seizure_spans": [
+      [
+        12608.0,
+        12630.0
+      ],
+      [
+        27803.0,
+        27828.0
+      ],
+      [
+        46770.0,
+        46783.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 27828.0,
+      "t2": 37299.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1
+    },
+    "packed": {
+      "t1": 27828.0,
+      "t2": 37299.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1,
+      "n_positive_train": 21,
+      "n_negative_train": 899,
+      "n_positive_val": 0,
+      "n_positive_test": 900,
+      "n_negative_test": 5808
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 1800,
+        "packed_positive_windows": 21,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 0,
+        "packed_positive_windows": 0,
+        "verdict": "structural_no_sop_seconds"
+      },
+      "test": {
+        "recomputed_sop_seconds": 900,
+        "packed_positive_windows": 900,
+        "verdict": "positives_present"
+      }
+    },
+    "all_checks_pass": true
+  },
+  {
+    "patient_id": "sub-051",
+    "sop_minutes": 10,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "01",
+    "n_seizures_total": 3,
+    "n_seizures_usable": 3,
+    "seizure_spans": [
+      [
+        12608.0,
+        12630.0
+      ],
+      [
+        27803.0,
+        27828.0
+      ],
+      [
+        46770.0,
+        46783.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 27828.0,
+      "t2": 37299.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1
+    },
+    "packed": {
+      "t1": 27828.0,
+      "t2": 37299.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1,
+      "n_positive_train": 14,
+      "n_negative_train": 878,
+      "n_positive_val": 0,
+      "n_positive_test": 600,
+      "n_negative_test": 5808
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 1200,
+        "packed_positive_windows": 14,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 0,
+        "packed_positive_windows": 0,
+        "verdict": "structural_no_sop_seconds"
+      },
+      "test": {
+        "recomputed_sop_seconds": 600,
+        "packed_positive_windows": 600,
+        "verdict": "positives_present"
+      }
+    },
+    "all_checks_pass": true
+  },
+  {
+    "patient_id": "sub-051",
+    "sop_minutes": 5,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "01",
+    "n_seizures_total": 3,
+    "n_seizures_usable": 3,
+    "seizure_spans": [
+      [
+        12608.0,
+        12630.0
+      ],
+      [
+        27803.0,
+        27828.0
+      ],
+      [
+        46770.0,
+        46783.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 27828.0,
+      "t2": 37299.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1
+    },
+    "packed": {
+      "t1": 27828.0,
+      "t2": 37299.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1,
+      "n_positive_train": 14,
+      "n_negative_train": 856,
+      "n_positive_val": 0,
+      "n_positive_test": 300,
+      "n_negative_test": 5808
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 600,
+        "packed_positive_windows": 14,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 0,
+        "packed_positive_windows": 0,
+        "verdict": "structural_no_sop_seconds"
+      },
+      "test": {
+        "recomputed_sop_seconds": 300,
+        "packed_positive_windows": 300,
+        "verdict": "positives_present"
+      }
+    },
+    "all_checks_pass": true
+  },
+  {
+    "patient_id": "sub-052",
+    "sop_minutes": 30,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "07",
+    "n_seizures_total": 3,
+    "n_seizures_usable": 3,
+    "seizure_spans": [
+      [
+        7833.0,
+        7993.0
+      ],
+      [
+        17785.0,
+        17929.0
+      ],
+      [
+        28287.0,
+        28408.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 17929.0,
+      "t2": 23108.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1
+    },
+    "packed": {
+      "t1": 17929.0,
+      "t2": 23108.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1,
+      "n_positive_train": 29,
+      "n_negative_train": 170,
+      "n_positive_val": 0,
+      "n_positive_test": 642,
+      "n_negative_test": 3304
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 3600,
+        "packed_positive_windows": 29,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 0,
+        "packed_positive_windows": 0,
+        "verdict": "structural_no_sop_seconds"
+      },
+      "test": {
+        "recomputed_sop_seconds": 1800,
+        "packed_positive_windows": 642,
+        "verdict": "positives_present"
+      }
+    },
+    "all_checks_pass": true
+  },
+  {
+    "patient_id": "sub-052",
+    "sop_minutes": 15,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "07",
+    "n_seizures_total": 3,
+    "n_seizures_usable": 3,
+    "seizure_spans": [
+      [
+        7833.0,
+        7993.0
+      ],
+      [
+        17785.0,
+        17929.0
+      ],
+      [
+        28287.0,
+        28408.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 17929.0,
+      "t2": 23108.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1
+    },
+    "packed": {
+      "t1": 17929.0,
+      "t2": 23108.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1,
+      "n_positive_train": 18,
+      "n_negative_train": 132,
+      "n_positive_val": 0,
+      "n_positive_test": 642,
+      "n_negative_test": 3304
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 1800,
+        "packed_positive_windows": 18,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 0,
+        "packed_positive_windows": 0,
+        "verdict": "structural_no_sop_seconds"
+      },
+      "test": {
+        "recomputed_sop_seconds": 900,
+        "packed_positive_windows": 642,
+        "verdict": "positives_present"
+      }
+    },
+    "all_checks_pass": true
+  },
+  {
+    "patient_id": "sub-052",
+    "sop_minutes": 10,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "07",
+    "n_seizures_total": 3,
+    "n_seizures_usable": 3,
+    "seizure_spans": [
+      [
+        7833.0,
+        7993.0
+      ],
+      [
+        17785.0,
+        17929.0
+      ],
+      [
+        28287.0,
+        28408.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 17929.0,
+      "t2": 23108.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1
+    },
+    "packed": {
+      "t1": 17929.0,
+      "t2": 23108.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1,
+      "n_positive_train": 9,
+      "n_negative_train": 134,
+      "n_positive_val": 0,
+      "n_positive_test": 455,
+      "n_negative_test": 3304
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 1200,
+        "packed_positive_windows": 9,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 0,
+        "packed_positive_windows": 0,
+        "verdict": "structural_no_sop_seconds"
+      },
+      "test": {
+        "recomputed_sop_seconds": 600,
+        "packed_positive_windows": 455,
+        "verdict": "positives_present"
+      }
+    },
+    "all_checks_pass": true
+  },
+  {
+    "patient_id": "sub-073",
+    "sop_minutes": 30,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "50",
+    "n_seizures_total": 3,
+    "n_seizures_usable": 3,
+    "seizure_spans": [
+      [
+        7481.0,
+        7622.0
+      ],
+      [
+        16721.0,
+        16817.0
+      ],
+      [
+        19691.0,
+        19786.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 16817.0,
+      "t2": 18254.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1
+    },
+    "packed": {
+      "t1": 16817.0,
+      "t2": 18254.0,
+      "n_train_seizures": 2,
+      "n_test_seizures": 1,
+      "n_positive_train": 38,
+      "n_negative_train": 186,
+      "n_positive_val": 222,
+      "n_positive_test": 664,
+      "n_negative_test": 0
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 3600,
+        "packed_positive_windows": 38,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 663,
+        "packed_positive_windows": 222,
+        "verdict": "positives_present"
+      },
+      "test": {
+        "recomputed_sop_seconds": 1137,
+        "packed_positive_windows": 664,
+        "verdict": "positives_present"
+      }
+    },
+    "all_checks_pass": true
+  },
+  {
+    "patient_id": "sub-113",
+    "sop_minutes": 30,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "04",
+    "n_seizures_total": 4,
+    "n_seizures_usable": 4,
+    "seizure_spans": [
+      [
+        39095.0,
+        39130.0
+      ],
+      [
+        56763.0,
+        56772.0
+      ],
+      [
+        63217.0,
+        63232.0
+      ],
+      [
+        63592.0,
+        63932.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 56771.5,
+      "t2": 59994.5,
+      "n_train_seizures": 2,
+      "n_test_seizures": 2
+    },
+    "packed": {
+      "t1": 56771.5,
+      "t2": 59994.5,
+      "n_train_seizures": 2,
+      "n_test_seizures": 2,
+      "n_positive_train": 14,
+      "n_negative_train": 87,
+      "n_positive_val": 0,
+      "n_positive_test": 492,
+      "n_negative_test": 1040
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 3600,
+        "packed_positive_windows": 14,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 0,
+        "packed_positive_windows": 0,
+        "verdict": "structural_no_sop_seconds"
+      },
+      "test": {
+        "recomputed_sop_seconds": 1860,
+        "packed_positive_windows": 492,
+        "verdict": "positives_present"
+      }
+    },
+    "all_checks_pass": true
+  },
+  {
+    "patient_id": "sub-113",
+    "sop_minutes": 15,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "04",
+    "n_seizures_total": 4,
+    "n_seizures_usable": 4,
+    "seizure_spans": [
+      [
+        39095.0,
+        39130.0
+      ],
+      [
+        56763.0,
+        56772.0
+      ],
+      [
+        63217.0,
+        63232.0
+      ],
+      [
+        63592.0,
+        63932.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 56771.5,
+      "t2": 59994.5,
+      "n_train_seizures": 2,
+      "n_test_seizures": 2
+    },
+    "packed": {
+      "t1": 56771.5,
+      "t2": 59994.5,
+      "n_train_seizures": 2,
+      "n_test_seizures": 2,
+      "n_positive_train": 14,
+      "n_negative_train": 83,
+      "n_positive_val": 0,
+      "n_positive_test": 188,
+      "n_negative_test": 1040
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 1800,
+        "packed_positive_windows": 14,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 0,
+        "packed_positive_windows": 0,
+        "verdict": "structural_no_sop_seconds"
+      },
+      "test": {
+        "recomputed_sop_seconds": 960,
+        "packed_positive_windows": 188,
+        "verdict": "positives_present"
+      }
+    },
+    "all_checks_pass": true
+  },
+  {
+    "patient_id": "sub-113",
+    "sop_minutes": 10,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "04",
+    "n_seizures_total": 4,
+    "n_seizures_usable": 4,
+    "seizure_spans": [
+      [
+        39095.0,
+        39130.0
+      ],
+      [
+        56763.0,
+        56772.0
+      ],
+      [
+        63217.0,
+        63232.0
+      ],
+      [
+        63592.0,
+        63932.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 56771.5,
+      "t2": 59994.5,
+      "n_train_seizures": 2,
+      "n_test_seizures": 2
+    },
+    "packed": {
+      "t1": 56771.5,
+      "t2": 59994.5,
+      "n_train_seizures": 2,
+      "n_test_seizures": 2,
+      "n_positive_train": 14,
+      "n_negative_train": 83,
+      "n_positive_val": 0,
+      "n_positive_test": 168,
+      "n_negative_test": 1040
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 1200,
+        "packed_positive_windows": 14,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 0,
+        "packed_positive_windows": 0,
+        "verdict": "structural_no_sop_seconds"
+      },
+      "test": {
+        "recomputed_sop_seconds": 660,
+        "packed_positive_windows": 168,
+        "verdict": "positives_present"
+      }
+    },
+    "all_checks_pass": true
+  },
+  {
+    "patient_id": "sub-113",
+    "sop_minutes": 5,
+    "status": "audited",
+    "graph_used": "pearson",
+    "packed_run": "04",
+    "n_seizures_total": 4,
+    "n_seizures_usable": 4,
+    "seizure_spans": [
+      [
+        39095.0,
+        39130.0
+      ],
+      [
+        56763.0,
+        56772.0
+      ],
+      [
+        63217.0,
+        63232.0
+      ],
+      [
+        63592.0,
+        63932.0
+      ]
+    ],
+    "recomputed": {
+      "t1": 56771.5,
+      "t2": 59994.5,
+      "n_train_seizures": 2,
+      "n_test_seizures": 2
+    },
+    "packed": {
+      "t1": 56771.5,
+      "t2": 59994.5,
+      "n_train_seizures": 2,
+      "n_test_seizures": 2,
+      "n_positive_train": 7,
+      "n_negative_train": 85,
+      "n_positive_val": 0,
+      "n_positive_test": 168,
+      "n_negative_test": 1040
+    },
+    "checks": {
+      "t1": true,
+      "t2": true,
+      "n_train_seizures": true,
+      "n_test_seizures": true
+    },
+    "positive_findings": {
+      "train": {
+        "recomputed_sop_seconds": 600,
+        "packed_positive_windows": 7,
+        "verdict": "positives_present"
+      },
+      "val": {
+        "recomputed_sop_seconds": 0,
+        "packed_positive_windows": 0,
+        "verdict": "structural_no_sop_seconds"
+      },
+      "test": {
+        "recomputed_sop_seconds": 360,
+        "packed_positive_windows": 168,
+        "verdict": "positives_present"
+      }
+    },
+    "all_checks_pass": true
+  }
+]
