@@ -1,17 +1,24 @@
 from augment import AUGMENT_NAMES
 from focal_loss import LOSS_NAMES
+from sensor_mask import SENSOR_TIERS
 
 PRETRAIN_NAMES = ("none", "cross_patient")
-DEFAULT_RECIPE = {"loss": "weighted_bce", "augmentation": "none", "pretrain": "none"}
+DEFAULT_RECIPE = {
+    "loss": "weighted_bce",
+    "augmentation": "none",
+    "pretrain": "none",
+    "sensors": "full",
+}
 
 
-def normalize_recipe(loss=None, augmentation=None, pretrain=None):
+def normalize_recipe(loss=None, augmentation=None, pretrain=None, sensors=None):
     recipe = {
         "loss": loss if loss is not None else DEFAULT_RECIPE["loss"],
         "augmentation": (
             augmentation if augmentation is not None else DEFAULT_RECIPE["augmentation"]
         ),
         "pretrain": pretrain if pretrain is not None else DEFAULT_RECIPE["pretrain"],
+        "sensors": sensors if sensors is not None else DEFAULT_RECIPE["sensors"],
     }
     if recipe["loss"] not in LOSS_NAMES:
         raise ValueError(
@@ -27,6 +34,11 @@ def normalize_recipe(loss=None, augmentation=None, pretrain=None):
         raise ValueError(
             "pretrain has to be none or cross_patient, "
             f"we got {recipe['pretrain']!r}"
+        )
+    if recipe["sensors"] not in SENSOR_TIERS:
+        raise ValueError(
+            "sensors has to be full, headset, eeg_acc, or eeg_only, "
+            f"we got {recipe['sensors']!r}"
         )
     return recipe
 
@@ -48,12 +60,14 @@ def recipe_leaf(recipe):
         leaf += "-aug"
     if recipe["pretrain"] == "cross_patient":
         leaf += "-pre"
+    if recipe["sensors"] != DEFAULT_RECIPE["sensors"]:
+        leaf += "-" + recipe["sensors"]
     return leaf
 
 
 def recipe_extra(recipe):
     # the screening ledger reads these keys from the run folder config json
-    return {
+    extra = {
         "loss": recipe["loss"],
         "augmentation": recipe["augmentation"],
         "pretrain": recipe["pretrain"],
@@ -65,3 +79,8 @@ def recipe_extra(recipe):
             + recipe["pretrain"]
         ),
     }
+    # full is the usual sensor set, so it adds nothing to the run identity
+    if recipe["sensors"] != DEFAULT_RECIPE["sensors"]:
+        extra["sensors"] = recipe["sensors"]
+        extra["recipe"] += "+" + recipe["sensors"]
+    return extra

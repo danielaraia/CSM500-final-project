@@ -16,16 +16,22 @@ from metrics import read_metrics, replace_metrics_keys
 from pretrain import pretrain_model
 from recipe import normalize_recipe, recipe_extra, recipe_leaf
 from run import train_packed_eval_run
+from sensor_mask import make_sensor_mask_fn
 from time_cuda import make_batch
 from train_sop import _epoch_keys, _ready_folder, _save_train_scores
 from train_step import make_optimizer, one_train_step
 from variant_pack import prepare_variant_folder
 
-FLAG_NAMES = {"--loss": "loss", "--augment": "augmentation", "--pretrain": "pretrain"}
+FLAG_NAMES = {
+    "--loss": "loss",
+    "--augment": "augmentation",
+    "--pretrain": "pretrain",
+    "--sensors": "sensors",
+}
 USAGE = (
     "usage: python train_variant.py patient_id graph_strategy sop_minutes "
     "[--loss weighted_bce|focal] [--augment none|jitter_scale] "
-    "[--pretrain none|cross_patient]"
+    "[--pretrain none|cross_patient] [--sensors full|headset|eeg_acc|eeg_only]"
 )
 
 
@@ -59,17 +65,21 @@ def parse_args(argv):
         loss=picked.get("loss"),
         augmentation=picked.get("augmentation"),
         pretrain=picked.get("pretrain"),
+        sensors=picked.get("sensors"),
     )
     leaf = recipe_leaf(recipe)
     return patient_id, graph_strategy, sop_minutes, recipe, leaf
 
 
 def command_string(patient_id, graph_strategy, sop_minutes, recipe):
-    return (
+    command = (
         f"python train_variant.py {patient_id} {graph_strategy} {sop_minutes} "
         f"--loss {recipe['loss']} --augment {recipe['augmentation']} "
         f"--pretrain {recipe['pretrain']}"
     )
+    if recipe["sensors"] != "full":
+        command += f" --sensors {recipe['sensors']}"
+    return command
 
 
 def main():
@@ -145,6 +155,7 @@ def _train_variant(
     model = model.to(device)
     loss_fn = make_loss_fn(recipe["loss"])
     augment_fn = make_augment_fn(recipe["augmentation"], device=device)
+    sensor_mask_fn = make_sensor_mask_fn(recipe["sensors"])
     extra = {
         "train_model": "evobrain" if graph_strategy != "attention" else "evobrain attention",
         "sop_minutes": sop_minutes,
@@ -173,6 +184,7 @@ def _train_variant(
             pretrain_dir,
             loss_fn=loss_fn,
             augment_fn=augment_fn,
+            sensor_mask_fn=sensor_mask_fn,
             device=device,
         )
         extra.update(info)
@@ -188,8 +200,9 @@ def _train_variant(
         replace_existing_train=True,
         loss_fn=loss_fn,
         augment_fn=augment_fn,
+        sensor_mask_fn=sensor_mask_fn,
     )
-    _save_train_scores(folder, model, device)
+    _save_train_scores(folder, model, device, sensor_mask_fn=sensor_mask_fn)
     replace_metrics_keys(folder, _epoch_keys(folder))
     metrics = read_metrics(folder)
     return {

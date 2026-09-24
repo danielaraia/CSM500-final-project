@@ -189,10 +189,12 @@ def _ready_folder(here, patient_id, graph_strategy, sop_minutes):
     return folder
 
 
-def _save_train_scores(folder, model, device):
+def _save_train_scores(folder, model, device, sensor_mask_fn=None):
     train_f, train_g, _train_y, train_ends = load_split(os.path.join(folder, "train.npz"))
     if train_ends is None:
         raise ValueError("train pack has no stored ends")
+    if sensor_mask_fn is not None:
+        train_f = sensor_mask_fn(train_f)
     logits = score_windows(model, train_f, train_g, device=device)
     save_window_scores(
         os.path.join(folder, "train_scores.npz"),

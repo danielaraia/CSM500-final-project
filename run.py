@@ -321,6 +321,7 @@ def train_packed_eval_run(
     replace_existing_train=False,
     loss_fn=None,
     augment_fn=None,
+    sensor_mask_fn=None,
 ):
     config_path = os.path.join(folder, "config.json")
     if not os.path.isfile(config_path):
@@ -383,6 +384,7 @@ def train_packed_eval_run(
         replace_existing_train=replace_existing_train,
         loss_fn=loss_fn,
         augment_fn=augment_fn,
+        sensor_mask_fn=sensor_mask_fn,
     )
 
 
@@ -402,6 +404,7 @@ def train_score_and_write_metrics(
     replace_existing_train=False,
     loss_fn=None,
     augment_fn=None,
+    sensor_mask_fn=None,
 ):
     train_f, train_g, train_y, _train_ends = _load_split_file(folder, "train.npz")
     monitor_f, monitor_g, monitor_y, monitor_ends = _load_split_file(
@@ -409,6 +412,12 @@ def train_score_and_write_metrics(
     )
     val_f, val_g, _val_y, val_ends = _load_split_file(folder, "val.npz")
     test_f, test_g, _test_y, test_ends = _load_split_file(folder, "test.npz")
+    if sensor_mask_fn is not None:
+        # dropped sensor nodes are zeroed before the model sees any split
+        train_f = sensor_mask_fn(train_f)
+        monitor_f = sensor_mask_fn(monitor_f)
+        val_f = sensor_mask_fn(val_f)
+        test_f = sensor_mask_fn(test_f)
     torch.manual_seed(LOCKED["seed"])
     pos_weight, n_negative, n_positive = weight_from_class_numbers(train_y)
     _mon_w, n_negative_monitor, n_positive_monitor = weight_from_class_numbers(monitor_y)

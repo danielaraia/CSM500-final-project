@@ -23,7 +23,12 @@ def test_parse_args_reads_the_lever_flags():
         ["train_variant.py", "sub-051", "mi", "15", "--loss", "focal"]
     )
     assert (patient_id, graph_strategy, sop_minutes) == ("sub-051", "mi", 15)
-    assert recipe == {"loss": "focal", "augmentation": "none", "pretrain": "none"}
+    assert recipe == {
+        "loss": "focal",
+        "augmentation": "none",
+        "pretrain": "none",
+        "sensors": "full",
+    }
     assert leaf == "eval1-focal"
     _p, _g, _s, recipe, leaf = parse_args(
         [
@@ -35,6 +40,7 @@ def test_parse_args_reads_the_lever_flags():
         "loss": "weighted_bce",
         "augmentation": "jitter_scale",
         "pretrain": "cross_patient",
+        "sensors": "full",
     }
     assert leaf == "eval1-aug-pre"
 

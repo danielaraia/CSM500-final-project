@@ -63,6 +63,7 @@ def pretrain_model(
     checkpoint_dir,
     loss_fn=None,
     augment_fn=None,
+    sensor_mask_fn=None,
     device=None,
     max_epochs=None,
     patience=None,
@@ -70,6 +71,10 @@ def pretrain_model(
 ):
     folders = find_pretrain_folders(root, patient_id, graph_strategy, sop_minutes)
     train_f, train_g, train_y, monitor_f, monitor_g, monitor_y = pool_splits(folders)
+    if sensor_mask_fn is not None:
+        # the pool sees the same dropped nodes as the target patient
+        train_f = sensor_mask_fn(train_f)
+        monitor_f = sensor_mask_fn(monitor_f)
     torch.manual_seed(LOCKED["seed"])
     pos_weight, n_negative, n_positive = weight_from_class_numbers(train_y)
     optimizer = make_optimizer(model)
