@@ -9,7 +9,7 @@ from attention import load_attention_evobrain, prepare_attention_folder
 from core.config import LOCKED, run_folder_path
 from epoch_trace import install_logged_train_loop
 from metrics import read_metrics, replace_metrics_keys
-from pack import load_split
+from packs.pack import load_split
 from run import train_packed_eval_run
 from time_cuda import make_batch
 from train_loop import score_windows

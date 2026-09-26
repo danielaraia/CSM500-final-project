@@ -3,7 +3,7 @@ import torch
 from torch.nn import BCEWithLogitsLoss
 
 from data.labels import label_second
-from pack import label_to_class_number
+from packs.pack import label_to_class_number
 from tiny_model import TinyLogits
 from train_step import make_optimizer, model_logits, one_train_step
 from data.windows import WINDOW_SECONDS

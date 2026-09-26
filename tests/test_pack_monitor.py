@@ -7,8 +7,8 @@ import pytest
 
 from data.features import N_FFT_BINS
 from data.labels import LABEL_INTERICTAL, LABEL_SOP
-from pack import save_split
-from pack_monitor import (
+from packs.pack import save_split
+from packs.pack_monitor import (
     cut_monitoring_slice_at_clock,
     monitor_clock_from_train_hop10,
     rewrite_monitor_eval,

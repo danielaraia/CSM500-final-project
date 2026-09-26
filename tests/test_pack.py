@@ -5,7 +5,7 @@ import numpy as np
 import pytest
 
 from data.labels import LABEL_INTERICTAL, LABEL_SOP, LABEL_UNUSED
-from pack import label_to_class_number, load_split, save_named_labels, save_split
+from packs.pack import label_to_class_number, load_split, save_named_labels, save_split
 
 
 def test_round_trip_one_file_not_one_per_window():

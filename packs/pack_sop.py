@@ -6,7 +6,7 @@ from catch_coverage import catch_coverage_from_folder
 from core.config import ALLOWED_SOP_MINUTES
 from metrics import write_metrics
 from mi import build_mi_graph
-from pack_eval import seizeit2_run_paths
+from packs.pack_eval import seizeit2_run_paths
 from run import write_split_run
 
 LEAF = "eval1"

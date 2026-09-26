@@ -18,7 +18,7 @@ from alarms import (
 from data.events import load_event_rows, seizure_spans
 from data.labels import SOP_SECONDS, SPH_SECONDS
 from metrics import merge_alarm_metrics, read_metrics
-from pack import load_split
+from packs.pack import load_split
 
 
 KNOWN_EVENTS = {

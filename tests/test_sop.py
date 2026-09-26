@@ -23,7 +23,7 @@ from data.labels import (
     seizures_with_full_sop,
     split_cut_times,
 )
-from pack_sop import parse_args as parse_pack_args
+from packs.pack_sop import parse_args as parse_pack_args
 from report_sop import grid_row, plain_table
 from score_sop import run_grid
 from train_sop import parse_args as parse_train_args

@@ -7,7 +7,7 @@ import pytest
 
 from alarms import save_window_scores
 from logit_overlap import overlap_from_pack_and_scores, overlap_row, still_overlap
-from pack import save_split
+from packs.pack import save_split
 
 
 def test_full_overlap_when_every_sop_logit_sits_under_the_interictal_max():

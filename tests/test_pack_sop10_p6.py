@@ -3,7 +3,7 @@ import os
 import subprocess
 import tempfile
 
-from pack_sop10_p6 import (
+from packs.pack_sop10_p6 import (
     EXISTING_COHORT,
     PHASE,
     SOP_MINUTES,
@@ -73,7 +73,7 @@ def test_r2_pack_exists_false_on_error_or_empty(monkeypatch):
 
 def test_pack_patient_sop10_skips_when_r2_pack_exists(monkeypatch):
     monkeypatch.setattr(
-        "pack_sop10_p6.r2_pack_exists", lambda r2_path: True
+        "packs.pack_sop10_p6.r2_pack_exists", lambda r2_path: True
     )
     with tempfile.TemporaryDirectory() as root:
         path = os.path.join(root, "ledger.jsonl")
@@ -89,7 +89,7 @@ def test_pack_patient_sop10_skips_when_r2_pack_exists(monkeypatch):
 
 def test_pack_patient_sop10_defers_big_ram_without_allow_big(monkeypatch):
     monkeypatch.setattr(
-        "pack_sop10_p6.r2_pack_exists", lambda r2_path: False
+        "packs.pack_sop10_p6.r2_pack_exists", lambda r2_path: False
     )
     with tempfile.TemporaryDirectory() as root:
         path = os.path.join(root, "ledger.jsonl")

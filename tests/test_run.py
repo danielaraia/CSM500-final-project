@@ -14,7 +14,7 @@ from core.channels import (
     NECK_GYR_LABELS,
 )
 from data.labels import LABEL_INTERICTAL, LABEL_SOP
-from pack import load_split
+from packs.pack import load_split
 from run import (
     labelled_windows_from_files,
     write_scaled_splits,

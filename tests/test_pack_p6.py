@@ -2,7 +2,7 @@ import json
 import os
 import tempfile
 
-from pack_p6 import (
+from packs.pack_p6 import (
     append_ledger,
     classify_failure,
     ledger_row,

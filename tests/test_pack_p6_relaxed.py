@@ -2,7 +2,7 @@ import json
 import os
 import tempfile
 
-from pack_p6_relaxed import (
+from packs.pack_p6_relaxed import (
     PACK_SOP_MINUTES,
     PHASE,
     pack_patient,

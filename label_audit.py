@@ -13,7 +13,7 @@ from data.labels import (
     seizures_with_full_sop,
     split_cut_times,
 )
-from pack_eval import seizeit2_run_paths
+from packs.pack_eval import seizeit2_run_paths
 
 # the 8th handled patient (sub-022) has no local events tsv, so it is audited
 # on the pod by the replication run, not here

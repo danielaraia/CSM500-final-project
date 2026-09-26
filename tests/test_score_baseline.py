@@ -5,7 +5,7 @@ import tempfile
 import numpy as np
 import pytest
 
-from pack import save_split
+from packs.pack import save_split
 from report_baseline import plain_verdict
 from score_baseline import evo_from_metrics, load_strength_clock
 

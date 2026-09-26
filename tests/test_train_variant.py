@@ -9,13 +9,13 @@ from data.augment import make_augment_fn
 from core.config import read_config, start_run
 from focal_loss import make_loss_fn
 from metrics import read_metrics, write_metrics
-from pack import load_split, save_split
+from packs.pack import load_split, save_split
 from core.recipe import normalize_recipe, recipe_leaf
 from run import train_packed_eval_run
 from tiny_model import TinyLogits
 from train_step import make_optimizer
 from train_variant import command_string, parse_args
-from variant_pack import prepare_variant_folder
+from packs.variant_pack import prepare_variant_folder
 
 
 def test_parse_args_reads_the_lever_flags():

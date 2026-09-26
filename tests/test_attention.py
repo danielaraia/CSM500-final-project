@@ -16,7 +16,7 @@ from attention import (
     prepare_attention_folder,
 )
 from core.config import LOCKED, read_config, run_folder_path, start_run
-from pack import save_split
+from packs.pack import save_split
 
 
 class _UsesAdj(torch.nn.Module):

@@ -13,7 +13,7 @@ from epoch_trace import (
     logit_zero_weighted_bce,
     train_until_stop_logged,
 )
-from pack import save_split
+from packs.pack import save_split
 from run import train_score_and_write_metrics
 from tiny_model import TinyLogits
 from train_step import make_optimizer

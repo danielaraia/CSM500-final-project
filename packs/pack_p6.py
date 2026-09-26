@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 
 from core.config import run_folder_path
 from metrics import read_metrics
-from pack_eval import seizeit2_run_paths
+from packs.pack_eval import seizeit2_run_paths
 from screen_p6 import RAM_GIB_SKIP
 
 COHORT_NAME = "p6-screening-cohort.json"
@@ -129,7 +129,7 @@ def download_run_files(patient_id, run_id, paths):
 
 def pack_one(patient_id, run_id, sop_minutes):
     proc = subprocess.run(
-        [sys.executable, "pack_sop.py", patient_id, run_id, GRAPH_STRATEGY,
+        [sys.executable, "packs/pack_sop.py", patient_id, run_id, GRAPH_STRATEGY,
          str(sop_minutes)],
         capture_output=True,
         text=True,

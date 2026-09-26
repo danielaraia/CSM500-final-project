@@ -20,7 +20,7 @@ from data.sensor_mask import make_sensor_mask_fn
 from time_cuda import make_batch
 from train_sop import _epoch_keys, _ready_folder, _save_train_scores
 from train_step import make_optimizer, one_train_step
-from variant_pack import prepare_variant_folder
+from packs.variant_pack import prepare_variant_folder
 
 FLAG_NAMES = {
     "--loss": "loss",

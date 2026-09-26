@@ -7,7 +7,7 @@ import torch
 
 from core.config import LOCKED, start_run
 from metrics import read_metrics, write_metrics
-from pack import save_split
+from packs.pack import save_split
 from pretrain import (
     find_pretrain_folders,
     load_pretrain_weights,

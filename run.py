@@ -14,7 +14,7 @@ from glue import (
     keep_labelled_windows,
     split_labelled_windows,
 )
-from pack_monitor import cut_monitoring_slice_at_clock, monitor_clock_from_train_hop10
+from packs.pack_monitor import cut_monitoring_slice_at_clock, monitor_clock_from_train_hop10
 from data.labels import (
     LABEL_INTERICTAL,
     LABEL_SOP,
@@ -24,7 +24,7 @@ from data.labels import (
 )
 from metrics import merge_metrics, read_metrics, replace_metrics_keys, write_metrics
 from data.normalize import apply_node_zscore, node_mean_and_std
-from pack import load_split, save_named_labels
+from packs.pack import load_split, save_named_labels
 from pos_weight import weight_from_class_numbers
 from train_loop import score_windows, train_and_write_metrics, train_until_stop
 from data.windows import EVAL_STRIDE_SECONDS, TRAIN_STRIDE_SECONDS

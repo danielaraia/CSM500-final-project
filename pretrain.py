@@ -4,7 +4,7 @@ import numpy as np
 import torch
 
 from core.config import LOCKED, run_folder_path
-from pack import load_split
+from packs.pack import load_split
 from pos_weight import weight_from_class_numbers
 from train_loop import train_until_stop
 from train_step import make_optimizer

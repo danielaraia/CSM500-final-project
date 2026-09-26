@@ -6,7 +6,7 @@ from glue import build_windows, keep_labelled_windows
 from data.labels import LABEL_INTERICTAL, LABEL_SOP
 from metrics import read_metrics, replace_metrics_keys
 from data.normalize import apply_node_zscore, node_mean_and_std
-from pack import load_split, save_named_labels
+from packs.pack import load_split, save_named_labels
 from data.windows import EVAL_STRIDE_SECONDS, TRAIN_STRIDE_SECONDS, end_is_on_stride
 
 
