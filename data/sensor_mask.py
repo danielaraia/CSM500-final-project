@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from pearson import N_NODES
+from graphs.pearson import N_NODES
 
 NODE_NAMES = (  # pack node order, set by edf.py load_run and glue.py _features_for_second
     "eeg_left",

@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 import torch
 
-from attention import (
+from graphs.attention import (
     ATTENTION_ADDED_PARAMETERS,
     ATTENTION_HIDDEN,
     ATTENTION_METRIC,

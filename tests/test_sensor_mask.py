@@ -10,7 +10,7 @@ from alarms import load_window_scores
 from core.config import start_run
 from metrics import write_metrics
 from packs.pack import load_split, save_split
-from pearson import N_NODES, pearson_correlation
+from graphs.pearson import N_NODES, pearson_correlation
 from core.recipe import normalize_recipe, recipe_extra, recipe_leaf
 from score_variant import parse_args as score_parse_args
 from score_variant import score_variant_folder

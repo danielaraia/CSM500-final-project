@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.feature_selection import mutual_info_regression
 
-from pearson import (
+from graphs.pearson import (
     ELECTRICAL_SAMPLES_1S,
     ELECTRICAL_SAMPLES_4S,
     MOVEMENT_SAMPLES_4S,

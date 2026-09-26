@@ -19,7 +19,7 @@ from data.labels import (
     seizures_with_full_sop,
     split_cut_times,
 )
-from pearson import steps_with_full_movement_buffer
+from graphs.pearson import steps_with_full_movement_buffer
 from score_alarms import recording_duration_seconds
 from data.windows import TRAIN_STRIDE_SECONDS, WINDOW_SECONDS, end_is_on_stride
 

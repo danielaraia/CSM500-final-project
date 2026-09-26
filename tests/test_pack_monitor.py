@@ -13,7 +13,7 @@ from packs.pack_monitor import (
     monitor_clock_from_train_hop10,
     rewrite_monitor_eval,
 )
-from pearson import N_NODES
+from graphs.pearson import N_NODES
 from data.windows import WINDOW_SECONDS
 
 

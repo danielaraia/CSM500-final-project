@@ -6,7 +6,7 @@ import time
 from catch_coverage import catch_coverage_from_folder
 from core.config import LOCKED
 from metrics import write_metrics
-from mi import build_mi_graph
+from graphs.mi import build_mi_graph
 from run import write_split_run
 
 PATIENT_ID = "sub-113"

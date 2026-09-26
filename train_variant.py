@@ -6,7 +6,7 @@ import traceback
 
 import torch
 
-from attention import load_attention_evobrain
+from graphs.attention import load_attention_evobrain
 from data.augment import make_augment_fn
 from core.config import ALLOWED_SOP_MINUTES, LOCKED
 from epoch_trace import install_logged_train_loop

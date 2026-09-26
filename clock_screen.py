@@ -14,7 +14,7 @@ from data.labels import (
     seizures_with_full_sop,
     split_cut_times,
 )
-from pearson import MOVEMENT_BUFFER_SECONDS
+from graphs.pearson import MOVEMENT_BUFFER_SECONDS
 from score_alarms import recording_duration_seconds
 from data.windows import WINDOW_SECONDS, window_end_times
 

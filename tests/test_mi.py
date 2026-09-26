@@ -1,13 +1,13 @@
 import numpy as np
 import pytest
 
-from mi import (
+from graphs.mi import (
     MI_NEIGHBORS,
     MI_RANDOM_STATE,
     build_mi_graph,
     mutual_information,
 )
-from pearson import (
+from graphs.pearson import (
     ELECTRICAL_SAMPLES_1S,
     ELECTRICAL_SAMPLES_4S,
     MOVEMENT_SAMPLES_4S,

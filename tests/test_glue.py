@@ -11,7 +11,7 @@ from glue import (
     split_labelled_windows,
 )
 from data.labels import LABEL_INTERICTAL, LABEL_SOP, LABEL_UNUSED, label_second
-from pearson import N_NODES
+from graphs.pearson import N_NODES
 from data.windows import EVAL_STRIDE_SECONDS, TRAIN_STRIDE_SECONDS, WINDOW_SECONDS
 
 

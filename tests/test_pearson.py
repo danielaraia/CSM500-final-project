@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from pearson import (
+from graphs.pearson import (
     ELECTRICAL_SAMPLES_1S,
     ELECTRICAL_SAMPLES_4S,
     MOVEMENT_SAMPLES_4S,

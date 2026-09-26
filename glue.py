@@ -4,7 +4,7 @@ from data.features import log_amplitude_fft
 from data.filters import filter_ecg, filter_eeg, filter_emg, filter_movement_axis
 from data.labels import LABEL_UNUSED, SOP_SECONDS, label_second, monitoring_indices
 from data.movement import axis_magnitude, upsample_movement_to_256
-from pearson import (
+from graphs.pearson import (
     ELECTRICAL_SAMPLES_1S,
     MOVEMENT_BUFFER_SECONDS,
     MOVEMENT_SAMPLES_4S,

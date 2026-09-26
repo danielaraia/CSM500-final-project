@@ -7,7 +7,7 @@ import traceback
 import torch
 
 from alarms import save_window_scores
-from attention import load_attention_evobrain, prepare_attention_folder
+from graphs.attention import load_attention_evobrain, prepare_attention_folder
 from core.config import ALLOWED_SOP_MINUTES, LOCKED, run_folder_path
 from epoch_trace import install_logged_train_loop
 from evobrain_load import load_evobrain

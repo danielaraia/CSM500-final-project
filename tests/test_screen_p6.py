@@ -3,7 +3,7 @@ import os
 import random
 import tempfile
 
-from pearson import MOVEMENT_BUFFER_SECONDS
+from graphs.pearson import MOVEMENT_BUFFER_SECONDS
 from data.spans import second_hits_a_span
 from data.windows import WINDOW_SECONDS, window_end_times
 
