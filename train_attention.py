@@ -6,7 +6,7 @@ import torch
 
 from alarms import save_window_scores
 from attention import load_attention_evobrain, prepare_attention_folder
-from config import LOCKED, run_folder_path
+from core.config import LOCKED, run_folder_path
 from epoch_trace import install_logged_train_loop
 from metrics import read_metrics, replace_metrics_keys
 from pack import load_split

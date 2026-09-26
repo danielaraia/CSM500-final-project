@@ -1,7 +1,7 @@
 import json
 import os
 
-from config import run_folder_path
+from core.config import run_folder_path
 from metrics import read_metrics
 
 # same list of runs as train_sop. it is written out again here so this file

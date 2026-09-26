@@ -40,7 +40,7 @@ from calibrate_rules import (
     smooth_scores,
     vote_alarm_probability,
 )
-from config import write_config
+from core.config import write_config
 from fast_score import fast_alarms, prepare_scorer, score_part_fast, vote_supremum
 from labels import SOP_SECONDS, label_second, LABEL_INTERICTAL
 from report_calibrate import fa_ok, parse_args, rule_summaries

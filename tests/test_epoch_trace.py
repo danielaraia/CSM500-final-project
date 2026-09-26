@@ -6,7 +6,7 @@ import tempfile
 
 import torch
 
-from config import start_run
+from core.config import start_run
 from epoch_trace import (
     class_counts,
     install_logged_train_loop,

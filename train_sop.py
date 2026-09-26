@@ -8,7 +8,7 @@ import torch
 
 from alarms import save_window_scores
 from attention import load_attention_evobrain, prepare_attention_folder
-from config import ALLOWED_SOP_MINUTES, LOCKED, run_folder_path
+from core.config import ALLOWED_SOP_MINUTES, LOCKED, run_folder_path
 from epoch_trace import install_logged_train_loop
 from evobrain_load import load_evobrain
 from metrics import read_metrics, replace_metrics_keys

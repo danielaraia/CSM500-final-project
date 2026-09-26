@@ -13,7 +13,7 @@ from events import load_event_rows, seizure_spans
 from fast_score import prepare_scorer, score_part_fast, vote_supremum
 from labels import SPH_SECONDS, seizures_with_full_sop
 from metrics import read_metrics
-from config import read_config
+from core.config import read_config
 from score_alarms import recording_duration_seconds
 
 

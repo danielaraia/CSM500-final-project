@@ -4,7 +4,7 @@ import tempfile
 
 import pytest
 
-from config import LOCKED, read_config, run_folder_path, start_run, write_config
+from core.config import LOCKED, read_config, run_folder_path, start_run, write_config
 
 
 def test_locked_learning_rate_is_not_the_code_default():

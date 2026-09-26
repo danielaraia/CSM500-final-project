@@ -1,6 +1,6 @@
 import pytest
 
-from recipe import (
+from core.recipe import (
     DEFAULT_RECIPE,
     is_default,
     normalize_recipe,

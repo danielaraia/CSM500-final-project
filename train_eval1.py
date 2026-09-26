@@ -4,7 +4,7 @@ import time
 
 import torch
 
-from config import LOCKED
+from core.config import LOCKED
 from evobrain_load import load_evobrain
 from run import train_packed_eval_run
 from time_cuda import make_batch

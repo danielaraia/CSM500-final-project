@@ -4,7 +4,7 @@ import os
 
 import torch
 
-from config import LOCKED
+from core.config import LOCKED
 from train_loop import (
     _as_tensors,
     _load_checkpoint,

@@ -5,7 +5,7 @@ import tempfile
 import pytest
 import torch
 
-from config import LOCKED, start_run
+from core.config import LOCKED, start_run
 from metrics import read_metrics, write_metrics
 from pack import save_split
 from pretrain import (

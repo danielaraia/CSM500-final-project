@@ -2,9 +2,9 @@ import os
 import shutil
 
 from attention import _link_or_copy
-from config import start_run
+from core.config import start_run
 from metrics import read_metrics, write_metrics
-from recipe import recipe_extra
+from core.recipe import recipe_extra
 
 SPLIT_NAMES = ("train", "monitor", "val", "test")
 # pack side keys worth keeping in the variant folder; train side keys never

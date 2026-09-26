@@ -4,7 +4,7 @@ import tempfile
 import numpy as np
 import pytest
 
-from channels import (
+from core.channels import (
     CHEST_ACC_LABELS,
     CHEST_GYR_LABELS,
     NECK_ACC_LABELS,

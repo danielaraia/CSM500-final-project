@@ -1,6 +1,6 @@
 import pytest
 
-from channels import pick_eeg_pair, pick_run_channels
+from core.channels import pick_eeg_pair, pick_run_channels
 
 
 def test_picks_left_and_right_when_all_three_eeg_are_there():

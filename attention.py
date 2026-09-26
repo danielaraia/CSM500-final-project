@@ -5,7 +5,7 @@ import sys
 import torch
 import torch.nn as nn
 
-from config import LOCKED, start_run
+from core.config import LOCKED, start_run
 from evobrain_load import evobrain_clone_path, load_evobrain
 from metrics import read_metrics, write_metrics
 
@@ -122,7 +122,7 @@ def _graph_learner_class():
     clone = evobrain_clone_path()
     if clone not in sys.path:
         sys.path.insert(0, clone)
-    from model.graph_learner import GraphLearner
+    from EvoBrain.model.graph_learner import GraphLearner
 
     return GraphLearner
 

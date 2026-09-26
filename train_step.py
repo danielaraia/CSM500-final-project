@@ -1,7 +1,7 @@
 import torch
 from torch.nn import BCEWithLogitsLoss
 
-from config import LOCKED
+from core.config import LOCKED
 
 MAX_GRAD_NORM = 5.0
 

@@ -4,7 +4,7 @@ import time
 
 import torch
 
-from config import LOCKED
+from core.config import LOCKED
 from metrics import load_gate_metrics
 from evobrain_load import load_evobrain
 from run import timed_patient_run

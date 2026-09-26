@@ -5,7 +5,7 @@ import os
 import subprocess
 import sys
 
-from config import run_folder_path
+from core.config import run_folder_path
 from metrics import read_metrics
 from pack_eval import seizeit2_run_paths
 from pack_p6 import (

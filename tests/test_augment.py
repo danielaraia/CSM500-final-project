@@ -4,7 +4,7 @@ import pytest
 import torch
 
 from augment import JITTER_SIGMA, SCALE_HIGH, SCALE_LOW, jitter_scale, make_augment_fn
-from config import LOCKED
+from core.config import LOCKED
 from tiny_model import TinyLogits
 from train_loop import train_until_stop
 from train_step import make_optimizer

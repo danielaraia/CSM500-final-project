@@ -5,7 +5,7 @@ import time
 import torch
 
 from alarms import save_window_scores
-from config import LOCKED
+from core.config import LOCKED
 from epoch_trace import install_logged_train_loop
 from evobrain_load import load_evobrain
 from metrics import read_metrics, replace_metrics_keys

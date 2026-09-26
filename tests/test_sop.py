@@ -12,7 +12,7 @@ from alarms import (
     vote_need,
 )
 from catch_coverage import catch_coverage_from_ends
-from config import read_config, run_folder_path, start_run, write_config
+from core.config import read_config, run_folder_path, start_run, write_config
 from labels import (
     LABEL_INTERICTAL,
     LABEL_SOP,

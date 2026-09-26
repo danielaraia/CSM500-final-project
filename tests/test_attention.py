@@ -15,7 +15,7 @@ from attention import (
     make_graph_learner,
     prepare_attention_folder,
 )
-from config import LOCKED, read_config, run_folder_path, start_run
+from core.config import LOCKED, read_config, run_folder_path, start_run
 from pack import save_split
 
 

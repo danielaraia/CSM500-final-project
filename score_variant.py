@@ -3,7 +3,7 @@ import os
 import sys
 from datetime import datetime, timezone
 
-from config import read_config, run_folder_path
+from core.config import read_config, run_folder_path
 from metrics import merge_alarm_metrics, read_metrics
 from pack_eval import seizeit2_run_paths
 from score_alarms import alarm_metrics_from_folder

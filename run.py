@@ -5,7 +5,7 @@ import time
 import torch
 
 from alarms import save_window_scores
-from config import LOCKED, read_config, start_run
+from core.config import LOCKED, read_config, start_run
 from edf import edf_gap_spans, load_run
 from events import impd_spans, load_event_rows, seizure_spans
 from glue import (

@@ -3,7 +3,7 @@ import os
 import numpy as np
 import torch
 
-from config import LOCKED, run_folder_path
+from core.config import LOCKED, run_folder_path
 from pack import load_split
 from pos_weight import weight_from_class_numbers
 from train_loop import train_until_stop

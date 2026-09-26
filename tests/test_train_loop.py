@@ -7,7 +7,7 @@ import time
 import pytest
 import torch
 
-from config import start_run
+from core.config import start_run
 from metrics import read_metrics, write_metrics
 from pack import save_split
 from run import train_packed_eval_run, train_packed_run, train_score_and_write_metrics

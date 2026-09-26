@@ -4,7 +4,7 @@ import time
 
 import torch
 
-from config import LOCKED
+from core.config import LOCKED
 from evobrain_load import load_evobrain
 from train_step import make_optimizer, one_train_step
 

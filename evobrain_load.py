@@ -2,7 +2,7 @@ import os
 import sys
 from types import SimpleNamespace
 
-from config import LOCKED
+from core.config import LOCKED
 
 # EvoBrain clone, MIT licence, https://github.com/Kotoge/EvoBrain
 
@@ -37,7 +37,7 @@ def load_evobrain(device="cpu"):
     clone = evobrain_clone_path()
     if clone not in sys.path:
         sys.path.insert(0, clone)
-    from model.EvoBrain import EvoBrain_classification
+    from EvoBrain.model.EvoBrain import EvoBrain_classification
 
     args = locked_model_args()
     model = EvoBrain_classification(

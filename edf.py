@@ -3,7 +3,7 @@ import os
 import mne
 import numpy as np
 
-from channels import pick_run_channels
+from core.channels import pick_run_channels
 from filters import EEG_SAMPLE_RATE, MOVEMENT_SAMPLE_RATE
 from spans import gap_spans_from_record_onsets
 

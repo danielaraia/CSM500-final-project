@@ -3,7 +3,7 @@ import os
 import torch
 from torch.nn import BCEWithLogitsLoss
 
-from config import LOCKED
+from core.config import LOCKED
 from metrics import write_metrics
 from pos_weight import weight_from_class_numbers
 from train_step import model_logits, one_train_step

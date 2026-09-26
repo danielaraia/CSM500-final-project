@@ -1,6 +1,6 @@
 import torch
 
-from config import LOCKED
+from core.config import LOCKED
 
 # train slice only: small gaussian jitter plus a per window amplitude scale.
 # the main config has data_augment False and the evobrain augment flag only reaches their dataloader, which this pipeline never uses, so these live here
