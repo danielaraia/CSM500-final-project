@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from quality import EEG_RMS_MAX, EEG_RMS_MIN, electrical_rail_reason, is_flat, root_mean_square, second_drop_reason, second_is_bad
+from data.quality import EEG_RMS_MAX, EEG_RMS_MIN, electrical_rail_reason, is_flat, root_mean_square, second_drop_reason, second_is_bad
 
 
 def _ok_wave(scale):

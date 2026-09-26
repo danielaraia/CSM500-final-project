@@ -1,6 +1,6 @@
 import pytest
 
-from labels import LABEL_INTERICTAL, LABEL_SOP, LABEL_UNUSED
+from data.labels import LABEL_INTERICTAL, LABEL_SOP, LABEL_UNUSED
 from pos_weight import (
     positive_class_weight,
     weight_from_class_numbers,

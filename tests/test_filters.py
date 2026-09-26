@@ -1,6 +1,6 @@
 import numpy as np
 
-from filters import EEG_SAMPLE_RATE, NOTCH_HZ, filter_ecg, filter_eeg, filter_emg, filter_movement_axis
+from data.filters import EEG_SAMPLE_RATE, NOTCH_HZ, filter_ecg, filter_eeg, filter_emg, filter_movement_axis
 
 
 def test_eeg_keeps_ten_hz_and_cuts_dc():

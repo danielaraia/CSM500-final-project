@@ -1,4 +1,4 @@
-from labels import LABEL_INTERICTAL, LABEL_SOP
+from data.labels import LABEL_INTERICTAL, LABEL_SOP
 
 
 def positive_class_weight(n_negative, n_positive):

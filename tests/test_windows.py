@@ -1,4 +1,4 @@
-from windows import (
+from data.windows import (
     EVAL_STRIDE_SECONDS,
     TRAIN_STRIDE_SECONDS,
     WINDOW_SECONDS,

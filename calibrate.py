@@ -9,9 +9,9 @@ from alarms import (
     silent_seconds,
     test_leads_from_seizures,
 )
-from events import load_event_rows, seizure_spans
+from data.events import load_event_rows, seizure_spans
 from fast_score import prepare_scorer, score_part_fast, vote_supremum
-from labels import SPH_SECONDS, seizures_with_full_sop
+from data.labels import SPH_SECONDS, seizures_with_full_sop
 from metrics import read_metrics
 from core.config import read_config
 from score_alarms import recording_duration_seconds

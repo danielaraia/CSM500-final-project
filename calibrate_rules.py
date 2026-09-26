@@ -8,7 +8,7 @@ from calibrate import (
     scorer_for,
 )
 from fast_score import vote_supremum
-from labels import LABEL_INTERICTAL, label_second
+from data.labels import LABEL_INTERICTAL, label_second
 
 SAFETY_FP_MAX_PER_HOUR = 0.05
 HYSTERESIS_LOW_FP_MAX_PER_HOUR = 1.5

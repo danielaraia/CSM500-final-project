@@ -10,7 +10,7 @@ from core.channels import (
     NECK_ACC_LABELS,
     NECK_GYR_LABELS,
 )
-from edf import edf_gap_spans, edf_record_onsets, load_edf, load_run
+from data.edf import edf_gap_spans, edf_record_onsets, load_edf, load_run
 
 
 def test_missing_file_fails():

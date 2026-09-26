@@ -7,7 +7,7 @@ from core.config import read_config, run_folder_path
 from metrics import merge_alarm_metrics, read_metrics
 from pack_eval import seizeit2_run_paths
 from score_alarms import alarm_metrics_from_folder
-from sensor_mask import SENSOR_TIERS
+from data.sensor_mask import SENSOR_TIERS
 
 USAGE = (
     "usage: python score_variant.py patient_id graph_strategy sop_minutes run_leaf "

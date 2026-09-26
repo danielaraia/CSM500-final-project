@@ -6,8 +6,8 @@ import torch
 
 from alarms import save_window_scores
 from core.config import LOCKED, read_config, start_run
-from edf import edf_gap_spans, load_run
-from events import impd_spans, load_event_rows, seizure_spans
+from data.edf import edf_gap_spans, load_run
+from data.events import impd_spans, load_event_rows, seizure_spans
 from glue import (
     build_windows,
     cut_monitoring_slice,
@@ -15,7 +15,7 @@ from glue import (
     split_labelled_windows,
 )
 from pack_monitor import cut_monitoring_slice_at_clock, monitor_clock_from_train_hop10
-from labels import (
+from data.labels import (
     LABEL_INTERICTAL,
     LABEL_SOP,
     SOP_SECONDS,
@@ -23,11 +23,11 @@ from labels import (
     split_cut_times,
 )
 from metrics import merge_metrics, read_metrics, replace_metrics_keys, write_metrics
-from normalize import apply_node_zscore, node_mean_and_std
+from data.normalize import apply_node_zscore, node_mean_and_std
 from pack import load_split, save_named_labels
 from pos_weight import weight_from_class_numbers
 from train_loop import score_windows, train_and_write_metrics, train_until_stop
-from windows import EVAL_STRIDE_SECONDS, TRAIN_STRIDE_SECONDS
+from data.windows import EVAL_STRIDE_SECONDS, TRAIN_STRIDE_SECONDS
 
 
 def labelled_windows_from_files(

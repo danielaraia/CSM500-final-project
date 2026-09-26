@@ -5,7 +5,7 @@ import tempfile
 import pytest
 import torch
 
-from augment import make_augment_fn
+from data.augment import make_augment_fn
 from core.config import read_config, start_run
 from focal_loss import make_loss_fn
 from metrics import read_metrics, write_metrics

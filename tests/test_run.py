@@ -13,7 +13,7 @@ from core.channels import (
     NECK_ACC_LABELS,
     NECK_GYR_LABELS,
 )
-from labels import LABEL_INTERICTAL, LABEL_SOP
+from data.labels import LABEL_INTERICTAL, LABEL_SOP
 from pack import load_split
 from run import (
     labelled_windows_from_files,

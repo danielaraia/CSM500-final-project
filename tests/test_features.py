@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from features import LOG_EPSILON, N_FFT_BINS, SAMPLES_1S, log_amplitude_fft
+from data.features import LOG_EPSILON, N_FFT_BINS, SAMPLES_1S, log_amplitude_fft
 
 
 def test_ten_hz_sine_peaks_at_the_bin_we_expect():

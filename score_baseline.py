@@ -11,7 +11,7 @@ from alarms import (
     study_criterion_met,
     test_leads_from_seizures,
 )
-from events import load_event_rows, seizure_spans
+from data.events import load_event_rows, seizure_spans
 from logit_overlap import overlap_row, still_overlap
 from metrics import read_metrics
 from pos_weight import weight_from_class_numbers

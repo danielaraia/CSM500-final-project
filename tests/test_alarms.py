@@ -21,7 +21,7 @@ from alarms import (
     study_criterion_met,
     vote_need,
 )
-from labels import SOP_SECONDS, SPH_SECONDS
+from data.labels import SOP_SECONDS, SPH_SECONDS
 
 
 def test_sop30_vote_is_240_of_300():

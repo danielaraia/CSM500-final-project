@@ -14,12 +14,12 @@ from constant_check import (
     state_dicts_max_abs_diff,
     tiny_batch_learning,
 )
-from events import load_event_rows, seizure_spans
-from labels import seizures_with_full_sop
+from data.events import load_event_rows, seizure_spans
+from data.labels import seizures_with_full_sop
 from metrics import read_metrics
 from pos_weight import weight_from_class_numbers
 from score_alarms import KNOWN_EVENTS
-from windows import TRAIN_STRIDE_SECONDS, end_is_on_stride
+from data.windows import TRAIN_STRIDE_SECONDS, end_is_on_stride
 
 
 PACKED_FOLDERS = (

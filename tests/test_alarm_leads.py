@@ -5,7 +5,7 @@ from alarm_leads import (
     mark_caught_leads,
     mark_evaluable_at_second,
 )
-from labels import SOP_SECONDS, SPH_SECONDS
+from data.labels import SOP_SECONDS, SPH_SECONDS
 
 
 def test_blank_lead_flags_start_false():

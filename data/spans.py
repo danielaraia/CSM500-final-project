@@ -36,7 +36,7 @@ def gap_spans_from_record_onsets(onsets, record_duration):
             raise ValueError(
                 f"edf records overlap, we got start {start} then {nxt}"
             )
-        # r14: a jump bigger than one data record is a silent gap
+        # a jump bigger than one data record is a silent gap
         if jump > record_duration:
             spans.append((start + record_duration, nxt))
         index += 1

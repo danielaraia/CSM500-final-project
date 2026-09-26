@@ -4,8 +4,8 @@ import random
 import tempfile
 
 from pearson import MOVEMENT_BUFFER_SECONDS
-from spans import second_hits_a_span
-from windows import WINDOW_SECONDS, window_end_times
+from data.spans import second_hits_a_span
+from data.windows import WINDOW_SECONDS, window_end_times
 
 from screen_p6 import (
     COHORT_CAP,

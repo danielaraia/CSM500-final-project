@@ -3,7 +3,7 @@ import tempfile
 
 import pytest
 
-from events import impd_spans, load_event_rows, seizure_spans, unique_event_types
+from data.events import impd_spans, load_event_rows, seizure_spans, unique_event_types
 
 
 def test_seizure_and_impd_from_a_tiny_tsv():

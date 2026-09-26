@@ -1,6 +1,6 @@
-from augment import AUGMENT_NAMES
+from data.augment import AUGMENT_NAMES
 from focal_loss import LOSS_NAMES
-from sensor_mask import SENSOR_TIERS
+from data.sensor_mask import SENSOR_TIERS
 
 PRETRAIN_NAMES = ("none", "cross_patient")
 DEFAULT_RECIPE = {

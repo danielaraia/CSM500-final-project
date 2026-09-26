@@ -42,7 +42,7 @@ from calibrate_rules import (
 )
 from core.config import write_config
 from fast_score import fast_alarms, prepare_scorer, score_part_fast, vote_supremum
-from labels import SOP_SECONDS, label_second, LABEL_INTERICTAL
+from data.labels import SOP_SECONDS, label_second, LABEL_INTERICTAL
 from report_calibrate import fa_ok, parse_args, rule_summaries
 
 SOP_15 = 15 * 60

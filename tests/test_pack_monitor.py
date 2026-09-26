@@ -5,8 +5,8 @@ import tempfile
 import numpy as np
 import pytest
 
-from features import N_FFT_BINS
-from labels import LABEL_INTERICTAL, LABEL_SOP
+from data.features import N_FFT_BINS
+from data.labels import LABEL_INTERICTAL, LABEL_SOP
 from pack import save_split
 from pack_monitor import (
     cut_monitoring_slice_at_clock,
@@ -14,7 +14,7 @@ from pack_monitor import (
     rewrite_monitor_eval,
 )
 from pearson import N_NODES
-from windows import WINDOW_SECONDS
+from data.windows import WINDOW_SECONDS
 
 
 def test_monitor_clock_cut_uses_hop_ten_quarter():

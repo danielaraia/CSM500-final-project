@@ -9,7 +9,7 @@ from alarms import (
     silent_seconds,
     vote_need,
 )
-from labels import INTERICTAL_GAP_SECONDS, SPH_SECONDS
+from data.labels import INTERICTAL_GAP_SECONDS, SPH_SECONDS
 
 SECONDS_PER_HOUR = 3600.0
 

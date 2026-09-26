@@ -5,7 +5,7 @@ import time
 from metrics import read_metrics
 from pack import load_split
 from pack_monitor import rewrite_monitor_eval
-from windows import end_is_on_stride, TRAIN_STRIDE_SECONDS
+from data.windows import end_is_on_stride, TRAIN_STRIDE_SECONDS
 
 
 PACKED = (

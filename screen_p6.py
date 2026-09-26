@@ -10,9 +10,9 @@ import sys
 
 from alarms import HOURS_TO_RESOLVE_FP_MAX, test_leads_from_seizures
 from catch_coverage import catch_coverage_from_ends
-from events import impd_spans, load_event_rows, seizure_spans
+from data.events import impd_spans, load_event_rows, seizure_spans
 from glue import _keep_pack_ends
-from labels import (
+from data.labels import (
     LABEL_INTERICTAL,
     LABEL_SOP,
     label_second,
@@ -21,7 +21,7 @@ from labels import (
 )
 from pearson import steps_with_full_movement_buffer
 from score_alarms import recording_duration_seconds
-from windows import TRAIN_STRIDE_SECONDS, WINDOW_SECONDS, end_is_on_stride
+from data.windows import TRAIN_STRIDE_SECONDS, WINDOW_SECONDS, end_is_on_stride
 
 META_ROOT = os.path.join("data", "seizeit2-meta")
 OUT_NAME = "p6-screening-cohort.json"

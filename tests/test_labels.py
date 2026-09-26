@@ -1,6 +1,6 @@
 import pytest
 
-from labels import (
+from data.labels import (
     INTERICTAL_GAP_SECONDS,
     LABEL_INTERICTAL,
     LABEL_SOP,

@@ -15,8 +15,8 @@ from alarms import (
     test_leads_from_seizures,
     vote_need,
 )
-from events import load_event_rows, seizure_spans
-from labels import SOP_SECONDS, SPH_SECONDS
+from data.events import load_event_rows, seizure_spans
+from data.labels import SOP_SECONDS, SPH_SECONDS
 from metrics import merge_alarm_metrics, read_metrics
 from pack import load_split
 

@@ -1,6 +1,6 @@
 import numpy as np
 
-from labels import LABEL_INTERICTAL, LABEL_SOP
+from data.labels import LABEL_INTERICTAL, LABEL_SOP
 
 
 def save_split(path, features, adjacency, labels, ends=None):

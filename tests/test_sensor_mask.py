@@ -14,7 +14,7 @@ from pearson import N_NODES, pearson_correlation
 from core.recipe import normalize_recipe, recipe_extra, recipe_leaf
 from score_variant import parse_args as score_parse_args
 from score_variant import score_variant_folder
-from sensor_mask import (
+from data.sensor_mask import (
     NODE_NAMES,
     kept_nodes,
     make_sensor_mask_fn,

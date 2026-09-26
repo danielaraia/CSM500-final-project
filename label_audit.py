@@ -5,8 +5,8 @@ import json
 import math
 import os
 
-from events import load_event_rows, seizure_spans
-from labels import (
+from data.events import load_event_rows, seizure_spans
+from data.labels import (
     LABEL_SOP,
     SPH_SECONDS,
     label_second,

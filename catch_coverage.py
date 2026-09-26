@@ -9,8 +9,8 @@ from alarm_leads import (
     mark_evaluable_at_second,
 )
 from alarms import lookback_seconds, test_leads_from_seizures, vote_need
-from events import load_event_rows, seizure_spans
-from labels import SOP_SECONDS, SPH_SECONDS
+from data.events import load_event_rows, seizure_spans
+from data.labels import SOP_SECONDS, SPH_SECONDS
 from score_alarms import recording_duration_seconds
 
 

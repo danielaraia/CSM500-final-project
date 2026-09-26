@@ -19,7 +19,7 @@ from calibrate import (
     selection_part,
 )
 from calibrate_rules import RULES
-from labels import SPH_SECONDS
+from data.labels import SPH_SECONDS
 
 SUMMARY_NAME = "p5-calibration-summary.json"
 

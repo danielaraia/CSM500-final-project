@@ -4,8 +4,8 @@ import mne
 import numpy as np
 
 from core.channels import pick_run_channels
-from filters import EEG_SAMPLE_RATE, MOVEMENT_SAMPLE_RATE
-from spans import gap_spans_from_record_onsets
+from data.filters import EEG_SAMPLE_RATE, MOVEMENT_SAMPLE_RATE
+from data.spans import gap_spans_from_record_onsets
 
 # mne get_data is volts. quality.py rms is microvolts
 VOLTS_TO_UV = 1e6

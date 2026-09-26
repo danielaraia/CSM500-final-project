@@ -13,7 +13,7 @@ from alarms import (
 )
 from catch_coverage import catch_coverage_from_ends
 from core.config import read_config, run_folder_path, start_run, write_config
-from labels import (
+from data.labels import (
     LABEL_INTERICTAL,
     LABEL_SOP,
     LABEL_UNUSED,

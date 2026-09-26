@@ -1,6 +1,6 @@
 from alarm_leads import hit_interval
 from catch_coverage import catch_coverage_from_ends
-from labels import SOP_SECONDS, SPH_SECONDS
+from data.labels import SOP_SECONDS, SPH_SECONDS
 
 
 def test_dense_sop_lookback_is_evaluable():

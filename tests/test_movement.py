@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from movement import axis_magnitude, upsample_movement_to_256
+from data.movement import axis_magnitude, upsample_movement_to_256
 
 
 def test_magnitude_is_the_3_4_5_triangle():

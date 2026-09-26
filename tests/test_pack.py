@@ -4,7 +4,7 @@ import tempfile
 import numpy as np
 import pytest
 
-from labels import LABEL_INTERICTAL, LABEL_SOP, LABEL_UNUSED
+from data.labels import LABEL_INTERICTAL, LABEL_SOP, LABEL_UNUSED
 from pack import label_to_class_number, load_split, save_named_labels, save_split
 
 

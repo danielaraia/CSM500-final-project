@@ -1,6 +1,6 @@
 import pytest
 
-from spans import gap_spans_from_record_onsets, second_hits_a_span, spans_overlap
+from data.spans import gap_spans_from_record_onsets, second_hits_a_span, spans_overlap
 
 
 def test_overlap_and_just_touching():

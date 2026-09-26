@@ -7,7 +7,7 @@ import traceback
 import torch
 
 from attention import load_attention_evobrain
-from augment import make_augment_fn
+from data.augment import make_augment_fn
 from core.config import ALLOWED_SOP_MINUTES, LOCKED
 from epoch_trace import install_logged_train_loop
 from evobrain_load import load_evobrain
@@ -16,7 +16,7 @@ from metrics import read_metrics, replace_metrics_keys
 from pretrain import pretrain_model
 from core.recipe import normalize_recipe, recipe_extra, recipe_leaf
 from run import train_packed_eval_run
-from sensor_mask import make_sensor_mask_fn
+from data.sensor_mask import make_sensor_mask_fn
 from time_cuda import make_batch
 from train_sop import _epoch_keys, _ready_folder, _save_train_scores
 from train_step import make_optimizer, one_train_step

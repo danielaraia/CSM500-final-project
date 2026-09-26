@@ -1,9 +1,9 @@
 import numpy as np
 
-from features import log_amplitude_fft
-from filters import filter_ecg, filter_eeg, filter_emg, filter_movement_axis
-from labels import LABEL_UNUSED, SOP_SECONDS, label_second, monitoring_indices
-from movement import axis_magnitude, upsample_movement_to_256
+from data.features import log_amplitude_fft
+from data.filters import filter_ecg, filter_eeg, filter_emg, filter_movement_axis
+from data.labels import LABEL_UNUSED, SOP_SECONDS, label_second, monitoring_indices
+from data.movement import axis_magnitude, upsample_movement_to_256
 from pearson import (
     ELECTRICAL_SAMPLES_1S,
     MOVEMENT_BUFFER_SECONDS,
@@ -15,9 +15,9 @@ from pearson import (
     count_short_buffer_drops,
     steps_with_full_movement_buffer,
 )
-from quality import electrical_rail_reason, need_four_rails, second_drop_reason
-from spans import second_hits_a_span
-from windows import (
+from data.quality import electrical_rail_reason, need_four_rails, second_drop_reason
+from data.spans import second_hits_a_span
+from data.windows import (
     EVAL_STRIDE_SECONDS,
     TRAIN_STRIDE_SECONDS,
     WINDOW_SECONDS,

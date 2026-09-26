@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from normalize import apply_node_zscore, node_mean_and_std
+from data.normalize import apply_node_zscore, node_mean_and_std
 
 
 def test_constant_node_fails():

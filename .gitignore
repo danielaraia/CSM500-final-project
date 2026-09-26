@@ -2,7 +2,8 @@
 __pycache__/
 *.pyc
 .DS_Store
-data/
+data/seizeit2/
+data/seizeit2-meta/
 *.edf
 *.pt
 *.pth

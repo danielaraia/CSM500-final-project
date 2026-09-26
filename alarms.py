@@ -10,7 +10,7 @@ from alarm_leads import (
     mark_caught_leads,
     mark_evaluable_at_second,
 )
-from labels import (
+from data.labels import (
     LABEL_INTERICTAL,
     SOP_SECONDS,
     SPH_SECONDS,

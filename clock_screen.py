@@ -5,9 +5,9 @@ import sys
 
 from alarms import test_leads_from_seizures
 from catch_coverage import catch_coverage_from_ends
-from events import impd_spans, load_event_rows, seizure_spans
+from data.events import impd_spans, load_event_rows, seizure_spans
 from glue import _keep_pack_ends
-from labels import (
+from data.labels import (
     LABEL_INTERICTAL,
     LABEL_SOP,
     label_second,
@@ -16,7 +16,7 @@ from labels import (
 )
 from pearson import MOVEMENT_BUFFER_SECONDS
 from score_alarms import recording_duration_seconds
-from windows import WINDOW_SECONDS, window_end_times
+from data.windows import WINDOW_SECONDS, window_end_times
 
 META_ROOT = os.path.join("data", "seizeit2-meta")
 BYTES_PER_WINDOW = WINDOW_SECONDS * 8 * 128 * 8 + WINDOW_SECONDS * 8 * 8 * 8

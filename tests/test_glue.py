@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from features import N_FFT_BINS
+from data.features import N_FFT_BINS
 from glue import (
     SECONDS_NEEDED,
     build_one_window,
@@ -10,9 +10,9 @@ from glue import (
     keep_labelled_windows,
     split_labelled_windows,
 )
-from labels import LABEL_INTERICTAL, LABEL_SOP, LABEL_UNUSED, label_second
+from data.labels import LABEL_INTERICTAL, LABEL_SOP, LABEL_UNUSED, label_second
 from pearson import N_NODES
-from windows import EVAL_STRIDE_SECONDS, TRAIN_STRIDE_SECONDS, WINDOW_SECONDS
+from data.windows import EVAL_STRIDE_SECONDS, TRAIN_STRIDE_SECONDS, WINDOW_SECONDS
 
 
 WIDE_RAILS = [

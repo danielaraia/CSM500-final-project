@@ -2,11 +2,11 @@ import numpy as np
 import torch
 from torch.nn import BCEWithLogitsLoss
 
-from labels import label_second
+from data.labels import label_second
 from pack import label_to_class_number
 from tiny_model import TinyLogits
 from train_step import make_optimizer, model_logits, one_train_step
-from windows import WINDOW_SECONDS
+from data.windows import WINDOW_SECONDS
 
 DEAD_GRAPH_MAX_DIFF = 1e-12
 

@@ -1,4 +1,4 @@
-from labels import SOP_SECONDS, SPH_SECONDS
+from data.labels import SOP_SECONDS, SPH_SECONDS
 
 
 def hit_interval(onset, sph_seconds=SPH_SECONDS, sop_seconds=SOP_SECONDS):
