@@ -20,9 +20,9 @@ from data.sensor_mask import (
     make_sensor_mask_fn,
     mask_features,
 )
-from tiny_model import TinyLogits
-from train_loop import score_windows
-from train_step import make_optimizer
+from model.tiny_model import TinyLogits
+from model.train_loop import score_windows
+from model.train_step import make_optimizer
 from train_variant import command_string, parse_args
 from run import train_packed_eval_run
 

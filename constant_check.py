@@ -4,8 +4,8 @@ from torch.nn import BCEWithLogitsLoss
 
 from data.labels import label_second
 from packs.pack import label_to_class_number
-from tiny_model import TinyLogits
-from train_step import make_optimizer, model_logits, one_train_step
+from model.tiny_model import TinyLogits
+from model.train_step import make_optimizer, model_logits, one_train_step
 from data.windows import WINDOW_SECONDS
 
 DEAD_GRAPH_MAX_DIFF = 1e-12

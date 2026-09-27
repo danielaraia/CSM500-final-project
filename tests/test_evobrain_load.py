@@ -1,6 +1,6 @@
 import pytest
 
-from evobrain_load import load_evobrain, locked_model_args
+from model.evobrain_load import load_evobrain, locked_model_args
 
 
 def test_locked_args_beat_evobrain_code_defaults():

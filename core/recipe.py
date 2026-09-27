@@ -1,5 +1,5 @@
 from data.augment import AUGMENT_NAMES
-from focal_loss import LOSS_NAMES
+from model.focal_loss import LOSS_NAMES
 from data.sensor_mask import SENSOR_TIERS
 
 PRETRAIN_NAMES = ("none", "cross_patient")

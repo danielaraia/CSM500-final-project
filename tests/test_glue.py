@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 
 from data.features import N_FFT_BINS
-from glue import (
+from model.glue import (
     SECONDS_NEEDED,
     build_one_window,
     build_windows,

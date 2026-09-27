@@ -3,7 +3,7 @@ import math
 import pytest
 import torch
 
-from train_step import make_optimizer, one_train_step
+from model.train_step import make_optimizer, one_train_step
 
 
 class _TinyLogits(torch.nn.Module):

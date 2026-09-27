@@ -15,8 +15,8 @@ from epoch_trace import (
 )
 from packs.pack import save_split
 from run import train_score_and_write_metrics
-from tiny_model import TinyLogits
-from train_step import make_optimizer
+from model.tiny_model import TinyLogits
+from model.train_step import make_optimizer
 
 
 def test_logit_zero_matches_the_old_monitor_check():

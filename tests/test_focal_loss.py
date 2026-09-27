@@ -4,9 +4,9 @@ import pytest
 import torch
 from torch.nn import BCEWithLogitsLoss
 
-from focal_loss import FOCAL_GAMMA, focal_loss_with_logits, make_loss_fn
-from tiny_model import TinyLogits
-from train_step import make_optimizer, one_train_step
+from model.focal_loss import FOCAL_GAMMA, focal_loss_with_logits, make_loss_fn
+from model.tiny_model import TinyLogits
+from model.train_step import make_optimizer, one_train_step
 
 
 def test_focal_matches_hand_computed_values():

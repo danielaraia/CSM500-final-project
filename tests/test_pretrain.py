@@ -8,14 +8,14 @@ import torch
 from core.config import LOCKED, start_run
 from metrics import read_metrics, write_metrics
 from packs.pack import save_split
-from pretrain import (
+from model.pretrain import (
     find_pretrain_folders,
     load_pretrain_weights,
     pool_splits,
     pretrain_model,
 )
 from run import train_packed_eval_run
-from tiny_model import TinyLogits
+from model.tiny_model import TinyLogits
 
 
 def test_pool_excludes_the_target_patient():

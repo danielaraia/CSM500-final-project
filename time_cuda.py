@@ -5,8 +5,8 @@ import time
 import torch
 
 from core.config import LOCKED
-from evobrain_load import load_evobrain
-from train_step import make_optimizer, one_train_step
+from model.evobrain_load import load_evobrain
+from model.train_step import make_optimizer, one_train_step
 
 
 def make_batch(batch_size, device):

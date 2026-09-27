@@ -5,8 +5,8 @@ from torch.nn import BCEWithLogitsLoss
 
 from core.config import LOCKED
 from metrics import write_metrics
-from pos_weight import weight_from_class_numbers
-from train_step import model_logits, one_train_step
+from model.pos_weight import weight_from_class_numbers
+from model.train_step import model_logits, one_train_step
 from data.windows import WINDOW_SECONDS
 
 

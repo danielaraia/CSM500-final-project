@@ -8,7 +8,7 @@ from alarms import save_window_scores
 from core.config import LOCKED, read_config, start_run
 from data.edf import edf_gap_spans, load_run
 from data.events import impd_spans, load_event_rows, seizure_spans
-from glue import (
+from model.glue import (
     build_windows,
     cut_monitoring_slice,
     keep_labelled_windows,
@@ -25,8 +25,8 @@ from data.labels import (
 from metrics import merge_metrics, read_metrics, replace_metrics_keys, write_metrics
 from data.normalize import apply_node_zscore, node_mean_and_std
 from packs.pack import load_split, save_named_labels
-from pos_weight import weight_from_class_numbers
-from train_loop import score_windows, train_and_write_metrics, train_until_stop
+from model.pos_weight import weight_from_class_numbers
+from model.train_loop import score_windows, train_and_write_metrics, train_until_stop
 from data.windows import EVAL_STRIDE_SECONDS, TRAIN_STRIDE_SECONDS
 
 

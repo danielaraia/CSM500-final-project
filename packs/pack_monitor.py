@@ -2,7 +2,7 @@ import os
 
 from data.edf import edf_gap_spans, load_run
 from data.events import impd_spans, load_event_rows, seizure_spans
-from glue import build_windows, keep_labelled_windows
+from model.glue import build_windows, keep_labelled_windows
 from data.labels import LABEL_INTERICTAL, LABEL_SOP
 from metrics import read_metrics, replace_metrics_keys
 from data.normalize import apply_node_zscore, node_mean_and_std

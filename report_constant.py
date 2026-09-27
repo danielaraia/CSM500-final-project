@@ -17,7 +17,7 @@ from constant_check import (
 from data.events import load_event_rows, seizure_spans
 from data.labels import seizures_with_full_sop
 from metrics import read_metrics
-from pos_weight import weight_from_class_numbers
+from model.pos_weight import weight_from_class_numbers
 from score_alarms import KNOWN_EVENTS
 from data.windows import TRAIN_STRIDE_SECONDS, end_is_on_stride
 

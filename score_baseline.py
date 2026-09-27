@@ -14,7 +14,7 @@ from alarms import (
 from data.events import load_event_rows, seizure_spans
 from logit_overlap import overlap_row, still_overlap
 from metrics import read_metrics
-from pos_weight import weight_from_class_numbers
+from model.pos_weight import weight_from_class_numbers
 from score_alarms import KNOWN_EVENTS, recording_duration_seconds
 from simple_baseline import (
     apply_zscore,

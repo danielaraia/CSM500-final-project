@@ -21,7 +21,7 @@ def locked_model_args():
 
 
 def evobrain_clone_path():
-    here = os.path.dirname(os.path.abspath(__file__))
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     path = os.path.join(here, "EvoBrain")
     if not os.path.isdir(path):
         raise ValueError("EvoBrain clone is missing, put it in seizure-tgnn/EvoBrain")

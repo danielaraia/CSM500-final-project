@@ -5,9 +5,9 @@ import torch
 
 from core.config import LOCKED, run_folder_path
 from packs.pack import load_split
-from pos_weight import weight_from_class_numbers
-from train_loop import train_until_stop
-from train_step import make_optimizer
+from model.pos_weight import weight_from_class_numbers
+from model.train_loop import train_until_stop
+from model.train_step import make_optimizer
 
 # pretraining only ever reads train and monitor packs. monitor is cut from the
 # train slice at pack time, so no patient val or test data is involved

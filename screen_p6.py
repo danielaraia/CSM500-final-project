@@ -11,7 +11,7 @@ import sys
 from alarms import HOURS_TO_RESOLVE_FP_MAX, test_leads_from_seizures
 from catch_coverage import catch_coverage_from_ends
 from data.events import impd_spans, load_event_rows, seizure_spans
-from glue import _keep_pack_ends
+from model.glue import _keep_pack_ends
 from data.labels import (
     LABEL_INTERICTAL,
     LABEL_SOP,

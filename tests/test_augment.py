@@ -5,9 +5,9 @@ import torch
 
 from data.augment import JITTER_SIGMA, SCALE_HIGH, SCALE_LOW, jitter_scale, make_augment_fn
 from core.config import LOCKED
-from tiny_model import TinyLogits
-from train_loop import train_until_stop
-from train_step import make_optimizer
+from model.tiny_model import TinyLogits
+from model.train_loop import train_until_stop
+from model.train_step import make_optimizer
 
 
 def test_jitter_scale_is_deterministic_under_seed():

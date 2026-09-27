@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 
 from core.config import LOCKED, start_run
-from evobrain_load import evobrain_clone_path, load_evobrain
+from model.evobrain_load import evobrain_clone_path, load_evobrain
 from metrics import read_metrics, write_metrics
 
 # GraphLearner is from the EvoBrain clone, MIT licence,

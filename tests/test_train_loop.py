@@ -11,9 +11,9 @@ from core.config import start_run
 from metrics import read_metrics, write_metrics
 from packs.pack import save_split
 from run import train_packed_eval_run, train_packed_run, train_score_and_write_metrics
-from tiny_model import TinyLogits
-from train_loop import monitor_bce, score_windows, train_and_write_metrics, train_until_stop
-from train_step import make_optimizer
+from model.tiny_model import TinyLogits
+from model.train_loop import monitor_bce, score_windows, train_and_write_metrics, train_until_stop
+from model.train_step import make_optimizer
 
 
 def test_score_windows_counts_and_does_not_train():
