@@ -66,7 +66,7 @@ def main():
     torch.cuda.synchronize()
     compile_seconds = time.perf_counter() - compile_start
 
-    here = os.path.dirname(os.path.abspath(__file__))
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     summary = {
         "command": "python train_sop.py",
         "compile_seconds": float(compile_seconds),

@@ -26,7 +26,7 @@ from data.labels import (
 from packs.pack_sop import parse_args as parse_pack_args
 from report_sop import grid_row, plain_table
 from score_sop import run_grid
-from train_sop import parse_args as parse_train_args
+from train.train_sop import parse_args as parse_train_args
 
 SOP_15 = 15 * 60
 SOP_5 = 5 * 60

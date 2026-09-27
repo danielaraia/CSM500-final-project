@@ -18,7 +18,7 @@ from core.recipe import normalize_recipe, recipe_extra, recipe_leaf
 from run import train_packed_eval_run
 from data.sensor_mask import make_sensor_mask_fn
 from time_cuda import make_batch
-from train_sop import _epoch_keys, _ready_folder, _save_train_scores
+from train.train_sop import _epoch_keys, _ready_folder, _save_train_scores
 from model.train_step import make_optimizer, one_train_step
 from packs.variant_pack import prepare_variant_folder
 
@@ -91,7 +91,7 @@ def main():
 
     install_logged_train_loop()
     device = "cuda"
-    here = os.path.dirname(os.path.abspath(__file__))
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     compile_start = time.perf_counter()
     warm = load_evobrain(device=device)
     warm = warm.to(device)

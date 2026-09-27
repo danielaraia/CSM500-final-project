@@ -14,7 +14,7 @@ from core.recipe import normalize_recipe, recipe_leaf
 from run import train_packed_eval_run
 from model.tiny_model import TinyLogits
 from model.train_step import make_optimizer
-from train_variant import command_string, parse_args
+from train.train_variant import command_string, parse_args
 from packs.variant_pack import prepare_variant_folder
 
 

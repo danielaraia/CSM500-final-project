@@ -17,8 +17,8 @@ from model.train_step import make_optimizer, one_train_step
 
 
 PACKED_FOLDERS = (
-    "experiments/runs/within_patient/sub-051/mi/sop30/seed123/eval1",
-    "experiments/runs/within_patient/sub-052/mi/sop30/seed123/eval1",
+    "experiments/runs/within_patient/sub-073/pearson/sop30/seed123/eval1",
+    "experiments/runs/within_patient/sub-039/pearson/sop30/seed123/eval1",
 )
 
 
@@ -39,9 +39,9 @@ def main():
     torch.cuda.synchronize()
     compile_seconds = time.perf_counter() - compile_start
 
-    here = os.path.dirname(os.path.abspath(__file__))
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     summary = {
-        "command": "python train_mi.py",
+        "command": "python train_073_039.py",
         "compile_seconds": float(compile_seconds),
         "gpu_name": torch.cuda.get_device_name(0),
         "gpu_memory_bytes": int(torch.cuda.get_device_properties(0).total_memory),
@@ -59,7 +59,7 @@ def main():
         extra = {
             "train_model": "evobrain",
             "train_torch_version": torch.__version__,
-            "command": "python train_mi.py",
+            "command": "python train_073_039.py",
             "seed": LOCKED["seed"],
             "dataset_accession": LOCKED["dataset_accession"],
             "dataset_version": LOCKED["dataset_version"],
@@ -69,7 +69,6 @@ def main():
             "mamba_ssm_version": mamba_ssm.__version__,
             "train_batch_size": LOCKED["train_batch_size"],
             "eval_batch_size": LOCKED["eval_batch_size"],
-            "graph_strategy": "mi",
         }
         _folder, metrics = train_packed_eval_run(
             folder,
@@ -96,13 +95,12 @@ def main():
             "n_test_windows_scored": metrics.get("n_test_windows_scored"),
             "n_validation_windows_scored": metrics.get("n_validation_windows_scored"),
             "pos_weight": metrics.get("pos_weight"),
-            "graph_strategy": metrics.get("graph_strategy"),
         }
         summary["patients"].append(row)
         print("folder", folder)
         print(json.dumps(row, indent=2))
     summary["wall_seconds"] = float(time.perf_counter() - wall_start)
-    out = os.path.join(here, "p2-mi-graph-gpu.json")
+    out = os.path.join(here, "p2-train-073-039-gpu.json")
     with open(out, "w") as handle:
         json.dump(summary, indent=2, fp=handle)
         handle.write("\n")

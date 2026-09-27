@@ -1,4 +1,4 @@
-from train_more_people import _patient_ids, packed_folder
+from train.train_more_people import _patient_ids, packed_folder
 
 
 def test_packed_folder_is_eval1_pearson():

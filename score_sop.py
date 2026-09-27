@@ -6,7 +6,7 @@ from core.config import read_config, run_folder_path
 from metrics import merge_alarm_metrics, read_metrics
 from packs.pack_eval import seizeit2_run_paths
 from score_alarms import alarm_metrics_from_folder
-from train_sop import GRAPH_STRATEGIES, NEW_SOP_MINUTES, PATIENTS
+from train.train_sop import GRAPH_STRATEGIES, NEW_SOP_MINUTES, PATIENTS
 
 SUMMARY_NAME = "p4-sop-scores-summary.json"
 

@@ -5,9 +5,9 @@ import time
 import torch
 
 from alarms import save_window_scores
-from core.config import LOCKED
+from graphs.attention import load_attention_evobrain, prepare_attention_folder
+from core.config import LOCKED, run_folder_path
 from epoch_trace import install_logged_train_loop
-from model.evobrain_load import load_evobrain
 from metrics import read_metrics, replace_metrics_keys
 from packs.pack import load_split
 from run import train_packed_eval_run
@@ -16,10 +16,7 @@ from model.train_loop import score_windows
 from model.train_step import make_optimizer, one_train_step
 
 
-PACKED_FOLDERS = (
-    "experiments/runs/within_patient/sub-073/pearson/sop30/seed123/eval1",
-    "experiments/runs/within_patient/sub-039/pearson/sop30/seed123/eval1",
-)
+PATIENTS = ("sub-051", "sub-052")
 
 
 def main():
@@ -31,7 +28,7 @@ def main():
     install_logged_train_loop()
     device = "cuda"
     compile_start = time.perf_counter()
-    model = load_evobrain(device=device)
+    model = load_attention_evobrain(device=device)
     model = model.to(device)
     optimizer = make_optimizer(model)
     input_seq, seq_lengths, adj, labels = make_batch(LOCKED["train_batch_size"], device)
@@ -39,27 +36,31 @@ def main():
     torch.cuda.synchronize()
     compile_seconds = time.perf_counter() - compile_start
 
-    here = os.path.dirname(os.path.abspath(__file__))
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    n_params = 0
+    for parameter in model.parameters():
+        n_params += parameter.numel()
     summary = {
-        "command": "python train_073_039.py",
+        "command": "python train_attention.py",
         "compile_seconds": float(compile_seconds),
         "gpu_name": torch.cuda.get_device_name(0),
         "gpu_memory_bytes": int(torch.cuda.get_device_properties(0).total_memory),
         "cuda_version": torch.version.cuda,
         "torch_version": torch.__version__,
         "mamba_ssm_version": mamba_ssm.__version__,
+        "parameter_count": int(n_params),
         "patients": [],
     }
     wall_start = time.perf_counter()
-    for rel in PACKED_FOLDERS:
-        folder = os.path.join(here, rel)
-        model = load_evobrain(device=device)
+    for patient_id in PATIENTS:
+        folder = _ready_folder(here, patient_id)
+        model = load_attention_evobrain(device=device)
         model = model.to(device)
         optimizer = make_optimizer(model)
         extra = {
-            "train_model": "evobrain",
+            "train_model": "evobrain attention",
             "train_torch_version": torch.__version__,
-            "command": "python train_073_039.py",
+            "command": "python train_attention.py",
             "seed": LOCKED["seed"],
             "dataset_accession": LOCKED["dataset_accession"],
             "dataset_version": LOCKED["dataset_version"],
@@ -69,6 +70,8 @@ def main():
             "mamba_ssm_version": mamba_ssm.__version__,
             "train_batch_size": LOCKED["train_batch_size"],
             "eval_batch_size": LOCKED["eval_batch_size"],
+            "graph_strategy": "attention",
+            "parameter_count": int(n_params),
         }
         _folder, metrics = train_packed_eval_run(
             folder,
@@ -95,16 +98,27 @@ def main():
             "n_test_windows_scored": metrics.get("n_test_windows_scored"),
             "n_validation_windows_scored": metrics.get("n_validation_windows_scored"),
             "pos_weight": metrics.get("pos_weight"),
+            "graph_strategy": metrics.get("graph_strategy"),
+            "parameter_count": metrics.get("parameter_count"),
         }
         summary["patients"].append(row)
         print("folder", folder)
         print(json.dumps(row, indent=2))
     summary["wall_seconds"] = float(time.perf_counter() - wall_start)
-    out = os.path.join(here, "p2-train-073-039-gpu.json")
+    out = os.path.join(here, "p2-attention-graph-gpu.json")
     with open(out, "w") as handle:
         json.dump(summary, indent=2, fp=handle)
         handle.write("\n")
     print(json.dumps(summary, indent=2))
+
+
+def _ready_folder(here, patient_id):
+    folder = run_folder_path(here, patient_id, "eval1", graph_strategy="attention")
+    train_npz = os.path.join(folder, "train.npz")
+    if os.path.isfile(train_npz):
+        return folder
+    pearson = run_folder_path(here, patient_id, "eval1", graph_strategy="pearson")
+    return prepare_attention_folder(here, patient_id, pearson)
 
 
 def _save_train_scores(folder, model, device):

@@ -1,6 +1,5 @@
 import json
 import os
-import sys
 import time
 
 import torch
@@ -17,23 +16,16 @@ from model.train_loop import score_windows
 from model.train_step import make_optimizer, one_train_step
 
 
-def packed_folder(patient_id):
-    return os.path.join(
-        "experiments",
-        "runs",
-        "within_patient",
-        patient_id,
-        "pearson",
-        "sop30",
-        "seed123",
-        "eval1",
-    )
+PACKED_FOLDERS = (
+    "experiments/runs/within_patient/sub-051/pearson/sop30/seed123/eval1",
+    "experiments/runs/within_patient/sub-052/pearson/sop30/seed123/eval1",
+)
 
 
 def main():
     if not torch.cuda.is_available():
         raise ValueError("need a gpu for this, we got cpu")
-    patient_ids = _patient_ids(sys.argv)
+
     import mamba_ssm
 
     install_logged_train_loop()
@@ -47,9 +39,9 @@ def main():
     torch.cuda.synchronize()
     compile_seconds = time.perf_counter() - compile_start
 
-    here = os.path.dirname(os.path.abspath(__file__))
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     summary = {
-        "command": "python train_more_people.py",
+        "command": "python honest_retrain.py",
         "compile_seconds": float(compile_seconds),
         "gpu_name": torch.cuda.get_device_name(0),
         "gpu_memory_bytes": int(torch.cuda.get_device_properties(0).total_memory),
@@ -59,9 +51,7 @@ def main():
         "patients": [],
     }
     wall_start = time.perf_counter()
-    index = 0
-    while index < len(patient_ids):
-        rel = packed_folder(patient_ids[index])
+    for rel in PACKED_FOLDERS:
         folder = os.path.join(here, rel)
         model = load_evobrain(device=device)
         model = model.to(device)
@@ -69,7 +59,7 @@ def main():
         extra = {
             "train_model": "evobrain",
             "train_torch_version": torch.__version__,
-            "command": "python train_more_people.py",
+            "command": "python honest_retrain.py",
             "seed": LOCKED["seed"],
             "dataset_accession": LOCKED["dataset_accession"],
             "dataset_version": LOCKED["dataset_version"],
@@ -109,19 +99,12 @@ def main():
         summary["patients"].append(row)
         print("folder", folder)
         print(json.dumps(row, indent=2))
-        index += 1
     summary["wall_seconds"] = float(time.perf_counter() - wall_start)
-    out = os.path.join(here, "p2-more-people-gpu.json")
+    out = os.path.join(here, "p2-honest-retrain-gpu.json")
     with open(out, "w") as handle:
-        json.dump(summary, indent=2, fp=handle)
+        json.dump(summary, handle, indent=2)
         handle.write("\n")
     print(json.dumps(summary, indent=2))
-
-
-def _patient_ids(argv):
-    if len(argv) < 2:
-        raise ValueError("usage: python train_more_people.py sub-XXX [sub-YYY ...]")
-    return tuple(argv[1:])
 
 
 def _save_train_scores(folder, model, device):
