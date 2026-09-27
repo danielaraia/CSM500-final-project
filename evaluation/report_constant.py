@@ -31,7 +31,7 @@ SPLIT_NAMES = ("train", "monitor", "val", "test")
 
 
 def main():
-    here = os.path.dirname(os.path.abspath(__file__))
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     summary = {"command": "python report_constant.py", "patients": []}
     states = []
     index = 0

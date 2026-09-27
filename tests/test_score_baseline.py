@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 
 from packs.pack import save_split
-from report_baseline import plain_verdict
+from evaluation.report_baseline import plain_verdict
 from evaluation.score_baseline import evo_from_metrics, load_strength_clock
 
 

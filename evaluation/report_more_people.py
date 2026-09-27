@@ -84,7 +84,7 @@ def resolve_events_path(here, patient_id, packed_run):
 
 
 def main():
-    here = os.path.dirname(os.path.abspath(__file__))
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     patient_ids = _patient_ids(sys.argv)
     summary = {"command": "python report_more_people.py", "patients": [], "comparison": []}
     index = 0

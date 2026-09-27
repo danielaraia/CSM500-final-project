@@ -62,7 +62,7 @@ ROW_KEYS = (
 
 
 def main():
-    here = os.path.dirname(os.path.abspath(__file__))
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     summary = {"command": "python report_mi.py", "mi": [], "pearson": [], "table": []}
     mi_rows = []
     for rel in MI_FOLDERS:

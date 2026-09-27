@@ -103,7 +103,7 @@ def plain_table(rows):
 
 
 def main():
-    here = os.path.dirname(os.path.abspath(__file__))
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     rows = build_grid(here)
     out = os.path.join(here, GRID_NAME)
     with open(out, "w") as handle:

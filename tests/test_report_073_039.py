@@ -1,4 +1,4 @@
-from report_073_039 import _overlap_flag, _unresolvable
+from evaluation.report_073_039 import _overlap_flag, _unresolvable
 
 
 def test_zero_scorable_hours_are_unresolvable():

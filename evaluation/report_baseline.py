@@ -14,7 +14,7 @@ SEPARATE_FRAC = 0.5
 
 
 def main():
-    here = os.path.dirname(os.path.abspath(__file__))
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     summary = {
         "command": "python report_baseline.py",
         "gpu": False,

@@ -280,7 +280,7 @@ def summary_table(summaries):
 
 
 def main():
-    here = os.path.dirname(os.path.abspath(__file__))
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     only = parse_args(sys.argv)
     runs = discover_runs(here)
     if only is not None:

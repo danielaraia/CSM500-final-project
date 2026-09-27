@@ -24,7 +24,7 @@ from data.labels import (
     split_cut_times,
 )
 from packs.pack_sop import parse_args as parse_pack_args
-from report_sop import grid_row, plain_table
+from evaluation.report_sop import grid_row, plain_table
 from evaluation.score_sop import run_grid
 from train.train_sop import parse_args as parse_train_args
 

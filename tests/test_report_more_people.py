@@ -1,4 +1,4 @@
-from report_more_people import _overlap_flag, _unresolvable, events_relpath
+from evaluation.report_more_people import _overlap_flag, _unresolvable, events_relpath
 
 
 def test_zero_scorable_hours_are_unresolvable():

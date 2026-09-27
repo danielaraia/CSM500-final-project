@@ -61,7 +61,7 @@ ROW_KEYS = (
 
 
 def main():
-    here = os.path.dirname(os.path.abspath(__file__))
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     summary = {"command": "python report_073_039.py", "patients": [], "comparison": []}
     for rel in PACKED_FOLDERS:
         folder = os.path.join(here, rel)
