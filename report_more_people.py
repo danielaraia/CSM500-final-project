@@ -2,9 +2,9 @@ import json
 import os
 import sys
 
-from logit_overlap import overlap_from_pack_and_scores, still_overlap
-from metrics import merge_alarm_metrics, read_metrics, replace_metrics_keys
-from score_alarms import alarm_metrics_from_folder
+from evaluation.logit_overlap import overlap_from_pack_and_scores, still_overlap
+from evaluation.metrics import merge_alarm_metrics, read_metrics, replace_metrics_keys
+from evaluation.score_alarms import alarm_metrics_from_folder
 
 
 COMPARISON_FOLDERS = (

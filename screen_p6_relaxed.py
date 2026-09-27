@@ -4,7 +4,7 @@ import contextlib
 import json
 import sys
 
-from alarms import HOURS_TO_RESOLVE_FP_MAX
+from evaluation.alarms import HOURS_TO_RESOLVE_FP_MAX
 
 import screen_p6
 

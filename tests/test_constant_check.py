@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 import torch
 
-from constant_check import (
+from evaluation.constant_check import (
     checkpoint_health,
     class_mix,
     ends_time_ordered,

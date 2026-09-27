@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.optimize import minimize
 
-from alarms import choose_operating_threshold, score_map
+from evaluation.alarms import choose_operating_threshold, score_map
 from model.pos_weight import weight_from_class_numbers
 
 

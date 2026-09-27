@@ -1,5 +1,5 @@
 import screen_p6
-from alarms import HOURS_TO_RESOLVE_FP_MAX
+from evaluation.alarms import HOURS_TO_RESOLVE_FP_MAX
 from screen_p6 import hop1_ends, screen_sop
 
 from screen_p6_relaxed import (

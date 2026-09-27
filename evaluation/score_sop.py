@@ -3,9 +3,9 @@ import os
 import sys
 
 from core.config import read_config, run_folder_path
-from metrics import merge_alarm_metrics, read_metrics
+from evaluation.metrics import merge_alarm_metrics, read_metrics
 from packs.pack_eval import seizeit2_run_paths
-from score_alarms import alarm_metrics_from_folder
+from evaluation.score_alarms import alarm_metrics_from_folder
 from train.train_sop import GRAPH_STRATEGIES, NEW_SOP_MINUTES, PATIENTS
 
 SUMMARY_NAME = "p4-sop-scores-summary.json"
@@ -69,7 +69,7 @@ def score_one_folder(here, patient_id, graph_strategy, sop_minutes):
 
 
 def main():
-    here = os.path.dirname(os.path.abspath(__file__))
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     if len(sys.argv) == 1:
         grid = run_grid()
     elif len(sys.argv) == 4:

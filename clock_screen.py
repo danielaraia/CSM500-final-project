@@ -3,8 +3,8 @@ import os
 import re
 import sys
 
-from alarms import test_leads_from_seizures
-from catch_coverage import catch_coverage_from_ends
+from evaluation.alarms import test_leads_from_seizures
+from evaluation.catch_coverage import catch_coverage_from_ends
 from data.events import impd_spans, load_event_rows, seizure_spans
 from model.glue import _keep_pack_ends
 from data.labels import (
@@ -15,7 +15,7 @@ from data.labels import (
     split_cut_times,
 )
 from graphs.pearson import MOVEMENT_BUFFER_SECONDS
-from score_alarms import recording_duration_seconds
+from evaluation.score_alarms import recording_duration_seconds
 from data.windows import WINDOW_SECONDS, window_end_times
 
 META_ROOT = os.path.join("data", "seizeit2-meta")

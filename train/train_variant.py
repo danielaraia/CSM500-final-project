@@ -9,10 +9,10 @@ import torch
 from graphs.attention import load_attention_evobrain
 from data.augment import make_augment_fn
 from core.config import ALLOWED_SOP_MINUTES, LOCKED
-from epoch_trace import install_logged_train_loop
+from evaluation.epoch_trace import install_logged_train_loop
 from model.evobrain_load import load_evobrain
 from model.focal_loss import make_loss_fn
-from metrics import read_metrics, replace_metrics_keys
+from evaluation.metrics import read_metrics, replace_metrics_keys
 from model.pretrain import pretrain_model
 from core.recipe import normalize_recipe, recipe_extra, recipe_leaf
 from run import train_packed_eval_run

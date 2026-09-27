@@ -6,7 +6,7 @@ import subprocess
 import sys
 
 from core.config import run_folder_path
-from metrics import read_metrics
+from evaluation.metrics import read_metrics
 from packs.pack_eval import seizeit2_run_paths
 from packs.pack_p6 import (
     GRAPH_STRATEGY,

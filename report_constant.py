@@ -4,8 +4,8 @@ import os
 import numpy as np
 import torch
 
-from alarms import load_window_scores
-from constant_check import (
+from evaluation.alarms import load_window_scores
+from evaluation.constant_check import (
     checkpoint_health,
     class_mix,
     ends_time_ordered,
@@ -16,9 +16,9 @@ from constant_check import (
 )
 from data.events import load_event_rows, seizure_spans
 from data.labels import seizures_with_full_sop
-from metrics import read_metrics
+from evaluation.metrics import read_metrics
 from model.pos_weight import weight_from_class_numbers
-from score_alarms import KNOWN_EVENTS
+from evaluation.score_alarms import KNOWN_EVENTS
 from data.windows import TRAIN_STRIDE_SECONDS, end_is_on_stride
 
 

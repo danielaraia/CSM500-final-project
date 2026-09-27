@@ -1,5 +1,5 @@
-from alarm_leads import hit_interval
-from catch_coverage import catch_coverage_from_ends
+from evaluation.alarm_leads import hit_interval
+from evaluation.catch_coverage import catch_coverage_from_ends
 from data.labels import SOP_SECONDS, SPH_SECONDS
 
 

@@ -1,7 +1,7 @@
 import json
 import os
 
-from score_baseline import run_folder
+from evaluation.score_baseline import run_folder
 
 
 PACKED_FOLDERS = (

@@ -4,7 +4,7 @@ import time
 
 import torch
 
-from alarms import save_window_scores
+from evaluation.alarms import save_window_scores
 from core.config import LOCKED, read_config, start_run
 from data.edf import edf_gap_spans, load_run
 from data.events import impd_spans, load_event_rows, seizure_spans
@@ -22,7 +22,7 @@ from data.labels import (
     seizures_with_full_sop,
     split_cut_times,
 )
-from metrics import merge_metrics, read_metrics, replace_metrics_keys, write_metrics
+from evaluation.metrics import merge_metrics, read_metrics, replace_metrics_keys, write_metrics
 from data.normalize import apply_node_zscore, node_mean_and_std
 from packs.pack import load_split, save_named_labels
 from model.pos_weight import weight_from_class_numbers

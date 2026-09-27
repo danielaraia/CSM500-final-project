@@ -3,7 +3,7 @@ import shutil
 
 from graphs.attention import _link_or_copy
 from core.config import start_run
-from metrics import read_metrics, write_metrics
+from evaluation.metrics import read_metrics, write_metrics
 from core.recipe import recipe_extra
 
 SPLIT_NAMES = ("train", "monitor", "val", "test")

@@ -7,7 +7,7 @@ import tempfile
 import numpy as np
 import pytest
 
-from alarms import (
+from evaluation.alarms import (
     choose_operating_threshold,
     lookback_seconds,
     pick_threshold,
@@ -18,7 +18,7 @@ from alarms import (
     test_leads_from_seizures as leads_from_seizures,
     vote_need,
 )
-from calibrate import (
+from evaluation.calibrate import (
     discover_runs,
     evaluate_test,
     load_run_context,
@@ -28,7 +28,7 @@ from calibrate import (
     run_events_path,
     scorer_for,
 )
-from calibrate_rules import (
+from evaluation.calibrate_rules import (
     RULES,
     budget_exceedance_rate,
     empirical_quantile,
@@ -41,7 +41,7 @@ from calibrate_rules import (
     vote_alarm_probability,
 )
 from core.config import write_config
-from fast_score import fast_alarms, prepare_scorer, score_part_fast, vote_supremum
+from evaluation.fast_score import fast_alarms, prepare_scorer, score_part_fast, vote_supremum
 from data.labels import SOP_SECONDS, label_second, LABEL_INTERICTAL
 from report_calibrate import fa_ok, parse_args, rule_summaries
 

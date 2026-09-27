@@ -10,7 +10,7 @@ import sys
 from datetime import datetime, timezone
 
 from core.config import run_folder_path
-from metrics import read_metrics
+from evaluation.metrics import read_metrics
 from packs.pack_eval import seizeit2_run_paths
 from screen_p6 import RAM_GIB_SKIP
 

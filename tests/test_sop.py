@@ -5,13 +5,13 @@ import tempfile
 
 import pytest
 
-from alarms import (
+from evaluation.alarms import (
     lookback_seconds,
     silent_seconds,
     test_leads_from_seizures as leads_from_seizures,
     vote_need,
 )
-from catch_coverage import catch_coverage_from_ends
+from evaluation.catch_coverage import catch_coverage_from_ends
 from core.config import read_config, run_folder_path, start_run, write_config
 from data.labels import (
     LABEL_INTERICTAL,
@@ -25,7 +25,7 @@ from data.labels import (
 )
 from packs.pack_sop import parse_args as parse_pack_args
 from report_sop import grid_row, plain_table
-from score_sop import run_grid
+from evaluation.score_sop import run_grid
 from train.train_sop import parse_args as parse_train_args
 
 SOP_15 = 15 * 60

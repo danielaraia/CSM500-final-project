@@ -1,6 +1,6 @@
 import numpy as np
 
-from alarms import load_window_scores
+from evaluation.alarms import load_window_scores
 
 
 def overlap_row(labels, logits):

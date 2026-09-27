@@ -117,7 +117,7 @@ def test_prepare_attention_folder_links_the_pearson_splits():
         ends = np.array([70, 80], dtype=np.int64)
         for name in ("train", "monitor", "val", "test"):
             save_split(os.path.join(pearson, name + ".npz"), features, graphs, labels, ends)
-        from metrics import write_metrics
+        from evaluation.metrics import write_metrics
         write_metrics(
             pearson,
             {
@@ -141,7 +141,7 @@ def test_prepare_attention_folder_links_the_pearson_splits():
         loaded = read_config(os.path.join(folder, "config.json"))
         assert loaded["graph_strategy"] == "attention"
         assert loaded["attention_hidden"] == 32
-        from metrics import read_metrics
+        from evaluation.metrics import read_metrics
         att_metrics = read_metrics(folder)
         assert att_metrics["t1"] == 17929.0
         assert att_metrics["t2"] == 23108.0

@@ -6,7 +6,7 @@ import pytest
 import torch
 
 from core.config import LOCKED, start_run
-from metrics import read_metrics, write_metrics
+from evaluation.metrics import read_metrics, write_metrics
 from packs.pack import save_split
 from model.pretrain import (
     find_pretrain_folders,

@@ -3,14 +3,14 @@ import math
 import os
 import sys
 
-from alarm_leads import hit_interval
-from alarms import (
+from evaluation.alarm_leads import hit_interval
+from evaluation.alarms import (
     FP_MAX_PER_HOUR,
     HOURS_TO_RESOLVE_FP_MAX,
     alarm_hits_a_seizure,
     study_criterion_met,
 )
-from calibrate import (
+from evaluation.calibrate import (
     discover_runs,
     evaluate_part,
     evaluate_test,
@@ -18,7 +18,7 @@ from calibrate import (
     oracle_diagnostic,
     selection_part,
 )
-from calibrate_rules import RULES
+from evaluation.calibrate_rules import RULES
 from data.labels import SPH_SECONDS
 
 SUMMARY_NAME = "p5-calibration-summary.json"

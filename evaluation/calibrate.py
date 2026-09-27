@@ -2,7 +2,7 @@ import glob
 import math
 import os
 
-from alarms import (
+from evaluation.alarms import (
     load_window_scores,
     merge_lead_onsets,
     score_map,
@@ -10,11 +10,11 @@ from alarms import (
     test_leads_from_seizures,
 )
 from data.events import load_event_rows, seizure_spans
-from fast_score import prepare_scorer, score_part_fast, vote_supremum
+from evaluation.fast_score import prepare_scorer, score_part_fast, vote_supremum
 from data.labels import SPH_SECONDS, seizures_with_full_sop
-from metrics import read_metrics
+from evaluation.metrics import read_metrics
 from core.config import read_config
-from score_alarms import recording_duration_seconds
+from evaluation.score_alarms import recording_duration_seconds
 
 
 def discover_runs(here):

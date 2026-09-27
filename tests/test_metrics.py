@@ -4,7 +4,7 @@ import tempfile
 
 import pytest
 
-from metrics import load_gate_metrics, merge_alarm_metrics, merge_metrics, read_metrics, write_metrics
+from evaluation.metrics import load_gate_metrics, merge_alarm_metrics, merge_metrics, read_metrics, write_metrics
 
 
 def test_write_and_read_metrics():

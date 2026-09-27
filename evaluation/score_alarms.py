@@ -2,7 +2,7 @@ import json
 import math
 import os
 
-from alarms import (
+from evaluation.alarms import (
     FP_MAX_PER_HOUR,
     choose_operating_threshold,
     load_window_scores,
@@ -17,7 +17,7 @@ from alarms import (
 )
 from data.events import load_event_rows, seizure_spans
 from data.labels import SOP_SECONDS, SPH_SECONDS
-from metrics import merge_alarm_metrics, read_metrics
+from evaluation.metrics import merge_alarm_metrics, read_metrics
 from packs.pack import load_split
 
 
@@ -228,7 +228,7 @@ def alarm_metrics_from_folder(folder, events_path, sop_seconds=SOP_SECONDS):
 
 
 def main():
-    here = os.path.dirname(os.path.abspath(__file__))
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     summary = {"command": "python score_alarms.py", "patients": []}
     for rel in PACKED_FOLDERS:
         folder = os.path.join(here, rel)

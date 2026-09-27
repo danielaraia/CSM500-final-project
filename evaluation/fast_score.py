@@ -2,8 +2,8 @@ import math
 
 import numpy as np
 
-from alarm_leads import lead_event_counts
-from alarms import (
+from evaluation.alarm_leads import lead_event_counts
+from evaluation.alarms import (
     HOURS_TO_RESOLVE_FP_MAX,
     lookback_seconds,
     silent_seconds,

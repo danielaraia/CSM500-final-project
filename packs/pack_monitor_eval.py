@@ -2,7 +2,7 @@ import json
 import os
 import time
 
-from metrics import read_metrics
+from evaluation.metrics import read_metrics
 from packs.pack import load_split
 from packs.pack_monitor import rewrite_monitor_eval
 from data.windows import end_is_on_stride, TRAIN_STRIDE_SECONDS

@@ -2,16 +2,16 @@ import os
 
 import numpy as np
 
-from alarm_leads import (
+from evaluation.alarm_leads import (
     blank_lead_flags,
     hit_interval,
     lead_event_counts,
     mark_evaluable_at_second,
 )
-from alarms import lookback_seconds, test_leads_from_seizures, vote_need
+from evaluation.alarms import lookback_seconds, test_leads_from_seizures, vote_need
 from data.events import load_event_rows, seizure_spans
 from data.labels import SOP_SECONDS, SPH_SECONDS
-from score_alarms import recording_duration_seconds
+from evaluation.score_alarms import recording_duration_seconds
 
 
 def catch_coverage_from_ends(ends, lead_onsets, duration_seconds, sop_seconds=SOP_SECONDS):

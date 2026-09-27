@@ -5,11 +5,11 @@ import time
 
 import torch
 
-from alarms import save_window_scores
+from evaluation.alarms import save_window_scores
 from core.config import LOCKED
-from epoch_trace import install_logged_train_loop
+from evaluation.epoch_trace import install_logged_train_loop
 from model.evobrain_load import load_evobrain
-from metrics import read_metrics, replace_metrics_keys
+from evaluation.metrics import read_metrics, replace_metrics_keys
 from packs.pack import load_split
 from run import train_packed_eval_run
 from time_cuda import make_batch

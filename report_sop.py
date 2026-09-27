@@ -2,7 +2,7 @@ import json
 import os
 
 from core.config import run_folder_path
-from metrics import read_metrics
+from evaluation.metrics import read_metrics
 
 # same list of runs as train_sop. it is written out again here so this file
 # works without torch. train_sop.py loads torch at the top.

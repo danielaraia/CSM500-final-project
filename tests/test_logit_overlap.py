@@ -5,8 +5,8 @@ import tempfile
 import numpy as np
 import pytest
 
-from alarms import save_window_scores
-from logit_overlap import overlap_from_pack_and_scores, overlap_row, still_overlap
+from evaluation.alarms import save_window_scores
+from evaluation.logit_overlap import overlap_from_pack_and_scores, overlap_row, still_overlap
 from packs.pack import save_split
 
 

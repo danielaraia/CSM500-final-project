@@ -3,7 +3,7 @@ import math
 import numpy as np
 import pytest
 
-from simple_baseline import (
+from evaluation.simple_baseline import (
     apply_zscore,
     fit_logistic,
     fit_on_train_windows,

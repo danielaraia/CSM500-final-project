@@ -4,9 +4,9 @@ import sys
 from datetime import datetime, timezone
 
 from core.config import read_config, run_folder_path
-from metrics import merge_alarm_metrics, read_metrics
+from evaluation.metrics import merge_alarm_metrics, read_metrics
 from packs.pack_eval import seizeit2_run_paths
-from score_alarms import alarm_metrics_from_folder
+from evaluation.score_alarms import alarm_metrics_from_folder
 from data.sensor_mask import SENSOR_TIERS
 
 USAGE = (
@@ -111,7 +111,7 @@ def score_variant_folder(
 
 def main():
     patient_id, graph_strategy, sop_minutes, leaf, sensors = parse_args(sys.argv)
-    here = os.path.dirname(os.path.abspath(__file__))
+    here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     row = score_variant_folder(
         here, patient_id, graph_strategy, sop_minutes, leaf, sensors=sensors
     )

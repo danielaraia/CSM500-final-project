@@ -4,7 +4,7 @@ import tempfile
 
 import pytest
 
-from alarms import (
+from evaluation.alarms import (
     FP_MAX_PER_HOUR,
     alarm_hits_a_seizure,
     choose_operating_threshold,
@@ -555,8 +555,8 @@ def test_save_and_load_window_scores():
 
 
 def test_folder_alarm_metrics_fail_without_scores():
-    from metrics import write_metrics
-    from score_alarms import alarm_metrics_from_folder
+    from evaluation.metrics import write_metrics
+    from evaluation.score_alarms import alarm_metrics_from_folder
 
     folder = tempfile.mkdtemp()
     try:

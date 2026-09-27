@@ -2,9 +2,9 @@ import json
 import sys
 import time
 
-from catch_coverage import catch_coverage_from_folder
+from evaluation.catch_coverage import catch_coverage_from_folder
 from core.config import ALLOWED_SOP_MINUTES
-from metrics import write_metrics
+from evaluation.metrics import write_metrics
 from graphs.mi import build_mi_graph
 from packs.pack_eval import seizeit2_run_paths
 from run import write_split_run

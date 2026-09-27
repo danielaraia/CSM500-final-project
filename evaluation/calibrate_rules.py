@@ -1,13 +1,13 @@
 import math
 
-from alarms import FP_MAX_PER_HOUR, lookback_seconds, vote_need
-from calibrate import (
+from evaluation.alarms import FP_MAX_PER_HOUR, lookback_seconds, vote_need
+from evaluation.calibrate import (
     evaluate_part,
     pick_threshold_fast,
     pick_with_fallback,
     scorer_for,
 )
-from fast_score import vote_supremum
+from evaluation.fast_score import vote_supremum
 from data.labels import LABEL_INTERICTAL, label_second
 
 SAFETY_FP_MAX_PER_HOUR = 0.05
@@ -127,7 +127,7 @@ def _budget_rule(ctx, fp_max_per_hour, note, probe_cache=None):
 
 
 def rule_val_015(ctx, probe_cache=None):
-    return _budget_rule(ctx, FP_MAX_PER_HOUR, "locked rule: val budget 0.15", probe_cache)
+    return _budget_rule(ctx, FP_MAX_PER_HOUR, "main rule: val budget 0.15", probe_cache)
 
 
 def rule_val_005(ctx, probe_cache=None):
