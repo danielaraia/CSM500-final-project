@@ -7,7 +7,7 @@ from graphs.pearson import MOVEMENT_BUFFER_SECONDS
 from data.spans import second_hits_a_span
 from data.windows import WINDOW_SECONDS, window_end_times
 
-from screen_p6 import (
+from tools.screen_p6 import (
     COHORT_CAP,
     SCREEN_SOP_SECONDS,
     choose_cohort,

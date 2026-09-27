@@ -11,7 +11,7 @@ from model.evobrain_load import load_evobrain
 from evaluation.metrics import read_metrics, replace_metrics_keys
 from packs.pack import load_split
 from run import train_packed_eval_run
-from time_cuda import make_batch
+from tools.time_cuda import make_batch
 from model.train_loop import score_windows
 from model.train_step import make_optimizer, one_train_step
 

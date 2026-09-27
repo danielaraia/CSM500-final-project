@@ -6,8 +6,7 @@ import sys
 
 from evaluation.alarms import HOURS_TO_RESOLVE_FP_MAX
 
-import screen_p6
-
+import tools.screen_p6 as screen_p6
 OUT_NAME = "p6-screening-cohort-relaxed.json"
 RELAXED_MIN_TEST_INTERICTAL_HOURS = 3.0
 # already tried once: packed at SOP 15, 10, 5 on the pod, qc_fail each time

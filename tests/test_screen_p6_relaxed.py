@@ -1,8 +1,8 @@
-import screen_p6
+import tools.screen_p6 as screen_p6
 from evaluation.alarms import HOURS_TO_RESOLVE_FP_MAX
-from screen_p6 import hop1_ends, screen_sop
+from tools.screen_p6 import hop1_ends, screen_sop
 
-from screen_p6_relaxed import (
+from tools.screen_p6_relaxed import (
     RELAXED_MIN_TEST_INTERICTAL_HOURS,
     RETRY_EXCLUDED,
     fa_resolution,

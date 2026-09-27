@@ -1,6 +1,6 @@
 import os
 
-from label_audit import audit_one, sop_second_counts_by_region
+from tools.label_audit import audit_one, sop_second_counts_by_region
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

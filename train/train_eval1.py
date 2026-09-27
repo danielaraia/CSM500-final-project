@@ -7,7 +7,7 @@ import torch
 from core.config import LOCKED
 from model.evobrain_load import load_evobrain
 from run import train_packed_eval_run
-from time_cuda import make_batch
+from tools.time_cuda import make_batch
 from model.train_step import make_optimizer, one_train_step
 
 

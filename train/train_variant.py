@@ -17,7 +17,7 @@ from model.pretrain import pretrain_model
 from core.recipe import normalize_recipe, recipe_extra, recipe_leaf
 from run import train_packed_eval_run
 from data.sensor_mask import make_sensor_mask_fn
-from time_cuda import make_batch
+from tools.time_cuda import make_batch
 from train.train_sop import _epoch_keys, _ready_folder, _save_train_scores
 from model.train_step import make_optimizer, one_train_step
 from packs.variant_pack import prepare_variant_folder

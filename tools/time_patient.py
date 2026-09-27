@@ -8,7 +8,7 @@ from core.config import LOCKED
 from evaluation.metrics import load_gate_metrics
 from model.evobrain_load import load_evobrain
 from run import timed_patient_run
-from time_cuda import make_batch
+from tools.time_cuda import make_batch
 from model.train_step import make_optimizer, one_train_step
 
 
@@ -46,7 +46,7 @@ def main():
         "train_batch_size": LOCKED["train_batch_size"],
         "eval_batch_size": LOCKED["eval_batch_size"],
     }
-    gate_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "p0-gate-metrics.json")
+    gate_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "p0-gate-metrics.json")
     gate = load_gate_metrics(gate_path)
     for key in gate:
         extra[key] = gate[key]

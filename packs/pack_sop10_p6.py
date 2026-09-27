@@ -17,7 +17,7 @@ from packs.pack_p6 import (
     r2_pack_path,
     upload_pack,
 )
-from screen_p6 import RAM_GIB_SKIP
+from tools.screen_p6 import RAM_GIB_SKIP
 
 LEDGER_NAME = "screening-ledger.jsonl"
 SOP_MINUTES = 10
