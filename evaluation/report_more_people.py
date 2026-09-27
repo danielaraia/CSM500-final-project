@@ -143,7 +143,7 @@ def main():
         print("comparison", folder)
         print(json.dumps(row, indent=2))
         cmp_i += 1
-    out = os.path.join(here, "p2-more-people-summary.json")
+    out = os.path.join(here, "results/p2-more-people-summary.json")
     with open(out, "w") as handle:
         json.dump(summary, indent=2, fp=handle)
         handle.write("\n")

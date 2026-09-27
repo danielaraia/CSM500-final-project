@@ -29,7 +29,7 @@ def main():
         print(json.dumps(row, indent=2))
         index += 1
     summary["verdict"] = plain_verdict(summary["patients"])
-    out = os.path.join(here, "p2-simple-baseline-summary.json")
+    out = os.path.join(here, "results/p2-simple-baseline-summary.json")
     with open(out, "w") as handle:
         json.dump(summary, handle, indent=2)
         handle.write("\n")

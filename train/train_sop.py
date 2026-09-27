@@ -21,7 +21,7 @@ from model.train_step import make_optimizer, one_train_step
 PATIENTS = ("sub-004", "sub-051", "sub-052", "sub-113", "sub-039", "sub-073", "sub-015")
 GRAPH_STRATEGIES = ("pearson", "mi", "attention")
 NEW_SOP_MINUTES = (15, 5)
-SUMMARY_NAME = "p4-sop-runs-gpu.json"
+SUMMARY_NAME = "results/p4-sop-runs-gpu.json"
 
 
 def parse_args(argv):

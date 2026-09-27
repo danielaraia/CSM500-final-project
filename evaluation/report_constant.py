@@ -46,7 +46,7 @@ def main():
     ckpt_diff = state_dicts_max_abs_diff(states[0], states[1])
     summary["checkpoint_diff"] = ckpt_diff
     summary["verdict"] = _verdict(summary["patients"], ckpt_diff)
-    out = os.path.join(here, "p2-constant-check-summary.json")
+    out = os.path.join(here, "results/p2-constant-check-summary.json")
     with open(out, "w") as handle:
         json.dump(summary, handle, indent=2)
         handle.write("\n")

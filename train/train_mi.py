@@ -102,7 +102,7 @@ def main():
         print("folder", folder)
         print(json.dumps(row, indent=2))
     summary["wall_seconds"] = float(time.perf_counter() - wall_start)
-    out = os.path.join(here, "p2-mi-graph-gpu.json")
+    out = os.path.join(here, "results/p2-mi-graph-gpu.json")
     with open(out, "w") as handle:
         json.dump(summary, indent=2, fp=handle)
         handle.write("\n")

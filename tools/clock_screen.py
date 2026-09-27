@@ -154,7 +154,7 @@ def main():
         "n_new_ram_skipped_catch_evaluable": len(ram_skipped),
         "new_ram_skipped_catch_evaluable": ram_skipped,
     }
-    out = os.path.join("p2-more-people-clock.json")
+    out = os.path.join("results/p2-more-people-clock.json")
     with open(out, "w") as handle:
         json.dump(summary, indent=2, fp=handle)
         handle.write("\n")

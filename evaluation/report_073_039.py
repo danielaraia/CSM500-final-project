@@ -111,7 +111,7 @@ def main():
         summary["comparison"].append(row)
         print("comparison", folder)
         print(json.dumps(row, indent=2))
-    out = os.path.join(here, "p2-train-073-039-summary.json")
+    out = os.path.join(here, "results/p2-train-073-039-summary.json")
     with open(out, "w") as handle:
         json.dump(summary, indent=2, fp=handle)
         handle.write("\n")

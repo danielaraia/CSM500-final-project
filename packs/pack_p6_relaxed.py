@@ -19,7 +19,7 @@ from packs.pack_p6 import (
 )
 from tools.screen_p6 import RAM_GIB_SKIP
 
-COHORT_NAME = "p6-screening-cohort-relaxed.json"
+COHORT_NAME = "results/p6-screening-cohort-relaxed.json"
 LEDGER_NAME = "screening-ledger.jsonl"
 PACK_SOP_MINUTES = (15, 10, 5)
 PHASE = "p6-pack-relaxed"

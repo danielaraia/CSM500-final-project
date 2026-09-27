@@ -258,7 +258,7 @@ def main():
         summary["patients"].append(row)
         print("folder", folder)
         print(json.dumps(row, indent=2))
-    out = os.path.join(here, "p2-alarm-metrics-summary.json")
+    out = os.path.join(here, "results/p2-alarm-metrics-summary.json")
     with open(out, "w") as handle:
         json.dump(summary, handle, indent=2)
         handle.write("\n")

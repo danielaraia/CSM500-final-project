@@ -7,7 +7,8 @@ import sys
 from evaluation.alarms import HOURS_TO_RESOLVE_FP_MAX
 
 import tools.screen_p6 as screen_p6
-OUT_NAME = "p6-screening-cohort-relaxed.json"
+
+OUT_NAME = "results/p6-screening-cohort-relaxed.json"
 RELAXED_MIN_TEST_INTERICTAL_HOURS = 3.0
 # already tried once: packed at SOP 15, 10, 5 on the pod, qc_fail each time
 RETRY_EXCLUDED = {"sub-043": "phase 1 pack qc_fail at SOP 15, 10, 5"}

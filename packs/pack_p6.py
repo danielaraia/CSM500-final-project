@@ -14,7 +14,7 @@ from evaluation.metrics import read_metrics
 from packs.pack_eval import seizeit2_run_paths
 from tools.screen_p6 import RAM_GIB_SKIP
 
-COHORT_NAME = "p6-screening-cohort.json"
+COHORT_NAME = "results/p6-screening-cohort.json"
 LEDGER_NAME = "screening-ledger.jsonl"
 GRAPH_STRATEGY = "pearson"
 PACK_SOP_MINUTES = (15, 10, 5)

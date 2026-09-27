@@ -21,7 +21,7 @@ from evaluation.calibrate import (
 from evaluation.calibrate_rules import RULES
 from data.labels import SPH_SECONDS
 
-SUMMARY_NAME = "p5-calibration-summary.json"
+SUMMARY_NAME = "results/p5-calibration-summary.json"
 
 
 def parse_args(argv):

@@ -8,7 +8,7 @@ from packs.pack_eval import seizeit2_run_paths
 from evaluation.score_alarms import alarm_metrics_from_folder
 from train.train_sop import GRAPH_STRATEGIES, NEW_SOP_MINUTES, PATIENTS
 
-SUMMARY_NAME = "p4-sop-scores-summary.json"
+SUMMARY_NAME = "results/p4-sop-scores-summary.json"
 
 
 def run_grid():

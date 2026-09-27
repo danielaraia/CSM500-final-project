@@ -10,7 +10,7 @@ PATIENTS = ("sub-004", "sub-051", "sub-052", "sub-113", "sub-039", "sub-073", "s
 GRAPH_STRATEGIES = ("pearson", "mi", "attention")
 NEW_SOP_MINUTES = (15, 5)
 
-GRID_NAME = "p4-sop-grid.json"
+GRID_NAME = "results/p4-sop-grid.json"
 
 ROW_KEYS = (
     "best_epoch",

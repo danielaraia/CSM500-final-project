@@ -82,7 +82,7 @@ def main():
         print("pearson", folder)
         print(json.dumps(row, indent=2))
     summary["table"] = _english_table(pearson_rows, mi_rows)
-    out = os.path.join(here, "p2-mi-graph-summary.json")
+    out = os.path.join(here, "results/p2-mi-graph-summary.json")
     with open(out, "w") as handle:
         json.dump(summary, indent=2, fp=handle)
         handle.write("\n")

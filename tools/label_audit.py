@@ -202,7 +202,7 @@ def run_audit(root):
 def main():
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     results = run_audit(root)
-    out_path = os.path.join(root, "label-audit.json")
+    out_path = os.path.join(root, "results/label-audit.json")
     with open(out_path, "w") as handle:
         json.dump(results, handle, indent=2)
 

@@ -14,6 +14,7 @@ Seizure prediction from wearable sensor data with a temporal graph neural networ
 - evaluation/: scoring, calibration, and report scripts
 - tools/: screening, timing, and audit utilities
 - tests/: the pytest suite
+- results/: the run summaries behind the report numbers
 
 
 

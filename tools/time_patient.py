@@ -46,7 +46,7 @@ def main():
         "train_batch_size": LOCKED["train_batch_size"],
         "eval_batch_size": LOCKED["eval_batch_size"],
     }
-    gate_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "p0-gate-metrics.json")
+    gate_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "results/p0-gate-metrics.json")
     gate = load_gate_metrics(gate_path)
     for key in gate:
         extra[key] = gate[key]

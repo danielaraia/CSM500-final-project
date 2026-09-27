@@ -24,7 +24,7 @@ from evaluation.score_alarms import recording_duration_seconds
 from data.windows import TRAIN_STRIDE_SECONDS, WINDOW_SECONDS, end_is_on_stride
 
 META_ROOT = os.path.join("data", "seizeit2-meta")
-OUT_NAME = "p6-screening-cohort.json"
+OUT_NAME = "results/p6-screening-cohort.json"
 SCREEN_SOP_SECONDS = (15 * 60, 10 * 60, 5 * 60)
 # the split minimum from labels.n_test_seizures, which raises under 2: one earlier
 # seizure trains, one later seizure tests. clock_screen.py used 3 for its SOP 30

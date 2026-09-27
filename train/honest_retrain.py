@@ -100,7 +100,7 @@ def main():
         print("folder", folder)
         print(json.dumps(row, indent=2))
     summary["wall_seconds"] = float(time.perf_counter() - wall_start)
-    out = os.path.join(here, "p2-honest-retrain-gpu.json")
+    out = os.path.join(here, "results/p2-honest-retrain-gpu.json")
     with open(out, "w") as handle:
         json.dump(summary, handle, indent=2)
         handle.write("\n")

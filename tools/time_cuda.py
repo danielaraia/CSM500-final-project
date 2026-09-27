@@ -108,7 +108,7 @@ if __name__ == "__main__":
         "end_to_end_wall_clock": "not run, no patient EDFs on this pod yet",
     }
 
-    out = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "p0-gate-metrics.json")
+    out = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "results/p0-gate-metrics.json")
     with open(out, "w") as handle:
         json.dump(metrics, handle, indent=2)
         handle.write("\n")
