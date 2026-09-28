@@ -9,6 +9,8 @@ from model.pos_weight import weight_from_class_numbers
 from model.train_step import model_logits, one_train_step
 from data.windows import WINDOW_SECONDS
 
+# early stop and checkpoint recipe follows the EvoBrain clone, MIT licence, https://github.com/Kotoge/EvoBrain
+
 
 def monitor_bce(model, features, adjacency, labels, pos_weight, batch_size=None, device=None):
     if batch_size is None:

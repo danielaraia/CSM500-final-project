@@ -1,7 +1,8 @@
 import torch
 import torch.nn.functional as F
 
-# focal loss with gamma 2; the positive class alpha is the existing pos_weight,
+# focal loss from Lin et al 2017
+# gamma 2; the positive class alpha is the existing pos_weight,
 # same role it plays in the original weighted bce
 FOCAL_GAMMA = 2.0
 LOSS_NAMES = ("weighted_bce", "focal")

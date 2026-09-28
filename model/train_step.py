@@ -3,6 +3,7 @@ from torch.nn import BCEWithLogitsLoss
 
 from core.config import LOCKED
 
+# adam recipe and gradient clip follow the EvoBrain clone, MIT licence, https://github.com/Kotoge/EvoBrain
 MAX_GRAD_NORM = 5.0
 
 
