@@ -1,11 +1,18 @@
 import json
 import os
 
-# pearson is the default. mi is the other fixed graph. attention is learned.
-ALLOWED_GRAPH_STRATEGIES = ("pearson", "mi", "attention")
+# Main graph arms plus the two prespecified non-graph controls.
+ALLOWED_GRAPH_STRATEGIES = (
+    "pearson",
+    "mi",
+    "attention",
+    "identity",
+    "logistic",
+)
 
 # 30 minutes is the main pre seizure window. 15, 10, and 5 are the shorter ones.
 ALLOWED_SOP_MINUTES = (30, 15, 10, 5)
+ALLOWED_SEEDS = (123, 456, 789)
 
 # these beat the evobrain args.py defaults
 LOCKED = {
@@ -43,7 +50,7 @@ LOCKED = {
     "fft_bins": "drop dc, keep 1 to 128",
     "electrical_to_25hz": "scipy.signal.resample to 100 samples",
     "eeg_rms_rule": "drop a second only if both ears fail 13 to 150 uV",
-    "filter_call": "scipy.signal.butter SOS then sosfiltfilt",
+    "filter_call": "scipy.signal.butter SOS then causal sosfilt",
     "node_order": "eeg a, eeg b, ecg, emg, neck acc, neck gyr, chest acc, chest gyr",
     "early_stopping_direction": "minimise",
 }
@@ -58,6 +65,10 @@ def write_config(path, extra):
             continue
         if key == "sop_minutes":
             _require_sop_minutes(extra[key])
+            config[key] = extra[key]
+            continue
+        if key == "seed":
+            _require_seed(extra[key])
             config[key] = extra[key]
             continue
         if key in LOCKED and extra[key] != LOCKED[key]:
@@ -75,7 +86,14 @@ def read_config(path):
         return json.load(handle)
 
 
-def run_folder_path(root, patient_id, leaf="none", graph_strategy=None, sop_minutes=None):
+def run_folder_path(
+    root,
+    patient_id,
+    leaf="none",
+    graph_strategy=None,
+    sop_minutes=None,
+    seed=None,
+):
     if leaf is None or leaf == "":
         raise ValueError("need a run leaf folder name")
     if graph_strategy is None:
@@ -84,6 +102,9 @@ def run_folder_path(root, patient_id, leaf="none", graph_strategy=None, sop_minu
     if sop_minutes is None:
         sop_minutes = LOCKED["sop_minutes"]
     _require_sop_minutes(sop_minutes)
+    if seed is None:
+        seed = LOCKED["seed"]
+    _require_seed(seed)
     return os.path.join(
         root,
         "experiments",
@@ -92,7 +113,7 @@ def run_folder_path(root, patient_id, leaf="none", graph_strategy=None, sop_minu
         patient_id,
         graph_strategy,
         f"sop{sop_minutes}",
-        "seed123",
+        f"seed{seed}",
         leaf,
     )
 
@@ -103,8 +124,14 @@ def start_run(root, patient_id, extra=None, leaf="none"):
     extra = dict(extra or {})
     graph_strategy = extra.get("graph_strategy", LOCKED["graph_strategy"])
     sop_minutes = extra.get("sop_minutes", LOCKED["sop_minutes"])
+    seed = extra.get("seed", LOCKED["seed"])
     path = run_folder_path(
-        root, patient_id, leaf, graph_strategy=graph_strategy, sop_minutes=sop_minutes
+        root,
+        patient_id,
+        leaf,
+        graph_strategy=graph_strategy,
+        sop_minutes=sop_minutes,
+        seed=seed,
     )
     if os.path.exists(path):
         raise ValueError(f"run folder already exists, we wont write over it: {path}")
@@ -118,7 +145,7 @@ def start_run(root, patient_id, extra=None, leaf="none"):
 def _require_graph_strategy(graph_strategy):
     if graph_strategy not in ALLOWED_GRAPH_STRATEGIES:
         raise ValueError(
-            "graph_strategy has to be pearson, mi, or attention, "
+            "graph_strategy has to be pearson, mi, attention, identity, or logistic, "
             f"we got {graph_strategy!r}"
         )
 
@@ -128,4 +155,11 @@ def _require_sop_minutes(sop_minutes):
         raise ValueError(
             "sop_minutes has to be 30, 15, 10, or 5, "
             f"we got {sop_minutes!r}"
+        )
+
+
+def _require_seed(seed):
+    if seed not in ALLOWED_SEEDS:
+        raise ValueError(
+            f"seed has to be one of {ALLOWED_SEEDS}, we got {seed!r}"
         )

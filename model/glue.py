@@ -166,13 +166,13 @@ def split_labelled_windows(features, adjacency, ends, labels, t1, t2):
     test_i = []
     index = 0
     while index < len(ends):
-        # same clock as the label: the last second of the window
         end_time = ends[index]
+        start_time = end_time - features.shape[1] + 1
         if end_time < t1:
             train_i.append(index)
-        elif end_time < t2:
+        elif start_time >= t1 and end_time < t2:
             val_i.append(index)
-        else:
+        elif start_time >= t2:
             test_i.append(index)
         index += 1
     if len(train_i) == 0:
@@ -192,11 +192,13 @@ def cut_monitoring_slice(features, adjacency, ends, labels):
     n_windows = len(labels)
     train_i = []
     monitor_i = []
+    monitor_clock = ends[monitor_start]
+    train_end_limit = monitor_clock - features.shape[1] + 1
     index = 0
     while index < n_windows:
-        if index < monitor_start:
+        if ends[index] < train_end_limit:
             train_i.append(index)
-        else:
+        elif index >= monitor_start:
             monitor_i.append(index)
         index += 1
     if len(train_i) == 0:

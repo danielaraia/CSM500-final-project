@@ -6,6 +6,7 @@ import torch
 
 from evaluation.alarms import save_window_scores
 from core.config import LOCKED, read_config, start_run
+from core.randomness import seed_everything
 from data.edf import edf_gap_spans, load_run
 from data.events import impd_spans, load_event_rows, seizure_spans
 from model.glue import (
@@ -211,6 +212,7 @@ def train_packed_run(
     patience=None,
     train_batch_size=None,
     device=None,
+    seed=None,
 ):
     train_f, train_g, train_y, _train_ends = _load_split_file(folder, "train.npz")
     monitor_f, monitor_g, monitor_y, _monitor_ends = _load_split_file(
@@ -223,7 +225,9 @@ def train_packed_run(
     if extra is not None:
         for key in extra:
             packed_extra[key] = extra[key]
-    torch.manual_seed(LOCKED["seed"])
+    if seed is None:
+        seed = LOCKED["seed"]
+    seed_everything(seed)
     return train_and_write_metrics(
         folder,
         model,
@@ -322,6 +326,7 @@ def train_packed_eval_run(
     loss_fn=None,
     augment_fn=None,
     sensor_mask_fn=None,
+    seed=None,
 ):
     config_path = os.path.join(folder, "config.json")
     if not os.path.isfile(config_path):
@@ -385,6 +390,7 @@ def train_packed_eval_run(
         loss_fn=loss_fn,
         augment_fn=augment_fn,
         sensor_mask_fn=sensor_mask_fn,
+        seed=seed,
     )
 
 
@@ -405,6 +411,7 @@ def train_score_and_write_metrics(
     loss_fn=None,
     augment_fn=None,
     sensor_mask_fn=None,
+    seed=None,
 ):
     train_f, train_g, train_y, _train_ends = _load_split_file(folder, "train.npz")
     monitor_f, monitor_g, monitor_y, monitor_ends = _load_split_file(
@@ -418,7 +425,9 @@ def train_score_and_write_metrics(
         monitor_f = sensor_mask_fn(monitor_f)
         val_f = sensor_mask_fn(val_f)
         test_f = sensor_mask_fn(test_f)
-    torch.manual_seed(LOCKED["seed"])
+    if seed is None:
+        seed = LOCKED["seed"]
+    seed_everything(seed)
     pos_weight, n_negative, n_positive = weight_from_class_numbers(train_y)
     _mon_w, n_negative_monitor, n_positive_monitor = weight_from_class_numbers(monitor_y)
     train_start = time.perf_counter()

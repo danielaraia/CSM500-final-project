@@ -59,15 +59,24 @@ def _count_in_window(sorted_seconds, ts, lookback):
     )
 
 
-def fast_alarms(scorer, threshold):
-    # same alarm times as alarms.raise_alarms
+def fast_alarms(scorer, threshold, part_start=0, part_end=None):
     seconds = scorer["seconds"]
+    duration = scorer["duration_seconds"]
+    if part_end is None:
+        part_end = duration
+    if part_end < part_start:
+        raise ValueError(
+            f"part end is before part start, we got {part_start} {part_end}"
+        )
+    part_first = max(int(math.ceil(part_start)), 0)
+    part_last = min(int(math.ceil(part_end)), duration)
     lookback = scorer["lookback"]
     need = scorer["need"]
     silent = scorer["silent"]
-    above_seconds = seconds[scorer["values"] > threshold]  # n_above only grows at these
+    in_part = (seconds >= part_first) & (seconds < part_last)
+    above_seconds = seconds[(scorer["values"] > threshold) & in_part]
     alarms = []
-    silent_until = 0
+    silent_until = part_first
     index = 0
     n_above_seconds = len(above_seconds)
     while index < n_above_seconds:
@@ -112,11 +121,15 @@ def vote_supremum(scorer, part_start, part_end):
     part_first = max(int(math.ceil(part_start)), 0)
     part_last = min(int(math.ceil(part_end)), scorer["duration_seconds"])
     best = None
+    score_first = int(np.searchsorted(seconds, part_first, "left"))
     second = part_first
     while second < part_last:
         if interictal[second]:
             hi = int(np.searchsorted(seconds, second, "right"))
-            lo = int(np.searchsorted(seconds, second - lookback, "right"))
+            lo = max(
+                score_first,
+                int(np.searchsorted(seconds, second - lookback, "right")),
+            )
             count = hi - lo
             if count >= need:
                 window_values = values[lo:hi]
@@ -138,13 +151,17 @@ def score_part_fast(scorer, threshold, part_start, part_end, lead_onsets):
     seconds = scorer["seconds"]
     interictal = scorer["interictal"]
     cumsum = scorer["interictal_cumsum"]
-    alarms = fast_alarms(scorer, threshold)
     part_first = max(int(math.ceil(part_start)), 0)
     part_last = min(int(math.ceil(part_end)), duration)
+    alarms = fast_alarms(
+        scorer, threshold, part_start=part_first, part_end=part_last
+    )
+    part_score_mask = (seconds >= part_first) & (seconds < part_last)
+    part_score_seconds = seconds[part_score_mask]
     if part_last > part_first:
         part_seconds = np.arange(part_first, part_last, dtype=np.int64)
         part_interictal = interictal[part_first:part_last].astype(bool)
-        n_scores = _count_in_window(seconds, part_seconds, lookback)
+        n_scores = _count_in_window(part_score_seconds, part_seconds, lookback)
         raw_seconds = int(part_interictal.sum())
         scorable_seconds = int((part_interictal & (n_scores >= need)).sum())
     else:
@@ -156,11 +173,13 @@ def score_part_fast(scorer, threshold, part_start, part_end, lead_onsets):
     lead_index = 0
     while lead_index < len(lead_onsets):
         start, end = intervals[lead_index]
-        first = max(int(math.ceil(start)), 0)
-        last = min(int(math.ceil(end)), duration)
+        first = max(int(math.ceil(start)), part_first)
+        last = min(int(math.ceil(end)), part_last)
         if last > first:
             ts = np.arange(first, last, dtype=np.int64)
-            if (_count_in_window(seconds, ts, lookback) >= need).any():
+            if (
+                _count_in_window(part_score_seconds, ts, lookback) >= need
+            ).any():
                 evaluable[lead_index] = True
         lead_index += 1
     n_false = 0

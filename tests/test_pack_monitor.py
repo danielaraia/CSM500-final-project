@@ -18,21 +18,23 @@ from data.windows import WINDOW_SECONDS
 
 
 def test_monitor_clock_cut_uses_hop_ten_quarter():
-    ends = [59, 69, 79, 89, 90, 91, 92]
+    ends = list(range(59, 200, 10)) + [200, 201, 202]
     n_windows = len(ends)
     features = np.zeros((n_windows, WINDOW_SECONDS, N_NODES, N_FFT_BINS))
     graphs = np.zeros((n_windows, WINDOW_SECONDS, N_NODES, N_NODES))
-    labels = [LABEL_INTERICTAL] * 3 + [LABEL_SOP] * 2 + [LABEL_INTERICTAL] * 2
+    labels = [LABEL_INTERICTAL] * 12 + [LABEL_SOP] * 2 + [
+        LABEL_INTERICTAL
+    ] * 4
     clock = monitor_clock_from_train_hop10(ends)
-    assert clock == 89
+    assert clock == 179
     train, monitor, start, n_positive, n_negative = cut_monitoring_slice_at_clock(
         features, graphs, ends, labels, clock
     )
-    assert start == 89
-    assert train[2] == [59, 69, 79]
-    assert monitor[2] == [89, 90, 91, 92]
+    assert start == 179
+    assert train[2] == [59, 69, 79, 89, 99, 109, 119]
+    assert monitor[2] == [179, 189, 199, 200, 201, 202]
     assert n_positive == 2
-    assert n_negative == 2
+    assert n_negative == 4
 
 
 def test_rewrite_monitor_fails_when_folder_is_missing():

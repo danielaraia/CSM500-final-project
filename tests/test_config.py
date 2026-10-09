@@ -4,7 +4,14 @@ import tempfile
 
 import pytest
 
-from core.config import LOCKED, read_config, run_folder_path, start_run, write_config
+from core.config import (
+    ALLOWED_SEEDS,
+    LOCKED,
+    read_config,
+    run_folder_path,
+    start_run,
+    write_config,
+)
 
 
 def test_locked_learning_rate_is_not_the_code_default():
@@ -15,7 +22,7 @@ def test_locked_learning_rate_is_not_the_code_default():
     assert LOCKED["num_eigenvectors"] == 4
     assert LOCKED["rnn_units"] == 64
     assert LOCKED["eeg_rms_rule"] == "drop a second only if both ears fail 13 to 150 uV"
-    assert LOCKED["filter_call"] == "scipy.signal.butter SOS then sosfiltfilt"
+    assert LOCKED["filter_call"] == "scipy.signal.butter SOS then causal sosfilt"
     assert LOCKED["early_stopping_direction"] == "minimise"
     assert LOCKED["train_stride_seconds"] == 10
     assert LOCKED["eval_stride_seconds"] == 1
@@ -108,7 +115,21 @@ def test_write_config_rejects_unknown_graph_strategy():
     handle = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False)
     handle.close()
     try:
-        with pytest.raises(ValueError, match="pearson, mi, or attention"):
+        with pytest.raises(ValueError, match="pearson, mi, attention"):
             write_config(handle.name, {"graph_strategy": "cosine"})
+    finally:
+        os.remove(handle.name)
+
+
+def test_allowed_experiment_seeds_are_locked():
+    assert ALLOWED_SEEDS == (123, 456, 789)
+
+
+def test_write_config_rejects_unknown_seed():
+    handle = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False)
+    handle.close()
+    try:
+        with pytest.raises(ValueError, match="seed has to be"):
+            write_config(handle.name, {"seed": 111})
     finally:
         os.remove(handle.name)

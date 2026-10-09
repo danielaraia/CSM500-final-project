@@ -1,0 +1,26 @@
+[
+  {
+    "n_checked": 5140,
+    "n_mistakes": 0,
+    "mistakes": [],
+    "all_labels_match": true,
+    "patient": "sub-039",
+    "sop_minutes": 30
+  },
+  {
+    "n_checked": 3615,
+    "n_mistakes": 0,
+    "mistakes": [],
+    "all_labels_match": true,
+    "patient": "sub-039",
+    "sop_minutes": 15
+  },
+  {
+    "n_checked": 3238,
+    "n_mistakes": 0,
+    "mistakes": [],
+    "all_labels_match": true,
+    "patient": "sub-039",
+    "sop_minutes": 5
+  }
+]

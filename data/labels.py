@@ -27,6 +27,10 @@ def label_second(time_seconds, seizures, sop_seconds=SOP_SECONDS):
             return LABEL_UNUSED
 
     for onset, offset in seizures:
+        if offset <= time_seconds < offset + INTERICTAL_GAP_SECONDS:
+            return LABEL_UNUSED
+
+    for onset, offset in seizures:
         sop_start = onset - SPH_SECONDS - sop_seconds
         sop_end = onset - SPH_SECONDS
         if sop_start <= time_seconds < sop_end:
@@ -35,8 +39,6 @@ def label_second(time_seconds, seizures, sop_seconds=SOP_SECONDS):
     for onset, offset in seizures:
         too_close_before = onset - INTERICTAL_GAP_SECONDS
         if too_close_before <= time_seconds < onset:
-            return LABEL_UNUSED
-        if offset <= time_seconds < offset + INTERICTAL_GAP_SECONDS:
             return LABEL_UNUSED
 
     return LABEL_INTERICTAL

@@ -180,8 +180,15 @@ def score_at_threshold(
         silent = silent_seconds(sph_seconds, sop_seconds)
     if part_end < part_start:
         raise ValueError(f"part end is before part start, we got {part_start} {part_end}")
+    part_first = max(int(math.ceil(part_start)), 0)
+    part_last = min(int(math.ceil(part_end)), duration_seconds)
+    part_score_at = {
+        second: value
+        for second, value in score_at.items()
+        if part_first <= second < part_last
+    }
     alarms = raise_alarms(
-        score_at, threshold, duration_seconds, lookback, need, silent
+        part_score_at, threshold, duration_seconds, lookback, need, silent
     )
     raw_seconds = 0
     scorable_seconds = 0
@@ -190,19 +197,18 @@ def score_at_threshold(
     n_hit_alarms = 0
     caught, evaluable = blank_lead_flags(len(lead_onsets))
     n_scores_in_lookback = 0
-    t = 0
-    while t < duration_seconds:
+    t = part_first
+    while t < part_last:
         leave = t - lookback
-        if leave >= 0 and leave in score_at:
+        if leave >= part_first and leave in part_score_at:
             n_scores_in_lookback -= 1
-        if t in score_at:
+        if t in part_score_at:
             n_scores_in_lookback += 1
         if n_scores_in_lookback >= need:
             mark_evaluable_at_second(
                 evaluable, lead_onsets, t, sph_seconds, sop_seconds
             )
-        in_part = part_start <= t < part_end
-        if in_part and label_second(t, seizures, sop_seconds) == LABEL_INTERICTAL:
+        if label_second(t, seizures, sop_seconds) == LABEL_INTERICTAL:
             raw_seconds += 1
             if n_scores_in_lookback >= need:
                 scorable_seconds += 1
@@ -218,7 +224,7 @@ def score_at_threshold(
             mark_caught_leads(
                 caught, lead_onsets, alarm_time, sph_seconds, sop_seconds
             )
-        elif part_start <= alarm_time < part_end:
+        else:
             if label_second(alarm_time, seizures, sop_seconds) == LABEL_INTERICTAL:
                 n_false += 1
                 warn_t = alarm_time
@@ -326,8 +332,6 @@ def pick_threshold(
         if fpr <= fp_max_per_hour:
             chosen = threshold
             chosen_fpr = fpr
-        else:
-            break
         index += 1
     if math.isinf(chosen):
         rule = "highest, no scored window sits above any finite threshold"

@@ -1,0 +1,2494 @@
+{
+  "patient_means": [
+    {
+      "patient": "sub-004",
+      "graph": "attention",
+      "sop": 30,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-004",
+      "graph": "identity",
+      "sop": 30,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-004",
+      "graph": "logistic",
+      "sop": 30,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": null
+    },
+    {
+      "patient": "sub-004",
+      "graph": "mi",
+      "sop": 30,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-004",
+      "graph": "pearson",
+      "sop": 30,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-015",
+      "graph": "attention",
+      "sop": 15,
+      "event_sensitivity": 1.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 2.7701522335912157,
+      "false_alarms_per_hour_seed_std": 0.3430927647833174
+    },
+    {
+      "patient": "sub-015",
+      "graph": "attention",
+      "sop": 30,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-015",
+      "graph": "identity",
+      "sop": 15,
+      "event_sensitivity": 1.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 3.1444971300224616,
+      "false_alarms_per_hour_seed_std": 0.2246069378587472
+    },
+    {
+      "patient": "sub-015",
+      "graph": "identity",
+      "sop": 30,
+      "event_sensitivity": 0.6666666666666666,
+      "event_sensitivity_seed_std": 0.5773502691896258,
+      "false_alarms_per_hour": 0.7547697253476833,
+      "false_alarms_per_hour_seed_std": 0.25158990844922774
+    },
+    {
+      "patient": "sub-015",
+      "graph": "logistic",
+      "sop": 15,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.6738208135762417,
+      "false_alarms_per_hour_seed_std": null
+    },
+    {
+      "patient": "sub-015",
+      "graph": "logistic",
+      "sop": 30,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": null
+    },
+    {
+      "patient": "sub-015",
+      "graph": "mi",
+      "sop": 15,
+      "event_sensitivity": 1.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 2.9947591714499633,
+      "false_alarms_per_hour_seed_std": 0.12967687603460523
+    },
+    {
+      "patient": "sub-015",
+      "graph": "mi",
+      "sop": 30,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 0.25158990844922774,
+      "false_alarms_per_hour_seed_std": 0.25158990844922774
+    },
+    {
+      "patient": "sub-015",
+      "graph": "pearson",
+      "sop": 15,
+      "event_sensitivity": 1.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 2.9198901921637144,
+      "false_alarms_per_hour_seed_std": 0.2246069378587472
+    },
+    {
+      "patient": "sub-015",
+      "graph": "pearson",
+      "sop": 30,
+      "event_sensitivity": 0.6666666666666666,
+      "event_sensitivity_seed_std": 0.5773502691896258,
+      "false_alarms_per_hour": 0.670906422531274,
+      "false_alarms_per_hour_seed_std": 0.14525550136855497
+    },
+    {
+      "patient": "sub-039",
+      "graph": "attention",
+      "sop": 5,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 2.7906976744186043,
+      "false_alarms_per_hour_seed_std": 2.4168150803286657
+    },
+    {
+      "patient": "sub-039",
+      "graph": "attention",
+      "sop": 15,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 1.9138755980861244,
+      "false_alarms_per_hour_seed_std": 3.3149297752514393
+    },
+    {
+      "patient": "sub-039",
+      "graph": "attention",
+      "sop": 30,
+      "event_sensitivity": 1.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "identity",
+      "sop": 5,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 5.581395348837209,
+      "false_alarms_per_hour_seed_std": 6.394291667380242
+    },
+    {
+      "patient": "sub-039",
+      "graph": "identity",
+      "sop": 15,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 7.655502392344498,
+      "false_alarms_per_hour_seed_std": 6.6298595505028795
+    },
+    {
+      "patient": "sub-039",
+      "graph": "identity",
+      "sop": 30,
+      "event_sensitivity": 0.3333333333333333,
+      "event_sensitivity_seed_std": 0.5773502691896258,
+      "false_alarms_per_hour": 5.04201680672269,
+      "false_alarms_per_hour_seed_std": 4.366514640929943
+    },
+    {
+      "patient": "sub-039",
+      "graph": "logistic",
+      "sop": 5,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": null
+    },
+    {
+      "patient": "sub-039",
+      "graph": "logistic",
+      "sop": 15,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": null
+    },
+    {
+      "patient": "sub-039",
+      "graph": "logistic",
+      "sop": 30,
+      "event_sensitivity": 1.0,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 7.563025210084034,
+      "false_alarms_per_hour_seed_std": null
+    },
+    {
+      "patient": "sub-039",
+      "graph": "mi",
+      "sop": 5,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "mi",
+      "sop": 15,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "mi",
+      "sop": 30,
+      "event_sensitivity": 1.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "pearson",
+      "sop": 5,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "pearson",
+      "sop": 15,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 1.9138755980861244,
+      "false_alarms_per_hour_seed_std": 3.3149297752514393
+    },
+    {
+      "patient": "sub-039",
+      "graph": "pearson",
+      "sop": 30,
+      "event_sensitivity": 1.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-051",
+      "graph": "attention",
+      "sop": 5,
+      "event_sensitivity": 0.6666666666666666,
+      "event_sensitivity_seed_std": 0.5773502691896258,
+      "false_alarms_per_hour": 1.0816657652785289,
+      "false_alarms_per_hour_seed_std": 0.37470001245405676
+    },
+    {
+      "patient": "sub-051",
+      "graph": "attention",
+      "sop": 15,
+      "event_sensitivity": 0.3333333333333333,
+      "event_sensitivity_seed_std": 0.5773502691896258,
+      "false_alarms_per_hour": 0.673274733495418,
+      "false_alarms_per_hour_seed_std": 0.673274733495418
+    },
+    {
+      "patient": "sub-051",
+      "graph": "attention",
+      "sop": 30,
+      "event_sensitivity": 1.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 1.1888250445809392,
+      "false_alarms_per_hour_seed_std": 0.4118210757049044
+    },
+    {
+      "patient": "sub-051",
+      "graph": "identity",
+      "sop": 5,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 0.2163331530557058,
+      "false_alarms_per_hour_seed_std": 0.3747000124540568
+    },
+    {
+      "patient": "sub-051",
+      "graph": "identity",
+      "sop": 15,
+      "event_sensitivity": 0.6666666666666666,
+      "event_sensitivity_seed_std": 0.5773502691896258,
+      "false_alarms_per_hour": 1.346549466990836,
+      "false_alarms_per_hour_seed_std": 1.1661460458664594
+    },
+    {
+      "patient": "sub-051",
+      "graph": "identity",
+      "sop": 30,
+      "event_sensitivity": 0.6666666666666666,
+      "event_sensitivity_seed_std": 0.5773502691896258,
+      "false_alarms_per_hour": 0.9510600356647513,
+      "false_alarms_per_hour_seed_std": 0.8236421514098089
+    },
+    {
+      "patient": "sub-051",
+      "graph": "logistic",
+      "sop": 5,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": null
+    },
+    {
+      "patient": "sub-051",
+      "graph": "logistic",
+      "sop": 15,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": null
+    },
+    {
+      "patient": "sub-051",
+      "graph": "logistic",
+      "sop": 30,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": null
+    },
+    {
+      "patient": "sub-051",
+      "graph": "mi",
+      "sop": 5,
+      "event_sensitivity": 0.3333333333333333,
+      "event_sensitivity_seed_std": 0.5773502691896258,
+      "false_alarms_per_hour": 0.2163331530557058,
+      "false_alarms_per_hour_seed_std": 0.3747000124540568
+    },
+    {
+      "patient": "sub-051",
+      "graph": "mi",
+      "sop": 15,
+      "event_sensitivity": 0.6666666666666666,
+      "event_sensitivity_seed_std": 0.5773502691896258,
+      "false_alarms_per_hour": 0.673274733495418,
+      "false_alarms_per_hour_seed_std": 0.673274733495418
+    },
+    {
+      "patient": "sub-051",
+      "graph": "mi",
+      "sop": 30,
+      "event_sensitivity": 0.6666666666666666,
+      "event_sensitivity_seed_std": 0.5773502691896258,
+      "false_alarms_per_hour": 0.47553001783237564,
+      "false_alarms_per_hour_seed_std": 0.41182107570490445
+    },
+    {
+      "patient": "sub-051",
+      "graph": "pearson",
+      "sop": 5,
+      "event_sensitivity": 0.6666666666666666,
+      "event_sensitivity_seed_std": 0.5773502691896258,
+      "false_alarms_per_hour": 0.8653326122228232,
+      "false_alarms_per_hour_seed_std": 0.3747000124540568
+    },
+    {
+      "patient": "sub-051",
+      "graph": "pearson",
+      "sop": 15,
+      "event_sensitivity": 1.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 1.1221245558256967,
+      "false_alarms_per_hour_seed_std": 0.3887153486221531
+    },
+    {
+      "patient": "sub-051",
+      "graph": "pearson",
+      "sop": 30,
+      "event_sensitivity": 1.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 0.7132950267485635,
+      "false_alarms_per_hour_seed_std": 0.7132950267485635
+    },
+    {
+      "patient": "sub-052",
+      "graph": "attention",
+      "sop": 5,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 0.3996003996003996,
+      "false_alarms_per_hour_seed_std": 0.6921281948327183
+    },
+    {
+      "patient": "sub-052",
+      "graph": "attention",
+      "sop": 15,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 1.0054461667364893,
+      "false_alarms_per_hour_seed_std": 1.7414838450629688
+    },
+    {
+      "patient": "sub-052",
+      "graph": "attention",
+      "sop": 30,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "identity",
+      "sop": 5,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "identity",
+      "sop": 15,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 3.0163385002094683,
+      "false_alarms_per_hour_seed_std": 3.0163385002094683
+    },
+    {
+      "patient": "sub-052",
+      "graph": "identity",
+      "sop": 30,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "logistic",
+      "sop": 5,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 1.1988011988011988,
+      "false_alarms_per_hour_seed_std": null
+    },
+    {
+      "patient": "sub-052",
+      "graph": "logistic",
+      "sop": 15,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 4.524507750314203,
+      "false_alarms_per_hour_seed_std": null
+    },
+    {
+      "patient": "sub-052",
+      "graph": "logistic",
+      "sop": 30,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": null
+    },
+    {
+      "patient": "sub-052",
+      "graph": "mi",
+      "sop": 5,
+      "event_sensitivity": 0.3333333333333333,
+      "event_sensitivity_seed_std": 0.5773502691896258,
+      "false_alarms_per_hour": 2.3976023976023977,
+      "false_alarms_per_hour_seed_std": 3.1717298434340746
+    },
+    {
+      "patient": "sub-052",
+      "graph": "mi",
+      "sop": 15,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 2.513615416841224,
+      "false_alarms_per_hour_seed_std": 2.303766583136577
+    },
+    {
+      "patient": "sub-052",
+      "graph": "mi",
+      "sop": 30,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "pearson",
+      "sop": 5,
+      "event_sensitivity": 0.3333333333333333,
+      "event_sensitivity_seed_std": 0.5773502691896258,
+      "false_alarms_per_hour": 1.5984015984015985,
+      "false_alarms_per_hour_seed_std": 1.8311990789034327
+    },
+    {
+      "patient": "sub-052",
+      "graph": "pearson",
+      "sop": 15,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 1.5081692501047341,
+      "false_alarms_per_hour_seed_std": 2.6122257675944534
+    },
+    {
+      "patient": "sub-052",
+      "graph": "pearson",
+      "sop": 30,
+      "event_sensitivity": 0.0,
+      "event_sensitivity_seed_std": 0.0,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-113",
+      "graph": "attention",
+      "sop": 30,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-113",
+      "graph": "identity",
+      "sop": 30,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-113",
+      "graph": "logistic",
+      "sop": 30,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": null
+    },
+    {
+      "patient": "sub-113",
+      "graph": "mi",
+      "sop": 30,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    },
+    {
+      "patient": "sub-113",
+      "graph": "pearson",
+      "sop": 30,
+      "event_sensitivity": null,
+      "event_sensitivity_seed_std": null,
+      "false_alarms_per_hour": 0.0,
+      "false_alarms_per_hour_seed_std": 0.0
+    }
+  ],
+  "summaries": [
+    {
+      "graph": "pearson",
+      "sop": 30,
+      "event_sensitivity": {
+        "n_patients": 4,
+        "mean": 0.6666666666666666,
+        "low": 0.25,
+        "high": 1.0
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 6,
+        "mean": 0.23070024154663957,
+        "low": 0.0,
+        "high": 0.47553001783237564
+      }
+    },
+    {
+      "graph": "pearson",
+      "sop": 15,
+      "event_sensitivity": {
+        "n_patients": 3,
+        "mean": 0.6666666666666666,
+        "low": 0.0,
+        "high": 1.0
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 4,
+        "mean": 1.8660148990450673,
+        "low": 1.3151469029652154,
+        "high": 2.5669599566489696
+      }
+    },
+    {
+      "graph": "pearson",
+      "sop": 5,
+      "event_sensitivity": {
+        "n_patients": 2,
+        "mean": 0.5,
+        "low": 0.3333333333333333,
+        "high": 0.6666666666666666
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 3,
+        "mean": 0.8212447368748071,
+        "low": 0.0,
+        "high": 1.5984015984015985
+      }
+    },
+    {
+      "graph": "mi",
+      "sop": 30,
+      "event_sensitivity": {
+        "n_patients": 4,
+        "mean": 0.41666666666666663,
+        "low": 0.0,
+        "high": 0.8333333333333333
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 6,
+        "mean": 0.12118665438026723,
+        "low": 0.0,
+        "high": 0.27969666032439244
+      }
+    },
+    {
+      "graph": "mi",
+      "sop": 15,
+      "event_sensitivity": {
+        "n_patients": 3,
+        "mean": 0.5555555555555555,
+        "low": 0.0,
+        "high": 1.0
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 4,
+        "mean": 1.5454123304466512,
+        "low": 0.336637366747709,
+        "high": 2.7541872941455936
+      }
+    },
+    {
+      "graph": "mi",
+      "sop": 5,
+      "event_sensitivity": {
+        "n_patients": 2,
+        "mean": 0.3333333333333333,
+        "low": 0.3333333333333333,
+        "high": 0.3333333333333333
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 3,
+        "mean": 0.8713118502193679,
+        "low": 0.0,
+        "high": 2.3976023976023977
+      }
+    },
+    {
+      "graph": "attention",
+      "sop": 30,
+      "event_sensitivity": {
+        "n_patients": 4,
+        "mean": 0.5,
+        "low": 0.0,
+        "high": 1.0
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 6,
+        "mean": 0.19813750743015654,
+        "low": 0.0,
+        "high": 0.5944125222904696
+      }
+    },
+    {
+      "graph": "attention",
+      "sop": 15,
+      "event_sensitivity": {
+        "n_patients": 3,
+        "mean": 0.4444444444444444,
+        "low": 0.0,
+        "high": 1.0
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 4,
+        "mean": 1.590687182977312,
+        "low": 0.8393604501159536,
+        "high": 2.34201391583867
+      }
+    },
+    {
+      "graph": "attention",
+      "sop": 5,
+      "event_sensitivity": {
+        "n_patients": 2,
+        "mean": 0.3333333333333333,
+        "low": 0.0,
+        "high": 0.6666666666666666
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 3,
+        "mean": 1.4239879464325107,
+        "low": 0.3996003996003996,
+        "high": 2.7906976744186043
+      }
+    },
+    {
+      "graph": "identity",
+      "sop": 30,
+      "event_sensitivity": {
+        "n_patients": 4,
+        "mean": 0.41666666666666663,
+        "low": 0.16666666666666666,
+        "high": 0.6666666666666666
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 6,
+        "mean": 1.1246410946225207,
+        "low": 0.12579495422461387,
+        "high": 2.8053133635300838
+      }
+    },
+    {
+      "graph": "identity",
+      "sop": 15,
+      "event_sensitivity": {
+        "n_patients": 3,
+        "mean": 0.5555555555555555,
+        "low": 0.0,
+        "high": 1.0
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 4,
+        "mean": 3.790721872391816,
+        "low": 1.7960363827487422,
+        "high": 6.495711419310741
+      }
+    },
+    {
+      "graph": "identity",
+      "sop": 5,
+      "event_sensitivity": {
+        "n_patients": 2,
+        "mean": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 3,
+        "mean": 1.932576167297638,
+        "low": 0.0,
+        "high": 5.581395348837209
+      }
+    },
+    {
+      "graph": "logistic",
+      "sop": 30,
+      "event_sensitivity": {
+        "n_patients": 4,
+        "mean": 0.25,
+        "low": 0.0,
+        "high": 0.75
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 6,
+        "mean": 1.2605042016806725,
+        "low": 0.0,
+        "high": 3.781512605042017
+      }
+    },
+    {
+      "graph": "logistic",
+      "sop": 15,
+      "event_sensitivity": {
+        "n_patients": 3,
+        "mean": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 4,
+        "mean": 1.2995821409726112,
+        "low": 0.0,
+        "high": 3.3933808127356517
+      }
+    },
+    {
+      "graph": "logistic",
+      "sop": 5,
+      "event_sensitivity": {
+        "n_patients": 2,
+        "mean": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 3,
+        "mean": 0.3996003996003996,
+        "low": 0.0,
+        "high": 1.1988011988011988
+      }
+    }
+  ],
+  "comparisons": [
+    {
+      "graph": "pearson",
+      "control": "identity",
+      "sop": 30,
+      "event_sensitivity": {
+        "n_patients": 4,
+        "mean": 0.25,
+        "low": 0.0,
+        "high": 0.5
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 6,
+        "mean": -0.8939408530758811,
+        "low": -2.574613121983444,
+        "high": -0.013977217136068218
+      }
+    },
+    {
+      "graph": "pearson",
+      "control": "identity",
+      "sop": 15,
+      "event_sensitivity": {
+        "n_patients": 3,
+        "mean": 0.11111111111111112,
+        "low": 0.0,
+        "high": 0.3333333333333333
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 4,
+        "mean": -1.9247069733467481,
+        "low": -4.362371830158466,
+        "high": -0.22451592451194324
+      }
+    },
+    {
+      "graph": "pearson",
+      "control": "identity",
+      "sop": 5,
+      "event_sensitivity": {
+        "n_patients": 2,
+        "mean": 0.5,
+        "low": 0.3333333333333333,
+        "high": 0.6666666666666666
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 3,
+        "mean": -1.1113314304228308,
+        "low": -5.581395348837209,
+        "high": 1.5984015984015985
+      }
+    },
+    {
+      "graph": "pearson",
+      "control": "logistic",
+      "sop": 30,
+      "event_sensitivity": {
+        "n_patients": 4,
+        "mean": 0.41666666666666663,
+        "low": 0.0,
+        "high": 0.8333333333333333
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 6,
+        "mean": -1.0298039601340327,
+        "low": -3.669694867953472,
+        "high": 0.46846525046282744
+      }
+    },
+    {
+      "graph": "pearson",
+      "control": "logistic",
+      "sop": 15,
+      "event_sensitivity": {
+        "n_patients": 3,
+        "mean": 0.6666666666666666,
+        "low": 0.0,
+        "high": 1.0
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 4,
+        "mean": 0.5664327580724564,
+        "low": -1.7837849756355704,
+        "high": 2.0799724883367987
+      }
+    },
+    {
+      "graph": "pearson",
+      "control": "logistic",
+      "sop": 5,
+      "event_sensitivity": {
+        "n_patients": 2,
+        "mean": 0.5,
+        "low": 0.3333333333333333,
+        "high": 0.6666666666666666
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 3,
+        "mean": 0.42164433727440764,
+        "low": 0.0,
+        "high": 0.8653326122228232
+      }
+    },
+    {
+      "graph": "mi",
+      "control": "identity",
+      "sop": 30,
+      "event_sensitivity": {
+        "n_patients": 4,
+        "mean": 2.7755575615628914e-17,
+        "low": -0.5,
+        "high": 0.5
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 6,
+        "mean": -1.0034544402422536,
+        "low": -2.6841267091498167,
+        "high": -0.0792550029720626
+      }
+    },
+    {
+      "graph": "mi",
+      "control": "identity",
+      "sop": 15,
+      "event_sensitivity": {
+        "n_patients": 3,
+        "mean": 0.0,
+        "low": 0.0,
+        "high": 0.0
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 4,
+        "mean": -2.245309541945165,
+        "low": -5.867307565100434,
+        "high": -0.2806221523032282
+      }
+    },
+    {
+      "graph": "mi",
+      "control": "identity",
+      "sop": 5,
+      "event_sensitivity": {
+        "n_patients": 2,
+        "mean": 0.3333333333333333,
+        "low": 0.3333333333333333,
+        "high": 0.3333333333333333
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 3,
+        "mean": -1.0612643170782703,
+        "low": -5.581395348837209,
+        "high": 2.3976023976023977
+      }
+    },
+    {
+      "graph": "mi",
+      "control": "logistic",
+      "sop": 30,
+      "event_sensitivity": {
+        "n_patients": 4,
+        "mean": 0.16666666666666666,
+        "low": 0.0,
+        "high": 0.5
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 6,
+        "mean": -1.1393175473004051,
+        "low": -3.7395809536338125,
+        "high": 0.27969666032439244
+      }
+    },
+    {
+      "graph": "mi",
+      "control": "logistic",
+      "sop": 15,
+      "event_sensitivity": {
+        "n_patients": 3,
+        "mean": 0.5555555555555555,
+        "low": 0.0,
+        "high": 1.0
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 4,
+        "mean": 0.24583018947404023,
+        "low": -1.3398505667308795,
+        "high": 1.7407037684052913
+      }
+    },
+    {
+      "graph": "mi",
+      "control": "logistic",
+      "sop": 5,
+      "event_sensitivity": {
+        "n_patients": 2,
+        "mean": 0.3333333333333333,
+        "low": 0.3333333333333333,
+        "high": 0.3333333333333333
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 3,
+        "mean": 0.4717114506189682,
+        "low": 0.0,
+        "high": 1.1988011988011988
+      }
+    },
+    {
+      "graph": "attention",
+      "control": "identity",
+      "sop": 30,
+      "event_sensitivity": {
+        "n_patients": 4,
+        "mean": 0.08333333333333337,
+        "low": -0.41666666666666663,
+        "high": 0.5
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 6,
+        "mean": -0.926503587192364,
+        "low": -2.646803357585959,
+        "high": 0.07925500297206263
+      }
+    },
+    {
+      "graph": "attention",
+      "control": "identity",
+      "sop": 15,
+      "event_sensitivity": {
+        "n_patients": 3,
+        "mean": -0.1111111111111111,
+        "low": -0.3333333333333333,
+        "high": 0.0
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 4,
+        "mean": -2.200034689414504,
+        "low": -4.474538779067634,
+        "high": -0.5238098149633319
+      }
+    },
+    {
+      "graph": "attention",
+      "control": "identity",
+      "sop": 5,
+      "event_sensitivity": {
+        "n_patients": 2,
+        "mean": 0.3333333333333333,
+        "low": 0.0,
+        "high": 0.6666666666666666
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 3,
+        "mean": -0.5085882208651272,
+        "low": -2.7906976744186043,
+        "high": 0.8653326122228231
+      }
+    },
+    {
+      "graph": "attention",
+      "control": "logistic",
+      "sop": 30,
+      "event_sensitivity": {
+        "n_patients": 4,
+        "mean": 0.25,
+        "low": 0.0,
+        "high": 0.75
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 6,
+        "mean": -1.0623666942505159,
+        "low": -3.781512605042017,
+        "high": 0.5944125222904696
+      }
+    },
+    {
+      "graph": "attention",
+      "control": "logistic",
+      "sop": 15,
+      "event_sensitivity": {
+        "n_patients": 3,
+        "mean": 0.4444444444444444,
+        "low": 0.0,
+        "high": 1.0
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 4,
+        "mean": 0.291105042004701,
+        "low": -2.1608272881617534,
+        "high": 2.0051035090505493
+      }
+    },
+    {
+      "graph": "attention",
+      "control": "logistic",
+      "sop": 5,
+      "event_sensitivity": {
+        "n_patients": 2,
+        "mean": 0.3333333333333333,
+        "low": 0.0,
+        "high": 0.6666666666666666
+      },
+      "false_alarms_per_hour": {
+        "n_patients": 3,
+        "mean": 1.0243875468321113,
+        "low": -0.7992007992007992,
+        "high": 2.7906976744186043
+      }
+    }
+  ],
+  "chance": [
+    {
+      "patient": "sub-004",
+      "graph": "pearson",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-004",
+      "graph": "pearson",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-004",
+      "graph": "pearson",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-004",
+      "graph": "mi",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-004",
+      "graph": "mi",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-004",
+      "graph": "mi",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-004",
+      "graph": "attention",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-004",
+      "graph": "attention",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-004",
+      "graph": "attention",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-004",
+      "graph": "identity",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-004",
+      "graph": "identity",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-004",
+      "graph": "identity",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-004",
+      "graph": "logistic",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-015",
+      "graph": "pearson",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-015",
+      "graph": "pearson",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-015",
+      "graph": "pearson",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-015",
+      "graph": "pearson",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-015",
+      "graph": "pearson",
+      "sop": 15,
+      "seed": 456,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-015",
+      "graph": "pearson",
+      "sop": 15,
+      "seed": 789,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-015",
+      "graph": "mi",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-015",
+      "graph": "mi",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-015",
+      "graph": "mi",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-015",
+      "graph": "mi",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-015",
+      "graph": "mi",
+      "sop": 15,
+      "seed": 456,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-015",
+      "graph": "mi",
+      "sop": 15,
+      "seed": 789,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-015",
+      "graph": "attention",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-015",
+      "graph": "attention",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-015",
+      "graph": "attention",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-015",
+      "graph": "attention",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-015",
+      "graph": "attention",
+      "sop": 15,
+      "seed": 456,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-015",
+      "graph": "attention",
+      "sop": 15,
+      "seed": 789,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-015",
+      "graph": "identity",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-015",
+      "graph": "identity",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-015",
+      "graph": "identity",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-015",
+      "graph": "identity",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-015",
+      "graph": "identity",
+      "sop": 15,
+      "seed": 456,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-015",
+      "graph": "identity",
+      "sop": 15,
+      "seed": 789,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-015",
+      "graph": "logistic",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-015",
+      "graph": "logistic",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "pearson",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-039",
+      "graph": "pearson",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-039",
+      "graph": "pearson",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-039",
+      "graph": "pearson",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "pearson",
+      "sop": 15,
+      "seed": 456,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "pearson",
+      "sop": 15,
+      "seed": 789,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "pearson",
+      "sop": 5,
+      "seed": 123,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "pearson",
+      "sop": 5,
+      "seed": 456,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "pearson",
+      "sop": 5,
+      "seed": 789,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "mi",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-039",
+      "graph": "mi",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-039",
+      "graph": "mi",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-039",
+      "graph": "mi",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "mi",
+      "sop": 15,
+      "seed": 456,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "mi",
+      "sop": 15,
+      "seed": 789,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "mi",
+      "sop": 5,
+      "seed": 123,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "mi",
+      "sop": 5,
+      "seed": 456,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "mi",
+      "sop": 5,
+      "seed": 789,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "attention",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-039",
+      "graph": "attention",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-039",
+      "graph": "attention",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-039",
+      "graph": "attention",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "attention",
+      "sop": 15,
+      "seed": 456,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "attention",
+      "sop": 15,
+      "seed": 789,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "attention",
+      "sop": 5,
+      "seed": 123,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "attention",
+      "sop": 5,
+      "seed": 456,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "attention",
+      "sop": 5,
+      "seed": 789,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "identity",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "identity",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "identity",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-039",
+      "graph": "identity",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "identity",
+      "sop": 15,
+      "seed": 456,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "identity",
+      "sop": 15,
+      "seed": 789,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "identity",
+      "sop": 5,
+      "seed": 123,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "identity",
+      "sop": 5,
+      "seed": 456,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "identity",
+      "sop": 5,
+      "seed": 789,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "logistic",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-039",
+      "graph": "logistic",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-039",
+      "graph": "logistic",
+      "sop": 5,
+      "seed": 123,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-051",
+      "graph": "pearson",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-051",
+      "graph": "pearson",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-051",
+      "graph": "pearson",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-051",
+      "graph": "pearson",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-051",
+      "graph": "pearson",
+      "sop": 15,
+      "seed": 456,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-051",
+      "graph": "pearson",
+      "sop": 15,
+      "seed": 789,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-051",
+      "graph": "pearson",
+      "sop": 5,
+      "seed": 123,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-051",
+      "graph": "pearson",
+      "sop": 5,
+      "seed": 456,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 0.012422199506118559
+    },
+    {
+      "patient": "sub-051",
+      "graph": "pearson",
+      "sop": 5,
+      "seed": 789,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 0.012422199506118559
+    },
+    {
+      "patient": "sub-051",
+      "graph": "mi",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-051",
+      "graph": "mi",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-051",
+      "graph": "mi",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-051",
+      "graph": "mi",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-051",
+      "graph": "mi",
+      "sop": 15,
+      "seed": 456,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-051",
+      "graph": "mi",
+      "sop": 15,
+      "seed": 789,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-051",
+      "graph": "mi",
+      "sop": 5,
+      "seed": 123,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 0.012422199506118559
+    },
+    {
+      "patient": "sub-051",
+      "graph": "mi",
+      "sop": 5,
+      "seed": 456,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-051",
+      "graph": "mi",
+      "sop": 5,
+      "seed": 789,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-051",
+      "graph": "attention",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-051",
+      "graph": "attention",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-051",
+      "graph": "attention",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-051",
+      "graph": "attention",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-051",
+      "graph": "attention",
+      "sop": 15,
+      "seed": 456,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-051",
+      "graph": "attention",
+      "sop": 15,
+      "seed": 789,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-051",
+      "graph": "attention",
+      "sop": 5,
+      "seed": 123,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-051",
+      "graph": "attention",
+      "sop": 5,
+      "seed": 456,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 0.012422199506118559
+    },
+    {
+      "patient": "sub-051",
+      "graph": "attention",
+      "sop": 5,
+      "seed": 789,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 0.012422199506118559
+    },
+    {
+      "patient": "sub-051",
+      "graph": "identity",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-051",
+      "graph": "identity",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-051",
+      "graph": "identity",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 0.07225651367144714
+    },
+    {
+      "patient": "sub-051",
+      "graph": "identity",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-051",
+      "graph": "identity",
+      "sop": 15,
+      "seed": 456,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-051",
+      "graph": "identity",
+      "sop": 15,
+      "seed": 789,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 0.036805582279178184
+    },
+    {
+      "patient": "sub-051",
+      "graph": "identity",
+      "sop": 5,
+      "seed": 123,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-051",
+      "graph": "identity",
+      "sop": 5,
+      "seed": 456,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-051",
+      "graph": "identity",
+      "sop": 5,
+      "seed": 789,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-051",
+      "graph": "logistic",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-051",
+      "graph": "logistic",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-051",
+      "graph": "logistic",
+      "sop": 5,
+      "seed": 123,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "pearson",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "pearson",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "pearson",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "pearson",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "pearson",
+      "sop": 15,
+      "seed": 456,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "pearson",
+      "sop": 15,
+      "seed": 789,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "pearson",
+      "sop": 5,
+      "seed": 123,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "pearson",
+      "sop": 5,
+      "seed": 456,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 0.012422199506118559
+    },
+    {
+      "patient": "sub-052",
+      "graph": "pearson",
+      "sop": 5,
+      "seed": 789,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "mi",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "mi",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "mi",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "mi",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "mi",
+      "sop": 15,
+      "seed": 456,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "mi",
+      "sop": 15,
+      "seed": 789,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "mi",
+      "sop": 5,
+      "seed": 123,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 0.012422199506118559
+    },
+    {
+      "patient": "sub-052",
+      "graph": "mi",
+      "sop": 5,
+      "seed": 456,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "mi",
+      "sop": 5,
+      "seed": 789,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "attention",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "attention",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "attention",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "attention",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "attention",
+      "sop": 15,
+      "seed": 456,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "attention",
+      "sop": 15,
+      "seed": 789,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "attention",
+      "sop": 5,
+      "seed": 123,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "attention",
+      "sop": 5,
+      "seed": 456,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "attention",
+      "sop": 5,
+      "seed": 789,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "identity",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "identity",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "identity",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "identity",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "identity",
+      "sop": 15,
+      "seed": 456,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "identity",
+      "sop": 15,
+      "seed": 789,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "identity",
+      "sop": 5,
+      "seed": 123,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "identity",
+      "sop": 5,
+      "seed": 456,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "identity",
+      "sop": 5,
+      "seed": 789,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "logistic",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "logistic",
+      "sop": 15,
+      "seed": 123,
+      "chance_hit_probability": 0.036805582279178184,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-052",
+      "graph": "logistic",
+      "sop": 5,
+      "seed": 123,
+      "chance_hit_probability": 0.012422199506118559,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-113",
+      "graph": "pearson",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-113",
+      "graph": "pearson",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-113",
+      "graph": "pearson",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-113",
+      "graph": "mi",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-113",
+      "graph": "mi",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-113",
+      "graph": "mi",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-113",
+      "graph": "attention",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-113",
+      "graph": "attention",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-113",
+      "graph": "attention",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-113",
+      "graph": "identity",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-113",
+      "graph": "identity",
+      "sop": 30,
+      "seed": 456,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-113",
+      "graph": "identity",
+      "sop": 30,
+      "seed": 789,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    },
+    {
+      "patient": "sub-113",
+      "graph": "logistic",
+      "sop": 30,
+      "seed": 123,
+      "chance_hit_probability": 0.07225651367144714,
+      "chance_p_at_least_observed": 1.0
+    }
+  ],
+  "note": "Seeds are averaged first. Bootstrap intervals use patients."
+}

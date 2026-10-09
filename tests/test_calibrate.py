@@ -155,8 +155,13 @@ def test_fast_scorer_matches_score_at_threshold():
                 )
                 for key in expected:
                     assert expected[key] == fast[key], (key, threshold, case, sop_seconds)
+                part_scores = {
+                    second: value
+                    for second, value in score_at.items()
+                    if part_start <= second < part_end
+                }
                 expected_alarms = raise_alarms(
-                    score_at,
+                    part_scores,
                     threshold,
                     duration,
                     lookback_seconds(sop_seconds),
@@ -235,6 +240,95 @@ def test_pick_threshold_fast_matches_pick_threshold():
         expected_info["val_scorable_interictal_hours"]
         == fast_info["select_scorable_interictal_hours"]
     )
+
+
+def test_threshold_search_checks_candidates_after_a_failure(monkeypatch):
+    score_at = {10: 3.0, 11: 2.0, 12: 1.0}
+    fprs = {3.0: 0.0, 2.0: 1.0, 1.0: 0.0}
+
+    def fake_score(
+        _score_at,
+        threshold,
+        _seizures,
+        _leads,
+        _duration,
+        _part_start,
+        _part_end,
+        **_kwargs,
+    ):
+        return {
+            "scorable_interictal_hours": 1.0,
+            "false_alarms_per_hour": 0.0
+            if math.isinf(threshold)
+            else fprs[threshold],
+        }
+
+    monkeypatch.setattr("evaluation.alarms.score_at_threshold", fake_score)
+    threshold, _info = pick_threshold(
+        score_at,
+        [],
+        20,
+        0,
+        20,
+        fp_max_per_hour=0.5,
+    )
+
+    assert threshold == 1.0
+
+
+def test_fast_threshold_search_checks_candidates_after_a_failure(monkeypatch):
+    score_at = {10: 3.0, 11: 2.0, 12: 1.0}
+    fprs = {3.0: 0.0, 2.0: 1.0, 1.0: 0.0}
+
+    def fake_score(_scorer, threshold, _part_start, _part_end, _leads):
+        return {
+            "scorable_interictal_hours": 1.0,
+            "false_alarms_per_hour": 0.0
+            if math.isinf(threshold)
+            else fprs[threshold],
+        }
+
+    monkeypatch.setattr("evaluation.calibrate.score_part_fast", fake_score)
+    monkeypatch.setattr(
+        "evaluation.calibrate.vote_supremum",
+        lambda _scorer, _part_start, _part_end: None,
+    )
+    threshold, _info = pick_threshold_fast(
+        score_at,
+        [],
+        0,
+        20,
+        SOP_SECONDS,
+        0.5,
+        scorer={},
+    )
+
+    assert threshold == 1.0
+
+
+def test_part_scoring_starts_with_clean_alarm_state():
+    score_at = {second: 1.0 for second in range(100)}
+    seizures = [(10_000.0, 10_010.0)]
+    scorer = prepare_scorer(score_at, seizures, 100, 30)
+
+    fast = score_part_fast(scorer, 0.5, 50, 100, [])
+    reference = score_at_threshold(
+        score_at,
+        0.5,
+        seizures,
+        [],
+        100,
+        50,
+        100,
+        lookback=5,
+        need=4,
+        silent=330,
+        sop_seconds=30,
+    )
+
+    assert fast["alarms"] == [53]
+    assert reference["n_alarms"] == 1
+    assert reference["n_false_alarms"] == 1
 
 
 def test_pick_threshold_fast_empty_part_is_inf():

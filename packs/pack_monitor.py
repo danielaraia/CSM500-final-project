@@ -7,7 +7,12 @@ from data.labels import LABEL_INTERICTAL, LABEL_SOP
 from evaluation.metrics import read_metrics, replace_metrics_keys
 from data.normalize import apply_node_zscore, node_mean_and_std
 from packs.pack import load_split, save_named_labels
-from data.windows import EVAL_STRIDE_SECONDS, TRAIN_STRIDE_SECONDS, end_is_on_stride
+from data.windows import (
+    EVAL_STRIDE_SECONDS,
+    TRAIN_STRIDE_SECONDS,
+    WINDOW_SECONDS,
+    end_is_on_stride,
+)
 
 
 def monitor_clock_from_train_hop10(ends):
@@ -27,7 +32,9 @@ def monitor_clock_from_train_hop10(ends):
 
 
 def cut_monitoring_slice_at_clock(features, adjacency, ends, labels, monitor_clock):
-    train_i, monitor_i = _indices_at_clock(ends, monitor_clock, end_limit=None)
+    train_i, monitor_i = _indices_at_clock(
+        ends, monitor_clock, end_limit=None, window_seconds=features.shape[1]
+    )
     if len(train_i) == 0:
         raise ValueError("didnt leave any train windows after the monitoring cut")
     if len(monitor_i) == 0:
@@ -60,7 +67,9 @@ def rewrite_monitor_eval(folder, eeg_path, ecg_path, emg_path, mov_path, events_
     features, graphs, ends, labels = _labelled_windows(
         eeg_path, ecg_path, emg_path, mov_path, events_path, t1
     )
-    train_i, monitor_i = _indices_at_clock(ends, monitor_clock, end_limit=t1)
+    train_i, monitor_i = _indices_at_clock(
+        ends, monitor_clock, end_limit=t1, window_seconds=features.shape[1]
+    )
     if len(train_i) == 0:
         raise ValueError("didnt rebuild any train windows for the z score")
     if len(monitor_i) == 0:
@@ -133,18 +142,21 @@ def _labelled_windows(eeg_path, ecg_path, emg_path, mov_path, events_path, t1):
     return kept[0], kept[1], kept[2], kept[3]
 
 
-def _indices_at_clock(ends, monitor_clock, end_limit):
+def _indices_at_clock(
+    ends, monitor_clock, end_limit, window_seconds=WINDOW_SECONDS
+):
     train_i = []
     monitor_i = []
+    train_end_limit = monitor_clock - window_seconds + 1
     index = 0
     while index < len(ends):
         end_time = ends[index]
         index += 1
         if end_limit is not None and end_time >= end_limit:
             continue
-        if end_time < monitor_clock:
+        if end_time < train_end_limit:
             train_i.append(index - 1)
-        else:
+        elif end_time >= monitor_clock:
             monitor_i.append(index - 1)
     return train_i, monitor_i
 

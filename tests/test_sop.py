@@ -25,7 +25,8 @@ from data.labels import (
 )
 from packs.pack_sop import parse_args as parse_pack_args
 from evaluation.report_sop import grid_row, plain_table
-from evaluation.score_sop import run_grid
+from evaluation.metrics import read_metrics, write_metrics
+from packs.seed_pack import prepare_seed_folder
 from train.train_sop import parse_args as parse_train_args
 
 SOP_15 = 15 * 60
@@ -165,6 +166,63 @@ def test_sop_run_folders_do_not_collide():
         shutil.rmtree(root)
 
 
+def test_seed_run_folders_do_not_collide():
+    root = tempfile.mkdtemp()
+    try:
+        seed_123 = start_run(root, "sub-004", leaf="eval1")
+        seed_456 = start_run(
+            root, "sub-004", extra={"seed": 456}, leaf="eval1"
+        )
+        seed_789 = start_run(
+            root, "sub-004", extra={"seed": 789}, leaf="eval1"
+        )
+        assert len({seed_123, seed_456, seed_789}) == 3
+        assert seed_456 == run_folder_path(
+            root, "sub-004", "eval1", seed=456
+        )
+        assert read_config(os.path.join(seed_789, "config.json"))["seed"] == 789
+    finally:
+        shutil.rmtree(root)
+
+
+def test_prepare_seed_folder_reuses_seed_independent_packs():
+    root = tempfile.mkdtemp()
+    try:
+        source = start_run(root, "sub-004", leaf="eval1")
+        for split in ("train", "monitor", "val", "test"):
+            with open(os.path.join(source, split + ".npz"), "wb") as handle:
+                handle.write((split + "-pack").encode())
+        write_metrics(
+            source,
+            {
+                "patient_id": "sub-004",
+                "pack_seconds": 1.5,
+                "n_train_windows": 10,
+                "train_seconds": 9.0,
+            },
+        )
+        target = prepare_seed_folder(
+            root,
+            "sub-004",
+            source,
+            "pearson",
+            30,
+            456,
+        )
+        assert target == run_folder_path(
+            root, "sub-004", "eval1", seed=456
+        )
+        assert read_config(os.path.join(target, "config.json"))["seed"] == 456
+        with open(os.path.join(target, "train.npz"), "rb") as handle:
+            assert handle.read() == b"train-pack"
+        metrics = read_metrics(target)
+        assert metrics["pack_seconds"] == 1.5
+        assert metrics["n_train_windows"] == 10
+        assert "train_seconds" not in metrics
+    finally:
+        shutil.rmtree(root)
+
+
 def test_pack_sop_parse_args():
     assert parse_pack_args(
         ["pack_sop.py", "sub-004", "01", "mi", "15"]
@@ -181,24 +239,20 @@ def test_pack_sop_parse_args():
         parse_pack_args(["pack_sop.py", "sub-004", "01", "pearson", "fifteen"])
 
 
-def test_train_sop_parse_args_covers_the_whole_grid():
-    grid = parse_train_args(["train_sop.py"])
-    assert len(grid) == 42
-    assert ("sub-015", "attention", 5) in grid
-    assert ("sub-004", "pearson", 15) in grid
-    assert parse_train_args(["train_sop.py", "sub-051", "mi", "15"]) == [
-        ("sub-051", "mi", 15)
-    ]
-    with pytest.raises(ValueError, match="sop_minutes has to be"):
-        parse_train_args(["train_sop.py", "sub-051", "mi", "20"])
-    with pytest.raises(ValueError, match="usage"):
-        parse_train_args(["train_sop.py", "sub-051"])
-
-
-def test_score_sop_grid_matches_the_train_grid():
-    grid = run_grid()
-    assert len(grid) == 42
-    assert ("sub-073", "attention", 5) in grid
+def test_train_sop_parse_args():
+    assert parse_train_args(
+        ["train_sop.py", "sub-051", "mi", "15", "456"]
+    ) == ("sub-051", "mi", 15, 456)
+    with pytest.raises(ValueError, match="unknown sop"):
+        parse_train_args(["train_sop.py", "sub-051", "mi", "20", "123"])
+    with pytest.raises(ValueError, match="unknown seed"):
+        parse_train_args(["train_sop.py", "sub-051", "mi", "15", "111"])
+    with pytest.raises(ValueError, match="unknown graph"):
+        parse_train_args(
+            ["train_sop.py", "sub-051", "cosine", "15", "123"]
+        )
+    with pytest.raises(ValueError, match="unknown patient"):
+        parse_train_args(["train_sop.py", "sub-999", "mi", "15", "123"])
 
 
 def test_report_sop_grid_row_states():

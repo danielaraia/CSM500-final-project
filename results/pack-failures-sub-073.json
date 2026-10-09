@@ -1,0 +1,10 @@
+{
+  "patient": "sub-073",
+  "status": "no_valid_cells",
+  "reason": "no test windows after split-boundary purge",
+  "sop_minutes": [
+    30,
+    15,
+    5
+  ]
+}

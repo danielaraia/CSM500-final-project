@@ -18,19 +18,42 @@ Seizure prediction from wearable sensor data with a temporal graph neural networ
 
 
 
+## Setup
+
+```
+python -m pip install -r requirements.txt
+python -m pytest
+```
+
+Training needs an NVIDIA GPU. The GPU setup uses Python 3.10, CUDA 12.1,
+PyTorch 2.5.1, PyTorch Geometric 2.3.1 and mamba_ssm 2.2.4.
+
+```
+python -m pip install --index-url https://download.pytorch.org/whl/cu121 torch==2.5.1
+python -m pip install -r requirements-gpu.txt
+python -m pip install mamba-ssm==2.2.4 --no-build-isolation
+```
+
 ## Usage
 
 Run everything as a module from the repo root, for example:
 
 ```
 python -m packs.pack_sop sub-051 01 pearson 15
-python -m train.train_sop sub-051 pearson 15
-python -m evaluation.report_sop
+python -m train.train_sop sub-051 pearson 15 123
+python -m evaluation.score_sop sub-051 pearson 15 123
 ```
 
-Also run the tests the same way:
+Run one patient and then build the final summary:
 
 ```
-python -m pytest
+python -m tools.run_patient_grid sub-051
+python -m evaluation.experiment_analysis
+```
+
+Rebuild the saved results without a GPU:
+
+```
+python -m evaluation.experiment_analysis results/run-metrics.json
 ```
 

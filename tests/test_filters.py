@@ -27,7 +27,8 @@ def test_ecg_cuts_sixty_hz():
     time = np.arange(n_samples) / EEG_SAMPLE_RATE
     sixty_hz = np.sin(2 * np.pi * 60.0 * time)
     filtered = filter_ecg(sixty_hz)
-    assert _amplitude_near(filtered, time, 60.0) < 0.1
+    settled = EEG_SAMPLE_RATE * 2
+    assert _amplitude_near(filtered[settled:], time[settled:], 60.0) < 0.13
 
 
 def test_emg_cuts_low_frequency():
@@ -44,6 +45,19 @@ def test_movement_highpass_cuts_stillness():
     slow = np.sin(2 * np.pi * 0.2 * time) + 3.0
     filtered = filter_movement_axis(slow)
     assert np.abs(np.mean(filtered)) < 0.2
+
+
+def test_filters_do_not_use_future_samples():
+    rng = np.random.default_rng(123)
+    original = rng.normal(size=EEG_SAMPLE_RATE * 8)
+    changed_future = original.copy()
+    cut = EEG_SAMPLE_RATE * 4
+    changed_future[cut:] += 100.0
+
+    for filter_fn in (filter_eeg, filter_ecg, filter_emg):
+        before = filter_fn(original)
+        after = filter_fn(changed_future)
+        np.testing.assert_array_equal(before[:cut], after[:cut])
 
 
 def _amplitude_near(samples, time, freq_hz):

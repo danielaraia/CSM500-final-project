@@ -134,22 +134,22 @@ def test_all_unused_windows_fail():
         keep_labelled_windows(features, graphs, ends, seizures)
 
 
-def test_split_puts_windows_before_t1_in_train():
+def test_split_purges_windows_that_cross_boundaries():
     features = np.zeros((4, WINDOW_SECONDS, N_NODES, N_FFT_BINS))
     graphs = np.zeros((4, WINDOW_SECONDS, N_NODES, N_NODES))
     features[0, 0, 0, 0] = 1.0
     features[3, 0, 0, 0] = 9.0
-    ends = [10, 20, 50, 80]
+    ends = [100, 120, 190, 260]
     labels = [LABEL_SOP, LABEL_SOP, LABEL_SOP, LABEL_SOP]
     train, val, test = split_labelled_windows(
-        features, graphs, ends, labels, t1=30, t2=60
+        features, graphs, ends, labels, t1=130, t2=200
     )
     train_f, _train_g, train_ends, _train_l = train
     val_f, _val_g, val_ends, _val_l = val
     test_f, _test_g, test_ends, _test_l = test
-    assert train_ends == [10, 20]
-    assert val_ends == [50]
-    assert test_ends == [80]
+    assert train_ends == [100, 120]
+    assert val_ends == [190]
+    assert test_ends == [260]
     assert train_f[0, 0, 0, 0] == 1.0
     assert test_f[0, 0, 0, 0] == 9.0
     assert val_f.shape[0] == 1
@@ -158,19 +158,19 @@ def test_split_puts_windows_before_t1_in_train():
 def test_split_fails_without_train_windows():
     features = np.zeros((2, WINDOW_SECONDS, N_NODES, N_FFT_BINS))
     graphs = np.zeros((2, WINDOW_SECONDS, N_NODES, N_NODES))
-    ends = [50, 80]
+    ends = [190, 260]
     labels = [LABEL_SOP, LABEL_SOP]
     with pytest.raises(ValueError, match="no train windows"):
-        split_labelled_windows(features, graphs, ends, labels, t1=30, t2=60)
+        split_labelled_windows(features, graphs, ends, labels, t1=130, t2=200)
 
 
-def test_monitoring_cut_keeps_last_quarter():
+def test_monitoring_cut_purges_overlapping_training_windows():
     n_windows = 16
     features = np.zeros((n_windows, WINDOW_SECONDS, N_NODES, N_FFT_BINS))
     graphs = np.zeros((n_windows, WINDOW_SECONDS, N_NODES, N_NODES))
     features[0, 0, 0, 0] = 1.0
     features[15, 0, 0, 0] = 9.0
-    ends = list(range(n_windows))
+    ends = [59 + 10 * index for index in range(n_windows)]
     labels = [LABEL_INTERICTAL] * 12 + [LABEL_SOP] * 2 + [LABEL_INTERICTAL] * 2
     train, monitor, monitor_start, n_positive, n_negative = cut_monitoring_slice(
         features, graphs, ends, labels
@@ -180,16 +180,16 @@ def test_monitoring_cut_keeps_last_quarter():
     assert monitor_start == 12
     assert n_positive == 2
     assert n_negative == 2
-    assert train_ends == list(range(12))
-    assert mon_ends == [12, 13, 14, 15]
-    assert train_f.shape[0] == 12
+    assert train_ends == [59, 69, 79, 89, 99, 109, 119]
+    assert mon_ends == [179, 189, 199, 209]
+    assert train_f.shape[0] == 7
     assert mon_f[3, 0, 0, 0] == 9.0
     assert train_labels[-1] == LABEL_INTERICTAL
     assert mon_labels[0] == LABEL_SOP
 
 
 def test_pack_keeps_train_hop_ten_and_eval_hop_one():
-    electrical, movement = _fake_run(180)
+    electrical, movement = _fake_run(250)
     # far seizure: seconds 0 to 180 are all interictal
     seizures = [(100000, 100100)]
     features, graphs, ends, drop_counts = build_windows(
@@ -217,18 +217,16 @@ def test_pack_keeps_train_hop_ten_and_eval_hop_one():
         ends,
         [LABEL_INTERICTAL] * len(ends),
         t1=100,
-        t2=150,
+        t2=160,
     )
     assert train[2] == [69, 79, 89, 99]
-    assert val[2][0] == 100
-    assert val[2][1] == 101
-    assert val[2][-1] == 149
-    assert test[2][0] == 150
-    assert test[2][-1] == 179
+    assert val[2] == [159]
+    assert test[2][0] == 219
+    assert test[2][-1] == 249
 
 
 def test_pack_keeps_hop_one_inside_monitor_span():
-    electrical, movement = _fake_run(250)
+    electrical, movement = _fake_run(350)
     seizures = [(100000, 100100)]
     features, graphs, ends, drop_counts = build_windows(
         electrical,
@@ -255,14 +253,14 @@ def test_pack_keeps_hop_one_inside_monitor_span():
         ends,
         [LABEL_INTERICTAL] * len(ends),
         t1=200,
-        t2=220,
+        t2=260,
     )
     assert 170 not in train[2]
     assert 179 in train[2]
     assert 180 in train[2]
     assert 199 in train[2]
-    assert val[2][0] == 200
-    assert test[2][0] == 220
+    assert val[2][0] == 259
+    assert test[2][0] == 319
 
 
 def test_t1_without_train_stride_fails():

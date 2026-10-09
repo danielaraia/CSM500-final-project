@@ -33,21 +33,20 @@ def _butter_bandpass(samples, low_hz, high_hz, sample_rate, order):
     sos = signal.butter(
         order, [low_hz, high_hz], btype="bandpass", fs=sample_rate, output="sos"
     )
-    return signal.sosfiltfilt(sos, samples)
+    return signal.sosfilt(sos, samples)
 
 
 def _butter_highpass(samples, cutoff_hz, sample_rate, order):
     sos = signal.butter(order, cutoff_hz, btype="highpass", fs=sample_rate, output="sos")
-    return signal.sosfiltfilt(sos, samples)
+    return signal.sosfilt(sos, samples)
 
 
 def _butter_lowpass(samples, cutoff_hz, sample_rate, order):
     sos = signal.butter(order, cutoff_hz, btype="lowpass", fs=sample_rate, output="sos")
-    return signal.sosfiltfilt(sos, samples)
+    return signal.sosfilt(sos, samples)
 
 
 def _notch_50(samples, sample_rate):
-    # 50 Hz mains, Q=30, then filtfilt so it doesnt shift the phase
     b, a = signal.iirnotch(NOTCH_HZ, NOTCH_Q, fs=sample_rate)
     sos = signal.tf2sos(b, a)
-    return signal.sosfiltfilt(sos, samples)
+    return signal.sosfilt(sos, samples)

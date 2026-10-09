@@ -1,0 +1,1692 @@
+[
+  {
+    "patient": "sub-004",
+    "graph": "pearson",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-004",
+    "graph": "pearson",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-004",
+    "graph": "pearson",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-004",
+    "graph": "mi",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-004",
+    "graph": "mi",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-004",
+    "graph": "mi",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-004",
+    "graph": "attention",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-004",
+    "graph": "attention",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-004",
+    "graph": "attention",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-004",
+    "graph": "identity",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-004",
+    "graph": "identity",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-004",
+    "graph": "identity",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-004",
+    "graph": "logistic",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-015",
+    "graph": "pearson",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.7547697253476833,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "pearson",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.5031798168984555,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "pearson",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.7547697253476833,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "pearson",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 3.144497130022461,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "pearson",
+    "sop": 15,
+    "seed": 456,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 2.6952832543049667,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "pearson",
+    "sop": 15,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 2.919890192163714,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "mi",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "mi",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.5031798168984555,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "mi",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.25158990844922774,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "mi",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 2.919890192163714,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "mi",
+    "sop": 15,
+    "seed": 456,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 2.919890192163714,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "mi",
+    "sop": 15,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 3.144497130022461,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "attention",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "attention",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "attention",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "attention",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 2.470676316446219,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "attention",
+    "sop": 15,
+    "seed": 456,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 3.144497130022461,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "attention",
+    "sop": 15,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 2.6952832543049667,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "identity",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.5031798168984555,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "identity",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 1.006359633796911,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "identity",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.7547697253476833,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "identity",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 3.3691040678812083,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "identity",
+    "sop": 15,
+    "seed": 456,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 3.144497130022461,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "identity",
+    "sop": 15,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 2.919890192163714,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "logistic",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-015",
+    "graph": "logistic",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.6738208135762417,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-039",
+    "graph": "pearson",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-039",
+    "graph": "pearson",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-039",
+    "graph": "pearson",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-039",
+    "graph": "pearson",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 5.741626794258373,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "pearson",
+    "sop": 15,
+    "seed": 456,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "pearson",
+    "sop": 15,
+    "seed": 789,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "pearson",
+    "sop": 5,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "pearson",
+    "sop": 5,
+    "seed": 456,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "pearson",
+    "sop": 5,
+    "seed": 789,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "mi",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-039",
+    "graph": "mi",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-039",
+    "graph": "mi",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-039",
+    "graph": "mi",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "mi",
+    "sop": 15,
+    "seed": 456,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "mi",
+    "sop": 15,
+    "seed": 789,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "mi",
+    "sop": 5,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "mi",
+    "sop": 5,
+    "seed": 456,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "mi",
+    "sop": 5,
+    "seed": 789,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "attention",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-039",
+    "graph": "attention",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-039",
+    "graph": "attention",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-039",
+    "graph": "attention",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "attention",
+    "sop": 15,
+    "seed": 456,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 5.741626794258373,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "attention",
+    "sop": 15,
+    "seed": 789,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "attention",
+    "sop": 5,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 4.186046511627906,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "attention",
+    "sop": 5,
+    "seed": 456,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 4.186046511627906,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "attention",
+    "sop": 5,
+    "seed": 789,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "identity",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 7.563025210084034,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-039",
+    "graph": "identity",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 7.563025210084034,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-039",
+    "graph": "identity",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-039",
+    "graph": "identity",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 11.483253588516746,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "identity",
+    "sop": 15,
+    "seed": 456,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 11.483253588516746,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "identity",
+    "sop": 15,
+    "seed": 789,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "identity",
+    "sop": 5,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 12.55813953488372,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "identity",
+    "sop": 5,
+    "seed": 456,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "identity",
+    "sop": 5,
+    "seed": 789,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 4.186046511627906,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "logistic",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 7.563025210084034,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-039",
+    "graph": "logistic",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-039",
+    "graph": "logistic",
+    "sop": 5,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-051",
+    "graph": "pearson",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 1.426590053497127,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "pearson",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.7132950267485635,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "pearson",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "pearson",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 1.346549466990836,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "pearson",
+    "sop": 15,
+    "seed": 456,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.673274733495418,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "pearson",
+    "sop": 15,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 1.346549466990836,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "pearson",
+    "sop": 5,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.6489994591671174,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "pearson",
+    "sop": 5,
+    "seed": 456,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 1.2979989183342349,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "pearson",
+    "sop": 5,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.6489994591671174,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "mi",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.7132950267485635,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "mi",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "mi",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.7132950267485635,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "mi",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "mi",
+    "sop": 15,
+    "seed": 456,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 1.346549466990836,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "mi",
+    "sop": 15,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.673274733495418,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "mi",
+    "sop": 5,
+    "seed": 123,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.6489994591671174,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "mi",
+    "sop": 5,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "mi",
+    "sop": 5,
+    "seed": 789,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "attention",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.7132950267485635,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "attention",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 1.426590053497127,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "attention",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 1.426590053497127,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "attention",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "attention",
+    "sop": 15,
+    "seed": 456,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 0.673274733495418,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "attention",
+    "sop": 15,
+    "seed": 789,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 1.346549466990836,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "attention",
+    "sop": 5,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.6489994591671174,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "attention",
+    "sop": 5,
+    "seed": 456,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 1.2979989183342349,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "attention",
+    "sop": 5,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 1.2979989183342349,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "identity",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 1.426590053497127,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "identity",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "identity",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 1.426590053497127,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "identity",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 2.019824200486254,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "identity",
+    "sop": 15,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "identity",
+    "sop": 15,
+    "seed": 789,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 2.019824200486254,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "identity",
+    "sop": 5,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "identity",
+    "sop": 5,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.6489994591671174,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "identity",
+    "sop": 5,
+    "seed": 789,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "logistic",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "logistic",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-051",
+    "graph": "logistic",
+    "sop": 5,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "pearson",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "pearson",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "pearson",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "pearson",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "pearson",
+    "sop": 15,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 4.524507750314203,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "pearson",
+    "sop": 15,
+    "seed": 789,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "pearson",
+    "sop": 5,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 1.1988011988011988,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "pearson",
+    "sop": 5,
+    "seed": 456,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 3.5964035964035967,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "pearson",
+    "sop": 5,
+    "seed": 789,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "mi",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "mi",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "mi",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "mi",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 3.0163385002094683,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "mi",
+    "sop": 15,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 4.524507750314203,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "mi",
+    "sop": 15,
+    "seed": 789,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "mi",
+    "sop": 5,
+    "seed": 123,
+    "event_sensitivity": 1.0,
+    "false_alarms_per_hour": 5.994005994005994,
+    "caught": 1,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "mi",
+    "sop": 5,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 1.1988011988011988,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "mi",
+    "sop": 5,
+    "seed": 789,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "attention",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "attention",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "attention",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "attention",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "attention",
+    "sop": 15,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "attention",
+    "sop": 15,
+    "seed": 789,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 3.0163385002094683,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "attention",
+    "sop": 5,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "attention",
+    "sop": 5,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 1.1988011988011988,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "attention",
+    "sop": 5,
+    "seed": 789,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "identity",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "identity",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "identity",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "identity",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "identity",
+    "sop": 15,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 3.0163385002094683,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "identity",
+    "sop": 15,
+    "seed": 789,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 6.0326770004189365,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "identity",
+    "sop": 5,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "identity",
+    "sop": 5,
+    "seed": 456,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "identity",
+    "sop": 5,
+    "seed": 789,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "logistic",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "logistic",
+    "sop": 15,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 4.524507750314203,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-052",
+    "graph": "logistic",
+    "sop": 5,
+    "seed": 123,
+    "event_sensitivity": 0.0,
+    "false_alarms_per_hour": 1.1988011988011988,
+    "caught": 0,
+    "seizures": 1
+  },
+  {
+    "patient": "sub-113",
+    "graph": "pearson",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-113",
+    "graph": "pearson",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-113",
+    "graph": "pearson",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-113",
+    "graph": "mi",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-113",
+    "graph": "mi",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-113",
+    "graph": "mi",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-113",
+    "graph": "attention",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-113",
+    "graph": "attention",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-113",
+    "graph": "attention",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-113",
+    "graph": "identity",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-113",
+    "graph": "identity",
+    "sop": 30,
+    "seed": 456,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-113",
+    "graph": "identity",
+    "sop": 30,
+    "seed": 789,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  },
+  {
+    "patient": "sub-113",
+    "graph": "logistic",
+    "sop": 30,
+    "seed": 123,
+    "event_sensitivity": null,
+    "false_alarms_per_hour": 0.0,
+    "caught": 0,
+    "seizures": 0
+  }
+]

@@ -1,0 +1,10 @@
+[
+  {
+    "n_checked": 2667,
+    "n_mistakes": 0,
+    "mistakes": [],
+    "all_labels_match": true,
+    "patient": "sub-004",
+    "sop_minutes": 30
+  }
+]

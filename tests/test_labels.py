@@ -35,6 +35,17 @@ def test_sop_sph_ictal_and_interictal_on_known_clock():
     assert label_second(onset - INTERICTAL_GAP_SECONDS, seizures) == LABEL_UNUSED
 
 
+def test_postictal_period_overrides_the_next_seizure_sop():
+    seizures = [
+        (10_000, 10_100),
+        (15_000, 15_100),
+    ]
+
+    assert label_second(13_000, seizures) == LABEL_UNUSED
+    assert label_second(13_699, seizures) == LABEL_UNUSED
+    assert label_second(13_700, seizures) == LABEL_SOP
+
+
 def test_one_usable_seizure_is_rejected():
     with pytest.raises(ValueError, match="at least two usable seizures"):
         n_test_seizures(1)

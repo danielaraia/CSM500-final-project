@@ -235,8 +235,6 @@ def pick_threshold_fast(
         if fpr <= fp_max_per_hour:
             chosen = threshold
             chosen_fpr = fpr
-        else:
-            break
         index += 1
     return chosen, {
         "select_false_alarms_per_hour": chosen_fpr,

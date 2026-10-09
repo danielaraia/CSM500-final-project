@@ -11,6 +11,8 @@ import abc
 from typing import Dict, Callable, cast, List, Tuple
 from mamba_ssm import Mamba
 
+from .edge_batch import canonicalize_eigenvector_signs, time_major_edge_features
+
 GLOROTS: Dict[type, Callable[[torch.nn.Module, torch.Generator], int]]
 
 
@@ -954,7 +956,9 @@ class EvoBrain(nn.Module):
 
             if self.num_eigenvectors > 0:
                 data = self.laplacian_pe(data.detach())
-                pe = data.laplacian_eigenvector_pe.to(device)
+                pe = canonicalize_eigenvector_signs(
+                    data.laplacian_eigenvector_pe.to(device)
+                )
                 x_i = torch.cat([node_last[i], pe], dim=-1)
             else:
                 x_i = node_last[i]
@@ -987,8 +991,10 @@ class EvoBrain(nn.Module):
     def create_edge_tuples_and_features(self, adj):
         batch_size, timesteps, num_nodes, _ = adj.shape
         node_indices = torch.arange(num_nodes)
-        edge_tuples = torch.stack(torch.meshgrid(node_indices, node_indices)).reshape(2, -1).to(next(self.parameters()).device)
-        edge_features = adj.reshape(timesteps, batch_size, -1).unsqueeze(-1) # (timesteps, batch_size, num_nodes num_nodes, 1)
+        edge_tuples = torch.stack(
+            torch.meshgrid(node_indices, node_indices, indexing="ij")
+        ).reshape(2, -1).to(next(self.parameters()).device)
+        edge_features = time_major_edge_features(adj)
         non_zero_indices = torch.nonzero((edge_features.sum(dim=(0, 1)) > 0.0001) | (edge_features.sum(dim=(0, 1)) < -0.0001)).to(next(self.parameters()).device)
         non_zero_edge_tuples = edge_tuples[:, non_zero_indices[:,0]]
 
